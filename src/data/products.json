@@ -1,0 +1,86 @@
+[
+  {
+    "id": 1,
+    "name": "Blue Pottery Vase",
+    "price": "₹1,200",
+    "image": "/products/pottery1.jpg",
+    "state": "Rajasthan"
+  },
+  {
+    "id": 2,
+    "name": "Brass Lamp",
+    "price": "₹2,500",
+    "image": "/products/metal1.jpg",
+    "state": "West Bengal"
+  },
+  {
+    "id": 3,
+    "name": "Handloom Scarf",
+    "price": "₹900",
+    "image": "/products/textile1.jpg",
+    "state": "Tamil Nadu"
+  },
+  {
+    "id": 4,
+    "name": "Terracotta Figure",
+    "price": "₹650",
+    "image": "/products/terracotta1.jpg",
+    "state": "Uttar Pradesh"
+  },
+  {
+    "id": 5,
+    "name": "Wooden Box",
+    "price": "₹500",
+    "image": "/products/wood1.jpg",
+    "state": "Karnataka"
+  },
+  {
+    "id": 6,
+    "name": "Antique Mirror",
+    "price": "₹2,200",
+    "image": "/products/mirror1.jpg",
+    "state": "Gujarat"
+  },
+  {
+    "id": 7,
+    "name": "Handmade Bowl",
+    "price": "₹350",
+    "image": "/products/pottery2.jpg",
+    "state": "Rajasthan"
+  },
+  {
+    "id": 8,
+    "name": "Silver Bracelet",
+    "price": "₹1,800",
+    "image": "/products/jewelry1.jpg",
+    "state": "Punjab"
+  },
+  {
+    "id": 9,
+    "name": "Woven Basket",
+    "price": "₹420",
+    "image": "/products/basket1.jpg",
+    "state": "Assam"
+  },
+  {
+    "id": 10,
+    "name": "Embroidered Cushion",
+    "price": "₹780",
+    "image": "/products/cushion1.jpg",
+    "state": "West Bengal"
+  },
+  {
+    "id": 11,
+    "name": "Etched Tray",
+    "price": "₹1,100",
+    "image": "/products/metal2.jpg",
+    "state": "Madhya Pradesh"
+  },
+  {
+    "id": 12,
+    "name": "Carved Figure",
+    "price": "₹1,600",
+    "image": "/products/wood2.jpg",
+    "state": "Kerala"
+  }
+]
