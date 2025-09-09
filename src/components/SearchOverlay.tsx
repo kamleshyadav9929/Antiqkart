@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
+import { Link } from "react-router-dom";
 import { supabase } from "../lib/supabaseClient";
 import ProductCard from "./ProductCard";
 import SkeletonCard from "./SkeletonCard";
@@ -9,7 +10,7 @@ interface Product {
   id: string;
   name: string;
   image: string;
-  price?: string;
+  price?: number; // Price from database is a number
   affiliate_link: string;
 }
 
@@ -37,8 +38,8 @@ const CategoryCard: React.FC<{
   const href = `/${type}s/${item.name.toLowerCase().replace(/\s+/g, "-")}`;
 
   return (
-    <a
-      href={href}
+    <Link
+      to={href}
       className="group flex flex-col bg-white border border-gray-200/60 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-md hover:-translate-y-1"
     >
       <div className="aspect-[4/3] bg-gray-50 overflow-hidden">
@@ -52,7 +53,7 @@ const CategoryCard: React.FC<{
         <h3 className="font-semibold text-gray-800">{item.name}</h3>
         {getIcon()}
       </div>
-    </a>
+    </Link>
   );
 };
 
@@ -95,12 +96,10 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({ isOpen, onClose }) => {
     }
   }, [isOpen]);
 
-  // --- Intelligent, Prioritized Search Logic ---
   const rankedResults = useMemo(() => {
     const query = searchTerm.toLowerCase().trim();
     if (!query) return [];
 
-    // 1. Find all matching items
     const products = allProducts
       .filter((p) => p.name.toLowerCase().includes(query))
       .slice(0, 12);
@@ -111,19 +110,13 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({ isOpen, onClose }) => {
       .filter((c) => c.name.toLowerCase().includes(query))
       .slice(0, 6);
 
-    // 2. Determine ranking based on query intent
-    let rank = { products: 1, states: 2, collections: 3 }; // Default rank
-
-    // If the query is an exact match for a state, prioritize states
+    let rank = { products: 1, states: 2, collections: 3 };
     if (allStates.some((s) => s.name.toLowerCase() === query)) {
       rank = { states: 1, products: 2, collections: 3 };
-    }
-    // Else if the query is an exact match for a collection, prioritize collections
-    else if (allCollections.some((c) => c.name.toLowerCase() === query)) {
+    } else if (allCollections.some((c) => c.name.toLowerCase() === query)) {
       rank = { collections: 1, products: 2, states: 3 };
     }
 
-    // 3. Create section data only if there are results
     const sections = [];
     if (products.length > 0)
       sections.push({
@@ -147,7 +140,6 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({ isOpen, onClose }) => {
         type: "collection" as const,
       });
 
-    // 4. Sort the sections based on their rank
     return sections.sort((a, b) => a.rank - b.rank);
   }, [searchTerm, allProducts, allStates, allCollections]);
 
@@ -189,7 +181,6 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({ isOpen, onClose }) => {
         <div className="max-w-7xl mx-auto">
           {searchTerm.length > 0 && !loading && hasResults && (
             <div className="space-y-12">
-              {/* Dynamically render ranked sections */}
               {rankedResults.map((section) => (
                 <section key={section.title}>
                   <h3 className="text-xl font-semibold mb-4 text-gray-800">
@@ -201,9 +192,11 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({ isOpen, onClose }) => {
                         return (
                           <ProductCard
                             key={`product-${item.id}`}
+                            id={item.id}
                             name={item.name}
                             image={item.image}
-                            price={item.price}
+                            // Corrected: Convert price number to string before passing
+                            price={item.price?.toString()}
                             affiliateLink={item.affiliate_link}
                           />
                         );

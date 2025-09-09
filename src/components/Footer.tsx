@@ -1,13 +1,19 @@
 import React from "react";
-import { Link } from "react-router-dom"; // Import Link
+import { Link } from "react-router-dom";
 import { Facebook, Instagram, Twitter, Youtube, Send } from "lucide-react";
 
 const Footer = () => {
   return (
     <footer className="bg-slate-900 text-gray-300 mt-16">
       <div className="max-w-7xl mx-auto px-6 lg:px-12 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 text-sm">
-          <div className="md:col-span-2 lg:col-span-1">
+        {/*
+          New Grid Layout:
+          - Mobile (sm): 2 columns. Brand and Follow Us span the full width. Quick Links and Support sit side-by-side.
+          - Desktop (lg): 4 columns as before.
+        */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12 text-sm">
+          {/* Column 1: Brand & Newsletter (Spans 2 columns on mobile) */}
+          <div className="col-span-2 lg:col-span-1">
             <Link to="/" className="block mb-4">
               <img
                 src="/logo-round.png"
@@ -35,6 +41,8 @@ const Footer = () => {
               </button>
             </form>
           </div>
+
+          {/* Column 2: Quick Links */}
           <div>
             <h3 className="text-white font-medium uppercase tracking-wider mb-4">
               Quick Links
@@ -68,6 +76,8 @@ const Footer = () => {
               </li>
             </ul>
           </div>
+
+          {/* Column 3: Support */}
           <div>
             <h3 className="text-white font-medium uppercase tracking-wider mb-4">
               Support
@@ -104,7 +114,9 @@ const Footer = () => {
               </li>
             </ul>
           </div>
-          <div>
+
+          {/* Column 4: Follow Us (Spans 2 columns on mobile) */}
+          <div className="col-span-2 lg:col-span-1">
             <h3 className="text-white font-medium uppercase tracking-wider mb-4">
               Follow Us
             </h3>
@@ -141,6 +153,8 @@ const Footer = () => {
           </div>
         </div>
       </div>
+
+      {/* Bottom Bar */}
       <div className="border-t border-slate-800 py-6 text-center text-xs text-gray-400">
         <p>© {new Date().getFullYear()} AntiqKart. All rights reserved.</p>
         <p className="mt-1">Made with ❤️ in India.</p>

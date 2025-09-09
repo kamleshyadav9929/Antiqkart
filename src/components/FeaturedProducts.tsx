@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { supabase } from "../lib/supabaseClient";
 import ProductCard from "./ProductCard";
 import SkeletonCard from "./SkeletonCard";
@@ -20,7 +21,6 @@ const FeaturedProducts = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
-      // Fetch the 12 most recent products for the homepage preview
       const { data, error } = await supabase
         .from("products")
         .select("id, name, image, price, affiliate_link")
@@ -40,21 +40,38 @@ const FeaturedProducts = () => {
 
   return (
     <section className="py-12">
-      {/* Section Header with "See All" button */}
       <div className="flex justify-between items-center mb-8">
         <h2 className="text-2xl md:text-3xl font-serif font-semibold text-gray-900">
           Featured Products
         </h2>
-        <a
-          href="/shop"
+        <Link
+          to="/shop"
           className="text-sm font-medium text-blue-600 hover:underline inline-flex items-center"
         >
           See All <ArrowRight size={16} className="ml-1" />
-        </a>
+        </Link>
       </div>
 
-      {/* Products Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+      {/* Mobile: Two-row grid (showing 6 items) */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:hidden gap-4">
+        {loading
+          ? Array.from({ length: 6 }).map((_, index) => (
+              <SkeletonCard key={index} />
+            ))
+          : products.slice(0, 6).map((product) => (
+              <ProductCard
+                key={product.id}
+                id={product.id} // Add this line
+                name={product.name}
+                image={product.image}
+                price={product.price}
+                affiliateLink={product.affiliate_link}
+              />
+            ))}
+      </div>
+
+      {/* Desktop: Two-row grid (showing 12 items) */}
+      <div className="hidden md:grid md:grid-cols-6 gap-6">
         {loading
           ? Array.from({ length: 12 }).map((_, index) => (
               <SkeletonCard key={index} />
@@ -62,6 +79,7 @@ const FeaturedProducts = () => {
           : products.map((product) => (
               <ProductCard
                 key={product.id}
+                id={product.id} // Add this line
                 name={product.name}
                 image={product.image}
                 price={product.price}

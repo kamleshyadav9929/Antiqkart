@@ -60,7 +60,7 @@ const StatesGrid = () => {
     <section className="py-12">
       {/* Centered Title */}
       <div className="text-center mb-8">
-        <h2 className="text-2xl md:text-3xl font-serif font-semibold text-gray-900">
+        <h2 className="text-2xl md:text-3xl font-serif font-semibold text-gray-900 pb-5">
           Shop by State
         </h2>
       </div>

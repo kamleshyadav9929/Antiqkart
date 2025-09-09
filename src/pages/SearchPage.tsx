@@ -32,6 +32,7 @@ const SearchResultCard = ({ result }: { result: SearchResult }) => {
   if (result.result_type === "product") {
     return (
       <ProductCard
+        id={result.id}
         name={result.name}
         image={result.image}
         affiliateLink={result.link}

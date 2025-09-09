@@ -7,7 +7,6 @@ import Layout from "../components/Layout";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
-// Define the structure for a Product
 interface Product {
   id: string;
   name: string;
@@ -68,6 +67,7 @@ const StatePage = () => {
               {products.map((product) => (
                 <ProductCard
                   key={product.id}
+                  id={product.id} // Add this line
                   name={product.name}
                   image={product.image}
                   price={product.price?.toString()}
