@@ -24,10 +24,19 @@ const Hero: React.FC<HeroProps> = ({ onSearchClick }) => {
         <div className="mt-8 max-w-xl mx-auto">
           <button
             onClick={onSearchClick}
-            className="group flex w-full items-center justify-between rounded-full border border-gray-300 bg-white px-4 py-3 text-left text-muted shadow-sm transition-all hover:border-gray-400"
+            className="group flex w-full items-center justify-between rounded-full border border-gray-300 bg-white pl-5 pr-2 py-2 text-left text-muted shadow-sm transition-all hover:border-gray-400"
           >
-            <span>Search for products, collections, or states...</span>
-            <Search size={20} className="text-gray-500" />
+            <span className="truncate text-sm sm:text-base">
+              <span className="hidden sm:inline">
+                Search for products, collections, or states...
+              </span>
+              <span className="sm:hidden">
+                Search states,collections or products...
+              </span>
+            </span>
+            <div className="flex-shrink-0 p-2 bg-slate-800 rounded-full">
+              <Search size={20} className="text-white" />
+            </div>
           </button>
         </div>
 

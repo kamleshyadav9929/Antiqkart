@@ -22,7 +22,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
   const handleCartClick = (e: React.MouseEvent) => {
     e.preventDefault(); // Prevent navigating when clicking the button
-    // --- FIXED LOGIC ---
     if (inCart) {
       removeFromCart(id);
     } else {
@@ -41,22 +40,11 @@ const ProductCard: React.FC<ProductCardProps> = ({
       : "Price upon request";
 
   return (
-    <div className="group relative flex flex-col bg-white rounded-xl overflow-hidden transition-shadow duration-300 ease-in-out hover:shadow-lg border border-gray-200/80">
-      <div className="relative overflow-hidden aspect-[3/4] md:aspect-[4/5]">
-        <a href={affiliateLink} target="_blank" rel="noopener noreferrer">
+    <div className="group relative flex flex-col bg-white rounded-xl overflow-hidden transition-shadow duration-300 ease-in-out hover:shadow-lg border border-gray-200/80 w-full">
+      <div className="relative overflow-hidden aspect-square md:aspect-[4/3]">
+        <a href={affiliateLink}>
           <img src={image} alt={name} className="w-full h-full object-cover" />
         </a>
-        <button
-          onClick={handleCartClick}
-          className={`absolute top-2 right-2 flex items-center justify-center w-9 h-9 rounded-full transition-all duration-300 ease-in-out ${
-            inCart
-              ? "bg-amber-600 text-white shadow-md"
-              : "bg-white/80 backdrop-blur-sm text-gray-700 hover:bg-white hover:text-amber-600"
-          }`}
-          aria-label={inCart ? "Remove from wishlist" : "Add to wishlist"}
-        >
-          <ShoppingBag size={18} />
-        </button>
       </div>
 
       <div className="flex flex-col flex-grow p-4">
@@ -66,14 +54,27 @@ const ProductCard: React.FC<ProductCardProps> = ({
         <p className="text-sm font-sans font-semibold text-gray-600 mb-4">
           {formattedPrice}
         </p>
-        <a
-          href={affiliateLink}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="w-full text-center text-sm font-semibold text-white bg-slate-800 py-2.5 px-4 rounded-lg transition-colors duration-300 hover:bg-slate-700 inline-flex items-center justify-center gap-2"
-        >
-          Buy Now <ArrowRight size={16} />
-        </a>
+        <div className="flex items-center gap-x-2">
+          <a
+            href={affiliateLink}
+            className="flex-grow text-center text-sm font-semibold text-white bg-slate-800 py-2.5 px-4 rounded-lg transition-colors duration-300 hover:bg-slate-700 inline-flex items-center justify-center gap-2"
+          >
+            <span className="md:hidden">Buy</span>
+            <span className="hidden md:inline">Buy Now</span>
+            <ArrowRight size={16} className="hidden md:inline-block" />
+          </a>
+          <button
+            onClick={handleCartClick}
+            className={`flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-lg transition-colors duration-300 ease-in-out border ${
+              inCart
+                ? "bg-slate-800 text-white border-slate-800"
+                : "bg-white text-slate-800 border-gray-300 hover:bg-gray-100"
+            }`}
+            aria-label={inCart ? "Remove from wishlist" : "Add to wishlist"}
+          >
+            <ShoppingBag size={18} />
+          </button>
+        </div>
       </div>
     </div>
   );
