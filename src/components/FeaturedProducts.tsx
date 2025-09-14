@@ -39,21 +39,20 @@ const FeaturedProducts = () => {
 
   return (
     <div>
-      {/* --- Restored Heading with "See All" Button --- */}
-      <div className="flex justify-between items-center mb-8">
-        <h2 className="text-2xl md:text-3xl font-serif font-semibold text-text-main">
+      <div className="flex justify-between items-center mb-10">
+        <h2 className="text-3xl md:text-4xl font-serif font-semibold text-text">
           Featured Products
         </h2>
         <Link
           to="/shop"
-          className="text-sm font-medium text-accent-dark hover:underline inline-flex items-center"
+          className="text-center text-xs font-bold text-white bg-slate-800 py-2.5 px-4 rounded-md transition-colors duration-300 hover:bg-slate-700 inline-flex items-center gap-x-2"
         >
-          See All <ArrowRight size={16} className="ml-1" />
+          See All <ArrowRight size={14} />
         </Link>
       </div>
 
       {/* Mobile: Two-row grid (showing 6 items) */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:hidden gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:hidden gap-2">
         {loading
           ? Array.from({ length: 6 }).map((_, index) => (
               <SkeletonCard key={index} />
@@ -73,7 +72,7 @@ const FeaturedProducts = () => {
       </div>
 
       {/* Desktop: Two-row grid (showing 12 items) */}
-      <div className="hidden md:grid md:grid-cols-6 gap-6">
+      <div className="hidden md:grid md:grid-cols-6 gap-4">
         {loading
           ? Array.from({ length: 12 }).map((_, index) => (
               <SkeletonCard key={index} />

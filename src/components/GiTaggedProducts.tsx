@@ -60,7 +60,7 @@ const GiTaggedProducts = () => {
       </div>
 
       <div className="relative">
-        <div className="flex overflow-x-auto space-x-6 pb-4 -mx-4 px-4 scrollbar-hide">
+        <div className="flex overflow-x-auto space-x-4 pb-4 -mx-4 px-4 scrollbar-hide">
           {loading
             ? Array.from({ length: 6 }).map((_, index) => (
                 <div key={index} className="flex-shrink-0 w-64">

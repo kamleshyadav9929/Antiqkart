@@ -66,7 +66,7 @@ const TrendingProducts = () => {
 
   return (
     <div>
-      <div className="mb-8 text-center">
+      <div className="mb-10 text-center">
         <h2 className="text-3xl md:text-4xl font-serif font-semibold text-text">
           Trending Now
         </h2>
@@ -77,7 +77,7 @@ const TrendingProducts = () => {
       </div>
 
       <div className="relative">
-        <div className="flex overflow-x-auto space-x-6 pb-4 -mx-4 px-4 scrollbar-hide">
+        <div className="flex overflow-x-auto space-x-4 pb-4 -mx-4 px-4 scrollbar-hide">
           {loading
             ? Array.from({ length: 6 }).map((_, index) => (
                 <div key={index} className="flex-shrink-0 w-64">

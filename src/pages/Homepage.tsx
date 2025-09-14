@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
 import FeaturedProducts from "../components/FeaturedProducts";
@@ -9,65 +9,68 @@ import Collections from "../components/Collections";
 import Layout from "../components/Layout";
 import Footer from "../components/Footer";
 import SearchOverlay from "../components/SearchOverlay";
-
-// A simple divider component for visual separation
-const SectionDivider = () => (
-  <div className="py-8 md:py-12">
-    <div className="max-w-7xl mx-auto px-4 sm:px-6">
-      <hr className="border-t border-gray-200" />
-    </div>
-  </div>
-);
+import { ShapeOne, ShapeTwo } from "../components/DecorativeShapes";
 
 const Homepage = () => {
   const [isSearchOverlayOpen, setIsSearchOverlayOpen] = useState(false);
+  const [offsetY, setOffsetY] = useState(0);
+
+  // Scroll handler for parallax effect
+  const handleScroll = () => setOffsetY(window.pageYOffset);
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <>
       <Navbar />
-      <main>
-        <Hero onSearchClick={() => setIsSearchOverlayOpen(true)} />
+      <div className="bg-bg">
+        {/* Hero Section with Parallax Background */}
+        <div className="relative bg-[#f0ebe5] overflow-hidden">
+          <ShapeOne style={{ transform: `translateY(${offsetY * 0.3}px)` }} />
+          <ShapeTwo style={{ transform: `translateY(${offsetY * 0.5}px)` }} />
+          <main className="relative z-10">
+            <Hero onSearchClick={() => setIsSearchOverlayOpen(true)} />
+          </main>
+        </div>
 
-        <SectionDivider />
-
-        <section className="pb-16 md:pb-24">
+        {/* Section 1: Featured Products (Default Background) */}
+        <section className="py-16 md:py-24">
           <Layout>
             <FeaturedProducts />
           </Layout>
         </section>
 
-        <SectionDivider />
-
-        <section className="pb-16 md:pb-24">
+        {/* Section 2: Trending Products (White Background) */}
+        <section className="py-16 md:py-24 bg-white">
           <Layout>
             <TrendingProducts />
           </Layout>
         </section>
 
-        <SectionDivider />
-
-        <section className="pb-16 md:pb-24">
+        {/* Section 3: GI-Tagged Products (Default Background) */}
+        <section className="py-16 md:py-24">
           <Layout>
             <GiTaggedProducts />
           </Layout>
         </section>
 
-        <SectionDivider />
-
-        <section className="pb-16 md:pb-24">
+        {/* Section 4: Shop by State (White Background) */}
+        <section className="py-16 md:py-24 bg-white">
           <Layout>
             <StatesGrid />
           </Layout>
         </section>
 
-        <SectionDivider />
-
-        <section className="pb-16 md:pb-24">
+        {/* Section 5: Collections (Default Background) */}
+        <section className="py-16 md:py-24">
           <Layout>
             <Collections />
           </Layout>
         </section>
-      </main>
+      </div>
       <Footer />
       <SearchOverlay
         isOpen={isSearchOverlayOpen}

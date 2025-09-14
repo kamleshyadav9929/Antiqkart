@@ -8,7 +8,7 @@ interface HeroProps {
 
 const Hero: React.FC<HeroProps> = ({ onSearchClick }) => {
   return (
-    <section className="pt-16 md:pt-20 pb-12 text-center">
+    <section className="relative z-10 pt-16 md:pt-20 pb-12 text-center">
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
         <div>
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-serif font-semibold leading-tight text-text">

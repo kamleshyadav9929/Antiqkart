@@ -51,7 +51,7 @@ const CartPage = () => {
                         <h2 className="text-2xl md:text-3xl font-serif font-semibold text-gray-900 mb-6 border-b pb-3">
                           {category}
                         </h2>
-                        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-6">
                           {products.map((product) => (
                             <ProductCard
                               key={product.id}

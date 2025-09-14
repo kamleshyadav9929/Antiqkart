@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "../lib/supabaseClient";
+import { ArrowRight } from "lucide-react";
 
 interface Collection {
   id: string;
@@ -67,16 +68,16 @@ const Collections: React.FC<CollectionsProps> = ({ showAll = false }) => {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-10">
+      <div className="flex justify-between items-center mb-10">
         <h2 className="text-3xl md:text-4xl font-serif font-semibold text-text-main">
           Curated Collections
         </h2>
         {!showAll && (
           <Link
             to="/collections"
-            className="text-sm font-medium text-text-muted hover:text-dark transition"
+            className="text-center text-xs font-bold text-white bg-slate-800 py-2.5 px-4 rounded-md transition-colors duration-300 hover:bg-slate-700 inline-flex items-center gap-x-2"
           >
-            See All →
+            See All <ArrowRight size={14} />
           </Link>
         )}
       </div>

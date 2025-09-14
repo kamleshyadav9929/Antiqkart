@@ -189,7 +189,7 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({ isOpen, onClose }) => {
                   <h3 className="text-xl font-semibold mb-4 text-gray-800">
                     {section.title}
                   </h3>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 md:gap-4">
                     {section.data.map((item: SearchItem) => {
                       if (section.type === "product") {
                         // TypeScript knows 'item' is a Product here

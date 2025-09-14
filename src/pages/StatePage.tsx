@@ -57,13 +57,13 @@ const StatePage = () => {
             {stateName}
           </h1>
           {loading ? (
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
               {Array.from({ length: 10 }).map((_, index) => (
                 <SkeletonCard key={index} />
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-4">
               {products.map((product) => (
                 <ProductCard
                   key={product.id}

@@ -58,9 +58,8 @@ const StatesGrid = () => {
 
   return (
     <div>
-      {/* Centered Title */}
-      <div className="text-center mb-8">
-        <h2 className="text-2xl md:text-3xl font-serif font-semibold text-text-main pb-5">
+      <div className="text-center mb-10">
+        <h2 className="text-3xl md:text-4xl font-serif font-semibold text-text">
           Shop by State
         </h2>
       </div>

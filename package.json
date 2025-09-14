@@ -22,8 +22,10 @@
     "lucide-react": "^0.542.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
+    "react-globe.gl": "^2.36.0",
     "react-router-dom": "^7.8.2",
     "react-simple-typewriter": "^5.0.1",
+    "three": "^0.180.0",
     "vite-plugin-checker": "^0.10.3",
     "vite-plugin-compression": "^0.5.1"
   },
