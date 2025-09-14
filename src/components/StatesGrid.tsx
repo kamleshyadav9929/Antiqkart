@@ -9,8 +9,8 @@ interface State {
 
 const StateSkeleton = () => (
   <div className="flex flex-col items-center space-y-2 animate-pulse">
-    <div className="w-20 h-20 md:w-24 md:h-24 bg-gray-200 rounded-full"></div>
-    <div className="h-4 bg-gray-200 rounded w-16"></div>
+    <div className="w-20 h-20 md:w-24 md:h-24 bg-gray-300 rounded-full"></div>
+    <div className="h-4 bg-gray-300 rounded w-16"></div>
   </div>
 );
 
@@ -43,24 +43,24 @@ const StatesGrid = () => {
       href={`/states/${state.name.toLowerCase().replace(/\s+/g, "-")}`}
       className="group flex flex-col items-center space-y-2 text-center"
     >
-      <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-2 border-transparent group-hover:border-slate-800 transition-all duration-300 p-1">
+      <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-2 border-transparent group-hover:border-dark transition-all duration-300 p-1">
         <img
           src={state.image}
           alt={state.name}
           className="w-full h-full object-cover rounded-full transition-transform duration-300 group-hover:scale-110"
         />
       </div>
-      <p className="text-xs font-medium text-gray-700 group-hover:text-black transition-colors">
+      <p className="text-xs font-medium text-text-muted group-hover:text-dark transition-colors">
         {state.name}
       </p>
     </a>
   );
 
   return (
-    <section className="py-12">
+    <div>
       {/* Centered Title */}
       <div className="text-center mb-8">
-        <h2 className="text-2xl md:text-3xl font-serif font-semibold text-gray-900 pb-5">
+        <h2 className="text-2xl md:text-3xl font-serif font-semibold text-text-main pb-5">
           Shop by State
         </h2>
       </div>
@@ -82,7 +82,7 @@ const StatesGrid = () => {
             ))
           : states.map(stateCard)}
       </div>
-    </section>
+    </div>
   );
 };
 

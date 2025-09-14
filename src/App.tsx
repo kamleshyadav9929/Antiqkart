@@ -1,10 +1,6 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
-// Import your new component
 import ScrollToTop from "./components/ScrollToTop";
-
-// Import all your page components
 import Homepage from "./pages/Homepage";
 import ShopPage from "./pages/ShopPage";
 import StatesPage from "./pages/StatesPage";
@@ -15,12 +11,11 @@ import AboutUsPage from "./pages/AboutUsPage";
 import ContactUsPage from "./pages/ContactUsPage";
 import SignInPage from "./pages/SignInPage";
 import SignUpPage from "./pages/SignUpPage";
-import CartPage from "./pages/CartPage"; // Import the new CartPage
+import CartPage from "./pages/CartPage";
 
 function App() {
   return (
     <BrowserRouter>
-      {/* Add the ScrollToTop component here */}
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<Homepage />} />
@@ -36,7 +31,7 @@ function App() {
         <Route path="/contact" element={<ContactUsPage />} />
         <Route path="/sign-in" element={<SignInPage />} />
         <Route path="/sign-up" element={<SignUpPage />} />
-        <Route path="/cart" element={<CartPage />} /> {/* Add the cart route */}
+        <Route path="/cart" element={<CartPage />} />
       </Routes>
     </BrowserRouter>
   );

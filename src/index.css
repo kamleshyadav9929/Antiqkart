@@ -32,48 +32,21 @@ body {
   font-family: "Inter", sans-serif;
 }
 
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-:root {
-  --bg: #fafaf7;
-  --text: #2e2a27;
-  --accent: #c9a368;
-  --muted: #6b6b6b;
-}
-
-* {
-  box-sizing: border-box;
-}
+/* --- ROBUST SCROLLBAR HIDING --- */
+/* This targets the main page and the root app container */
 html,
 body,
 #root {
-  height: 100%;
+  /* For Chrome, Safari and Opera */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  /* For IE, Edge and Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
-html {
-  scroll-behavior: smooth; /* Add this line */
-}
-
-body {
-  background: var(--bg);
-  color: var(--text);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* set defaults so Tailwind classes can rely on font names */
-.font-serif {
-  font-family: "Playfair Display", serif;
-}
-.font-sans {
-  font-family: "Inter", sans-serif;
-}
-
+/* This is your utility class for specific elements */
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }

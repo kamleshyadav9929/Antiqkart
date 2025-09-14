@@ -5,7 +5,6 @@ import ProductCard from "./ProductCard";
 import SkeletonCard from "./SkeletonCard";
 import { ArrowRight } from "lucide-react";
 
-// Define the structure for a Product
 interface Product {
   id: string;
   name: string;
@@ -39,14 +38,15 @@ const FeaturedProducts = () => {
   }, []);
 
   return (
-    <section className="py-12">
+    <div>
+      {/* --- Restored Heading with "See All" Button --- */}
       <div className="flex justify-between items-center mb-8">
-        <h2 className="text-2xl md:text-3xl font-serif font-semibold text-gray-900">
+        <h2 className="text-2xl md:text-3xl font-serif font-semibold text-text-main">
           Featured Products
         </h2>
         <Link
           to="/shop"
-          className="text-sm font-medium text-blue-600 hover:underline inline-flex items-center"
+          className="text-sm font-medium text-accent-dark hover:underline inline-flex items-center"
         >
           See All <ArrowRight size={16} className="ml-1" />
         </Link>
@@ -58,16 +58,18 @@ const FeaturedProducts = () => {
           ? Array.from({ length: 6 }).map((_, index) => (
               <SkeletonCard key={index} />
             ))
-          : products.slice(0, 6).map((product) => (
-              <ProductCard
-                key={product.id}
-                id={product.id} // Add this line
-                name={product.name}
-                image={product.image}
-                price={product.price}
-                affiliateLink={product.affiliate_link}
-              />
-            ))}
+          : products
+              .slice(0, 6)
+              .map((product) => (
+                <ProductCard
+                  key={product.id}
+                  id={product.id}
+                  name={product.name}
+                  image={product.image}
+                  price={product.price}
+                  affiliateLink={product.affiliate_link}
+                />
+              ))}
       </div>
 
       {/* Desktop: Two-row grid (showing 12 items) */}
@@ -79,7 +81,7 @@ const FeaturedProducts = () => {
           : products.map((product) => (
               <ProductCard
                 key={product.id}
-                id={product.id} // Add this line
+                id={product.id}
                 name={product.name}
                 image={product.image}
                 price={product.price}
@@ -87,7 +89,7 @@ const FeaturedProducts = () => {
               />
             ))}
       </div>
-    </section>
+    </div>
   );
 };
 

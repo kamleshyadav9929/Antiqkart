@@ -1,58 +1,33 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Facebook, Instagram, Twitter, Youtube, Send } from "lucide-react";
+import { Instagram, Youtube } from "lucide-react";
 
 const Footer = () => {
   return (
     <footer className="bg-slate-900 text-gray-300 mt-16">
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 py-16">
-        {/*
-          New Grid Layout:
-          - Mobile (sm): 2 columns. Brand and Follow Us span the full width. Quick Links and Support sit side-by-side.
-          - Desktop (lg): 4 columns as before.
-        */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12 text-sm">
-          {/* Column 1: Brand & Newsletter (Spans 2 columns on mobile) */}
-          <div className="col-span-2 lg:col-span-1">
-            <Link to="/" className="block mb-4">
+      <div className="max-w-7xl mx-auto px-6 lg:px-12 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
+          {/* Column 1: Brand Info (larger on desktop) */}
+          <div className="md:col-span-5 lg:col-span-6">
+            <Link to="/" className="inline-block mb-4">
               <img
                 src="/logo-round.png"
                 alt="AntiqKart Logo"
                 className="h-12 w-12 rounded-full"
               />
             </Link>
-            <p className="text-gray-400 mb-6">
+            <p className="text-gray-400 text-sm max-w-sm">
               Discover timeless antiques and curated collections from across
-              India.
+              India, connecting you to the heart of authentic craftsmanship.
             </p>
-            <h3 className="text-white font-medium mb-3">Join Our Newsletter</h3>
-            <form className="flex items-center">
-              <input
-                type="email"
-                placeholder="your@email.com"
-                className="w-full bg-slate-800 text-white rounded-l-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-accent"
-              />
-              <button
-                type="submit"
-                className="bg-accent text-slate-900 p-2 rounded-r-md hover:bg-yellow-500 transition-colors"
-                aria-label="Subscribe to newsletter"
-              >
-                <Send size={20} />
-              </button>
-            </form>
           </div>
 
           {/* Column 2: Quick Links */}
-          <div>
-            <h3 className="text-white font-medium uppercase tracking-wider mb-4">
-              Quick Links
+          <div className="md:col-span-3 lg:col-span-2">
+            <h3 className="text-white font-medium uppercase tracking-wider text-sm mb-4">
+              Explore
             </h3>
-            <ul className="space-y-3">
-              <li>
-                <Link to="/" className="hover:text-white transition-colors">
-                  Home
-                </Link>
-              </li>
+            <ul className="space-y-3 text-sm">
               <li>
                 <Link to="/shop" className="hover:text-white transition-colors">
                   Shop
@@ -63,7 +38,7 @@ const Footer = () => {
                   to="/states"
                   className="hover:text-white transition-colors"
                 >
-                  Shop by State
+                  States
                 </Link>
               </li>
               <li>
@@ -77,70 +52,43 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Column 3: Support */}
-          <div>
-            <h3 className="text-white font-medium uppercase tracking-wider mb-4">
-              Support
+          {/* Column 3: Company Links */}
+          <div className="md:col-span-4 lg:col-span-2">
+            <h3 className="text-white font-medium uppercase tracking-wider text-sm mb-4">
+              Company
             </h3>
-            <ul className="space-y-3">
+            <ul className="space-y-3 text-sm">
               <li>
-                <Link to="/faq" className="hover:text-white transition-colors">
-                  FAQs
+                <Link
+                  to="/about"
+                  className="hover:text-white transition-colors"
+                >
+                  About Us
                 </Link>
               </li>
               <li>
                 <Link
-                  to="/returns"
+                  to="/contact"
                   className="hover:text-white transition-colors"
                 >
-                  Returns
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/shipping"
-                  className="hover:text-white transition-colors"
-                >
-                  Shipping
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/privacy"
-                  className="hover:text-white transition-colors"
-                >
-                  Privacy Policy
+                  Contact Us
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Column 4: Follow Us (Spans 2 columns on mobile) */}
-          <div className="col-span-2 lg:col-span-1">
-            <h3 className="text-white font-medium uppercase tracking-wider mb-4">
+          {/* Column 4: Social Media */}
+          <div className="md:col-span-12 lg:col-span-2 lg:text-right">
+            <h3 className="text-white font-medium uppercase tracking-wider text-sm mb-4">
               Follow Us
             </h3>
-            <div className="flex space-x-4">
+            <div className="flex space-x-4 lg:justify-end">
               <a
                 href="#"
                 className="p-2 rounded-full hover:bg-slate-700 transition-colors"
                 aria-label="Instagram"
               >
                 <Instagram size={20} />
-              </a>
-              <a
-                href="#"
-                className="p-2 rounded-full hover:bg-slate-700 transition-colors"
-                aria-label="Facebook"
-              >
-                <Facebook size={20} />
-              </a>
-              <a
-                href="#"
-                className="p-2 rounded-full hover:bg-slate-700 transition-colors"
-                aria-label="Twitter"
-              >
-                <Twitter size={20} />
               </a>
               <a
                 href="#"
@@ -155,9 +103,10 @@ const Footer = () => {
       </div>
 
       {/* Bottom Bar */}
-      <div className="border-t border-slate-800 py-6 text-center text-xs text-gray-400">
-        <p>© {new Date().getFullYear()} AntiqKart. All rights reserved.</p>
-        <p className="mt-1">Made with ❤️ in India.</p>
+      <div className="border-t border-slate-800 py-4">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 text-center text-xs text-gray-400">
+          <p>© {new Date().getFullYear()} AntiqKart. All rights reserved.</p>
+        </div>
       </div>
     </footer>
   );

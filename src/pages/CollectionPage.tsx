@@ -68,6 +68,7 @@ const CollectionPage = () => {
         .single();
 
       if (collectionError || !collectionData) {
+        console.error("Error fetching collection info:", collectionError);
         setLoading(false);
         return;
       }
@@ -81,6 +82,11 @@ const CollectionPage = () => {
         .select("id, name, image, price, affiliate_link, created_at")
         .eq("collection_id", collectionData.id);
 
+      // FIX 1: Handle the productsError variable
+      if (productsError) {
+        console.error("Error fetching products:", productsError);
+      }
+
       if (productsData) setProducts(productsData);
       setLoading(false);
     };
@@ -88,7 +94,8 @@ const CollectionPage = () => {
   }, [collectionSlug]);
 
   const filteredAndSortedProducts = useMemo(() => {
-    let result = [...products].filter((product) =>
+    // FIX 2: Use 'const' instead of 'let'
+    const result = [...products].filter((product) =>
       product.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
     switch (sortBy) {

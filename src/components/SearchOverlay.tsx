@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "../lib/supabaseClient";
 import ProductCard from "./ProductCard";
-import SkeletonCard from "./SkeletonCard";
+
 import { X, Search, MapPin, Layers } from "lucide-react";
 
 // --- Data Interfaces ---
@@ -25,6 +25,9 @@ interface Collection {
   name: string;
   image: string;
 }
+
+// A union type to represent any possible item in the search results
+type SearchItem = Product | State | Collection;
 
 // --- Search Result Card for States & Collections ---
 const CategoryCard: React.FC<{
@@ -187,24 +190,26 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({ isOpen, onClose }) => {
                     {section.title}
                   </h3>
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
-                    {section.data.map((item: any) => {
+                    {section.data.map((item: SearchItem) => {
                       if (section.type === "product") {
+                        // TypeScript knows 'item' is a Product here
+                        const productItem = item as Product;
                         return (
                           <ProductCard
-                            key={`product-${item.id}`}
-                            id={item.id}
-                            name={item.name}
-                            image={item.image}
-                            // Corrected: Convert price number to string before passing
-                            price={item.price?.toString()}
-                            affiliateLink={item.affiliate_link}
+                            key={`product-${productItem.id}`}
+                            id={productItem.id}
+                            name={productItem.name}
+                            image={productItem.image}
+                            price={productItem.price?.toString()}
+                            affiliateLink={productItem.affiliate_link}
                           />
                         );
                       }
+                      // TypeScript knows 'item' is a State or Collection here
                       return (
                         <CategoryCard
                           key={`${section.type}-${item.id}`}
-                          item={item}
+                          item={item as State | Collection}
                           type={section.type}
                         />
                       );

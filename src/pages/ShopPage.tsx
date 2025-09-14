@@ -14,12 +14,13 @@ interface Product {
   image: string;
   price?: string;
   affiliate_link: string;
-  collections: { name: string };
+  collections: { name: string } | null; // Allow collections to be null
 }
 
 const groupProductsByCollection = (products: Product[]) => {
   return products.reduce((acc, product) => {
-    const collection = product.collections?.name || "Other";
+    // Use "Uncategorized" if a product has no collection
+    const collection = product.collections?.name || "Uncategorized";
     if (!acc[collection]) acc[collection] = [];
     acc[collection].push(product);
     return acc;
@@ -41,11 +42,17 @@ const ShopPage = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
+      // FIX: Added .returns<Product[]>() to strongly type the fetched data.
       const { data, error } = await supabase
         .from("products")
-        .select("id, name, image, price, affiliate_link, collections ( name )");
-      if (error) console.error("Error fetching products:", error.message);
-      else setProducts((data as any[]) || []);
+        .select("id, name, image, price, affiliate_link, collections ( name )")
+        .returns<Product[]>();
+
+      if (error) {
+        console.error("Error fetching products:", error.message);
+      } else {
+        setProducts(data || []);
+      }
       setLoading(false);
     };
     fetchProducts();
@@ -87,7 +94,19 @@ const ShopPage = () => {
           </div>
           <div className="pb-16">
             {loading ? (
-              <p>Loading...</p>
+              // Display skeleton cards while loading
+              <div className="space-y-16">
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <section key={i}>
+                    <div className="h-8 bg-gray-200 rounded w-1/4 mb-6 animate-pulse"></div>
+                    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+                      {Array.from({ length: 6 }).map((_, j) => (
+                        <SkeletonCard key={j} />
+                      ))}
+                    </div>
+                  </section>
+                ))}
+              </div>
             ) : (
               <div className="space-y-16">
                 {Object.keys(productsByCollection).map((collection) => (
@@ -107,7 +126,7 @@ const ShopPage = () => {
                     </div>
                     <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
                       {productsByCollection[collection]
-                        .slice(0, 6)
+                        .slice(0, 6) // Show up to 6 products per collection
                         .map((product) => (
                           <ProductCard
                             key={product.id}

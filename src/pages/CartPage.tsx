@@ -1,21 +1,24 @@
 import React, { useMemo } from "react";
 import { Link } from "react-router-dom";
-import { useCart, Product } from "../context/CartContext";
+import { useCart } from "../hooks/useCart";
+import { Product } from "../context/cart-context";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Layout from "../components/Layout";
-import ProductCard from "../components/ProductCard"; // Using ProductCard now
-import SkeletonCard from "../components/SkeletonCard"; // For loading state
+import ProductCard from "../components/ProductCard";
+import SkeletonCard from "../components/SkeletonCard";
 import { ShoppingBag } from "lucide-react";
 
 const CartPage = () => {
   const { cartProductDetails, loading } = useCart();
 
-  // Group products by category
   const groupedProducts = useMemo(() => {
     return cartProductDetails.reduce((acc, product) => {
-      const category = product.category || "Other";
-      if (!acc[category]) acc[category] = [];
+      // Updated grouping logic to use the correct data field
+      const category = product.collections?.name || "Uncategorized";
+      if (!acc[category]) {
+        acc[category] = [];
+      }
       acc[category].push(product);
       return acc;
     }, {} as Record<string, Product[]>);
@@ -33,7 +36,6 @@ const CartPage = () => {
             <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto text-center">
               Browse your saved items below, conveniently organized by category.
             </p>
-
             <div className="mt-12">
               {loading ? (
                 <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
