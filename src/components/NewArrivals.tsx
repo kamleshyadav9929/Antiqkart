@@ -2,10 +2,7 @@ import React, { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 import ProductCard from "./ProductCard";
 import SkeletonCard from "./SkeletonCard";
-import { ArrowRight } from "lucide-react";
-import { Link } from "react-router-dom";
 
-// FIX: Add this interface definition at the top of the file
 interface Product {
   id: string;
   name: string;
@@ -44,33 +41,37 @@ const NewArrivals: React.FC = () => {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-10">
-        <h2 className="text-3xl md:text-4xl font-serif font-semibold text-text-main">
+      {/* FIX: Centered header for consistency */}
+      <div className="mb-10 text-center">
+        <h2 className="text-3xl md:text-4xl font-serif font-semibold text-text">
           New Arrivals
         </h2>
-        <Link
-          to="/shop"
-          className="text-center text-xs font-bold text-white bg-slate-800 py-2.5 px-4 rounded-md transition-colors duration-300 hover:bg-slate-700 inline-flex items-center gap-x-2"
-        >
-          See All <ArrowRight size={14} />
-        </Link>
+        <p className="mt-2 text-muted max-w-2xl mx-auto">
+          Check out the latest additions to our curated collection of Indian
+          handicrafts.
+        </p>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-4">
-        {loading
-          ? Array.from({ length: 10 }).map((_, index) => (
-              <SkeletonCard key={index} />
-            ))
-          : products.map((product) => (
-              <ProductCard
-                key={product.id}
-                id={product.id}
-                name={product.name}
-                image={product.image}
-                price={product.price}
-                affiliateLink={product.affiliate_link}
-              />
-            ))}
+      <div className="relative">
+        <div className="flex overflow-x-auto space-x-4 pb-4 -mx-4 px-4 scrollbar-hide">
+          {loading
+            ? Array.from({ length: 6 }).map((_, index) => (
+                <div key={index} className="flex-shrink-0 w-64">
+                  <SkeletonCard />
+                </div>
+              ))
+            : products.map((product) => (
+                <div key={product.id} className="flex-shrink-0 w-64">
+                  <ProductCard
+                    id={product.id}
+                    name={product.name}
+                    image={product.image}
+                    price={product.price}
+                    affiliateLink={product.affiliate_link}
+                  />
+                </div>
+              ))}
+        </div>
       </div>
     </div>
   );

@@ -2,7 +2,6 @@ import React, { useState, useEffect, ReactNode } from "react";
 import { supabase } from "../lib/supabaseClient";
 import { Product, CartContext } from "./cart-context";
 
-// Defines the structure for items in our cart, including the timestamp.
 interface CartItem {
   productId: string;
   addedAt: number;
@@ -13,26 +12,16 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     try {
       const localData = localStorage.getItem("antiqkart-cart");
       if (!localData) return [];
-
       const parsedData = JSON.parse(localData);
-
-      // **IMPROVEMENT**: This check ensures we have the correct data format.
-      // If the first item doesn't have a 'productId', we assume the format is old
-      // and reset the cart to prevent errors.
-      if (parsedData.length > 0 && typeof parsedData[0] !== "object") {
-        console.warn("Old cart format detected. Clearing cart.");
-        localStorage.removeItem("antiqkart-cart"); // Clear the invalid data
-        return [];
+      if (
+        Array.isArray(parsedData) &&
+        parsedData.every((item) => typeof item === "object" && item.productId)
+      ) {
+        return parsedData;
       }
-
-      return parsedData;
+      return [];
     } catch (error) {
-      console.error(
-        "Failed to parse cart from localStorage. Resetting cart.",
-        error
-      );
-      // If parsing fails for any reason, clear the broken data.
-      localStorage.removeItem("antiqkart-cart");
+      console.error("Failed to parse cart from localStorage:", error);
       return [];
     }
   });
@@ -81,6 +70,16 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       if (prev.some((item) => item.productId === productId)) {
         return prev;
       }
+
+      // --- NEW: Call the Edge Function to increment popularity ---
+      // This is a "fire-and-forget" call so it doesn't slow down the UI.
+      supabase.functions
+        .invoke("increment-popularity", {
+          body: { productId },
+        })
+        .catch((err) => console.error("Failed to increment popularity:", err));
+      // ---------------------------------------------------------
+
       return [...prev, { productId, addedAt: Date.now() }];
     });
   };

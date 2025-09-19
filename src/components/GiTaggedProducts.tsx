@@ -32,7 +32,6 @@ const GiTaggedProducts: React.FC = () => {
       }
       setLoading(false);
     };
-
     fetchGiTaggedProducts();
   }, []);
 
@@ -43,7 +42,7 @@ const GiTaggedProducts: React.FC = () => {
   return (
     <div>
       <div className="mb-10 text-center">
-        <div className="flex justify-center items-center gap-x-3 mb-4">
+        <div className="flex justify-center items-center gap-x-3 mb-2">
           <ShieldCheck className="w-8 h-8 text-amber-600" />
           <h2 className="text-3xl md:text-4xl font-serif font-semibold text-text">
             GI-Tagged Treasures

@@ -11,12 +11,10 @@ import Footer from "../components/Footer";
 import SearchOverlay from "../components/SearchOverlay";
 import { ShapeOne, ShapeTwo } from "../components/DecorativeShapes";
 import NewArrivals from "../components/NewArrivals";
-// REMOVED: No longer importing QuickViewModal or useQuickView
 
 const Homepage = () => {
   const [isSearchOverlayOpen, setIsSearchOverlayOpen] = useState(false);
   const [offsetY, setOffsetY] = useState(0);
-  // REMOVED: All state and logic for quick view
 
   const handleScroll = () => setOffsetY(window.pageYOffset);
 
@@ -28,8 +26,10 @@ const Homepage = () => {
   return (
     <>
       <Navbar />
-      <div className="bg-bg">
-        <div className="relative bg-[#f0ebe5] overflow-hidden">
+      {/* DESIGN UPGRADE: Main background is now our warmer off-white */}
+      <div className="bg-[var(--bg-primary)]">
+        {/* DESIGN UPGRADE: Hero section has a lighter, secondary accent background */}
+        <div className="relative bg-[var(--accent-secondary)]/20 overflow-hidden">
           <ShapeOne style={{ transform: `translateY(${offsetY * 0.3}px)` }} />
           <ShapeTwo style={{ transform: `translateY(${offsetY * 0.5}px)` }} />
           <main className="relative z-10">
@@ -37,38 +37,38 @@ const Homepage = () => {
           </main>
         </div>
 
-        {/* REMOVED: The 'onProductClick' prop has been removed from all these components */}
-        <section className="py-16 md:py-24">
+        {/* DESIGN UPGRADE: Consistent, spacious padding for all sections */}
+        <section className="py-20 md:py-28">
           <Layout>
             <NewArrivals />
           </Layout>
         </section>
 
-        <section className="py-16 md:py-24 bg-white">
+        <section className="py-20 md:py-28 bg-white">
           <Layout>
             <FeaturedProducts />
           </Layout>
         </section>
 
-        <section className="py-16 md:py-24">
+        <section className="py-20 md:py-28">
           <Layout>
             <TrendingProducts />
           </Layout>
         </section>
 
-        <section className="py-16 md:py-24 bg-white">
+        <section className="py-20 md:py-28 bg-white">
           <Layout>
             <GiTaggedProducts />
           </Layout>
         </section>
 
-        <section className="py-16 md:py-24">
+        <section className="py-20 md:py-28">
           <Layout>
             <StatesGrid />
           </Layout>
         </section>
 
-        <section className="py-16 md:py-24 bg-white">
+        <section className="py-20 md:py-28 bg-white">
           <Layout>
             <Collections />
           </Layout>
@@ -79,7 +79,6 @@ const Homepage = () => {
         isOpen={isSearchOverlayOpen}
         onClose={() => setIsSearchOverlayOpen(false)}
       />
-      {/* REMOVED: The QuickViewModal component has been deleted from here */}
     </>
   );
 };

@@ -6,9 +6,8 @@ import Layout from "../components/Layout";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { SlidersHorizontal, X, ChevronDown } from "lucide-react";
-// REMOVED: These two imports are no longer needed and cause the error.
-// import QuickViewModal from "../components/QuickViewModal";
-// import { useQuickView } from "../hooks/useQuickView";
+import Slider from "rc-slider";
+import "rc-slider/assets/index.css";
 
 interface Product {
   id: string;
@@ -18,24 +17,21 @@ interface Product {
   affiliate_link: string;
   collection_id: string;
   state_id: string;
+  popularity?: number; // Added for sorting
 }
+
 interface Collection {
   id: string;
   name: string;
 }
+
 interface State {
   id: string;
   name: string;
 }
 
-const priceRanges = [
-  { value: "0-1000", label: "Under ₹1,000" },
-  { value: "1000-2500", label: "₹1,000 to ₹2,500" },
-  { value: "2500-5000", label: "₹2,500 to ₹5,000" },
-  { value: "5000-", label: "Over ₹5,000" },
-];
-
 const sortOptions = [
+  { value: "popularity", label: "Sort by: Popularity" },
   { value: "featured", label: "Sort by: Featured" },
   { value: "price-asc", label: "Sort by: Price: Low to High" },
   { value: "price-desc", label: "Sort by: Price: High to Low" },
@@ -48,10 +44,9 @@ const ShopPage = () => {
   const [loading, setLoading] = useState(true);
   const [selectedCollections, setSelectedCollections] = useState<string[]>([]);
   const [selectedStates, setSelectedStates] = useState<string[]>([]);
-  const [selectedPrice, setSelectedPrice] = useState<string>("");
-  const [sortBy, setSortBy] = useState("featured");
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 10000]);
+  const [sortBy, setSortBy] = useState("popularity");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  // REMOVED: The useQuickView hook is no longer used.
 
   useEffect(() => {
     const fetchData = async () => {
@@ -90,11 +85,14 @@ const ShopPage = () => {
   const clearFilters = () => {
     setSelectedCollections([]);
     setSelectedStates([]);
-    setSelectedPrice("");
+    setPriceRange([0, 10000]);
   };
 
   const filteredAndSortedProducts = useMemo(() => {
-    let filtered = [...products];
+    let filtered = [...products].filter((p) => {
+      if (!p.price) return false;
+      return p.price >= priceRange[0] && p.price <= priceRange[1];
+    });
 
     if (selectedCollections.length > 0) {
       filtered = filtered.filter((p) =>
@@ -104,16 +102,6 @@ const ShopPage = () => {
     if (selectedStates.length > 0) {
       filtered = filtered.filter((p) => selectedStates.includes(p.state_id));
     }
-    if (selectedPrice) {
-      const [min, max] = selectedPrice.split("-");
-      filtered = filtered.filter((p) => {
-        if (!p.price) return false;
-        const price = p.price;
-        const minPrice = Number(min);
-        const maxPrice = max ? Number(max) : Infinity;
-        return price >= minPrice && price < maxPrice;
-      });
-    }
 
     switch (sortBy) {
       case "price-asc":
@@ -122,74 +110,14 @@ const ShopPage = () => {
       case "price-desc":
         filtered.sort((a, b) => (b.price || 0) - (a.price || 0));
         break;
-      default:
+      case "popularity":
+        filtered.sort((a, b) => (b.popularity || 0) - (a.popularity || 0));
+        break;
+      default: // "featured"
         break;
     }
-
     return filtered;
-  }, [products, selectedCollections, selectedStates, selectedPrice, sortBy]);
-
-  const FilterContent = () => (
-    <>
-      <div className="relative mb-4">
-        <select
-          value={sortBy}
-          onChange={(e) => setSortBy(e.target.value)}
-          className="w-full appearance-none bg-white border border-gray-300 rounded-md py-2 pl-3 pr-8 text-sm focus:outline-none focus:ring-slate-500 focus:border-slate-500"
-        >
-          {sortOptions.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
-          ))}
-        </select>
-        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-          <ChevronDown size={16} />
-        </div>
-      </div>
-
-      <FilterSection title="Collections">
-        {collections.map((c) => (
-          <Checkbox
-            key={c.id}
-            id={`cat-${c.id}`}
-            label={c.name}
-            checked={selectedCollections.includes(c.id)}
-            onChange={() => handleCollectionChange(c.id)}
-          />
-        ))}
-      </FilterSection>
-      <FilterSection title="State">
-        {states.map((s) => (
-          <Checkbox
-            key={s.id}
-            id={`state-${s.id}`}
-            label={s.name}
-            checked={selectedStates.includes(s.id)}
-            onChange={() => handleStateChange(s.id)}
-          />
-        ))}
-      </FilterSection>
-      <FilterSection title="Price">
-        {priceRanges.map((pr) => (
-          <label
-            key={pr.value}
-            className="flex items-center text-sm text-gray-600 cursor-pointer"
-          >
-            <input
-              type="radio"
-              name="price"
-              value={pr.value}
-              checked={selectedPrice === pr.value}
-              onChange={(e) => setSelectedPrice(e.target.value)}
-              className="h-4 w-4 text-slate-600 focus:ring-slate-500 border-gray-300"
-            />
-            <span className="ml-3">{pr.label}</span>
-          </label>
-        ))}
-      </FilterSection>
-    </>
-  );
+  }, [products, selectedCollections, selectedStates, priceRange, sortBy]);
 
   const FilterSection = ({
     title,
@@ -230,6 +158,72 @@ const ShopPage = () => {
     </label>
   );
 
+  const FilterContent = () => (
+    <>
+      <div className="relative mb-4">
+        <select
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value)}
+          className="w-full appearance-none bg-white border border-gray-300 rounded-md py-2 pl-3 pr-8 text-sm focus:outline-none focus:ring-slate-500 focus:border-slate-500"
+        >
+          {sortOptions.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
+        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+          <ChevronDown size={16} />
+        </div>
+      </div>
+
+      <FilterSection title="Price Range">
+        <div className="px-2 pt-2">
+          <Slider
+            range
+            min={0}
+            max={10000}
+            step={500}
+            value={priceRange}
+            onChange={(value) => setPriceRange(value as [number, number])}
+            trackStyle={[{ backgroundColor: "#2e2a27" }]}
+            handleStyle={[
+              { borderColor: "#2e2a27" },
+              { borderColor: "#2e2a27" },
+            ]}
+          />
+          <div className="flex justify-between mt-2 text-sm text-gray-600">
+            <span>₹{priceRange[0]}</span>
+            <span>₹{priceRange[1] === 10000 ? "10000+" : priceRange[1]}</span>
+          </div>
+        </div>
+      </FilterSection>
+
+      <FilterSection title="Collections">
+        {collections.map((c) => (
+          <Checkbox
+            key={c.id}
+            id={`cat-${c.id}`}
+            label={c.name}
+            checked={selectedCollections.includes(c.id)}
+            onChange={() => handleCollectionChange(c.id)}
+          />
+        ))}
+      </FilterSection>
+      <FilterSection title="State">
+        {states.map((s) => (
+          <Checkbox
+            key={s.id}
+            id={`state-${s.id}`}
+            label={s.name}
+            checked={selectedStates.includes(s.id)}
+            onChange={() => handleStateChange(s.id)}
+          />
+        ))}
+      </FilterSection>
+    </>
+  );
+
   return (
     <>
       <Navbar />
@@ -239,7 +233,6 @@ const ShopPage = () => {
             <h1 className="text-4xl font-serif font-bold text-center mb-8">
               Shop All Products
             </h1>
-
             <main className="w-full">
               <div className="flex justify-end mb-4">
                 <button
@@ -250,7 +243,6 @@ const ShopPage = () => {
                   Filters & Sort
                 </button>
               </div>
-
               {loading ? (
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
                   {Array.from({ length: 12 }).map((_, i) => (
@@ -276,7 +268,6 @@ const ShopPage = () => {
         </Layout>
       </div>
       <Footer />
-
       <div
         className={`fixed inset-0 bg-black/40 z-50 transition-opacity duration-300 ${
           isFilterOpen ? "opacity-100" : "opacity-0 pointer-events-none"
@@ -316,7 +307,6 @@ const ShopPage = () => {
           </div>
         </div>
       </div>
-      {/* REMOVED: The QuickViewModal component has been deleted from here */}
     </>
   );
 };

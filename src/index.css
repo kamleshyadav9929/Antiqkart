@@ -1,30 +1,28 @@
 @import "tailwindcss";
 
-/* small base adjustments */
+/* --- DESIGN UPGRADE: Defining a Professional Color Palette & Typography --- */
 :root {
-  --bg: #fafaf7;
-  --text: #2e2a27;
-  --accent: #c9a368;
-  --muted: #6b6b6b;
+  /* Colors */
+  --bg-primary: #fbf9f6; /* Warm, inviting off-white */
+  --text-primary: #3a3a3a; /* Softer, rich black for headings */
+  --text-secondary: #5d5d5d; /* Muted gray for body text */
+  --accent-primary: #b98b73; /* Sophisticated tan for buttons and highlights */
+  --accent-secondary: #e4c5af; /* Lighter tan for subtle backgrounds */
+  --border-color: #eaeaea; /* Soft border color */
 }
 
 * {
   box-sizing: border-box;
 }
-html,
-body,
-#root {
-  height: 100%;
-}
 
 body {
-  background: var(--bg);
-  color: var(--text);
+  background: var(--bg-primary);
+  color: var(--text-secondary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* set defaults so Tailwind classes can rely on font names */
+/* Typography Rules */
 .font-serif {
   font-family: "Playfair Display", serif;
 }
@@ -32,21 +30,17 @@ body {
   font-family: "Inter", sans-serif;
 }
 
-/* --- ROBUST SCROLLBAR HIDING --- */
-/* This targets the main page and the root app container */
-html,
-body,
-#root {
-  /* For Chrome, Safari and Opera */
-  &::-webkit-scrollbar {
-    display: none;
-  }
-  /* For IE, Edge and Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+/* Applying default text colors for better hierarchy */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--text-primary);
 }
 
-/* This is your utility class for specific elements */
+/* --- Utility Class for Scrollbar Hiding --- */
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
