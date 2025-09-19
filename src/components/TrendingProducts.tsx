@@ -3,7 +3,6 @@ import { supabase } from "../lib/supabaseClient";
 import ProductCard from "./ProductCard";
 import SkeletonCard from "./SkeletonCard";
 
-// Define the structure for a Product
 interface Product {
   id: string;
   name: string;
@@ -12,13 +11,12 @@ interface Product {
   affiliate_link: string;
 }
 
-// 1. Define the shape of the data we expect from the database query
 interface TrendingProductData {
   position: number;
   products: Product | null;
 }
 
-const TrendingProducts = () => {
+const TrendingProducts: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -31,27 +29,19 @@ const TrendingProducts = () => {
         .select(
           `
           position,
-          products (
-            id,
-            name,
-            image,
-            price,
-            affiliate_link
-          )
+          products ( id, name, image, price, affiliate_link )
         `
         )
         .order("position", { ascending: true })
         .limit(10)
-        // 2. Tell Supabase what shape to expect. This fixes the 'any' type error.
         .returns<TrendingProductData[]>();
 
       if (error) {
         console.error("Error fetching trending products:", error.message);
       } else if (data) {
-        // Now, TypeScript knows the exact type of 'item' in the map function.
         const trending = data
           .map((item) => item.products)
-          .filter(Boolean) as Product[]; // filter(Boolean) removes any nulls
+          .filter(Boolean) as Product[];
         setProducts(trending);
       }
       setLoading(false);

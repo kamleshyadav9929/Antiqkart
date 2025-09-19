@@ -2,9 +2,8 @@ import React, { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 import ProductCard from "./ProductCard";
 import SkeletonCard from "./SkeletonCard";
-import { ShieldCheck } from "lucide-react"; // A fitting icon for certification
+import { ShieldCheck } from "lucide-react";
 
-// Define the structure for a Product
 interface Product {
   id: string;
   name: string;
@@ -13,19 +12,18 @@ interface Product {
   affiliate_link: string;
 }
 
-const GiTaggedProducts = () => {
+const GiTaggedProducts: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchGiTaggedProducts = async () => {
       setLoading(true);
-
       const { data, error } = await supabase
         .from("products")
         .select("id, name, image, price, affiliate_link")
-        .eq("is_gi_tagged", true) // Fetch only products marked as GI-tagged
-        .limit(8); // Let's feature up to 8 items in this section
+        .eq("is_gi_tagged", true)
+        .limit(8);
 
       if (error) {
         console.error("Error fetching GI-tagged products:", error.message);
@@ -38,7 +36,6 @@ const GiTaggedProducts = () => {
     fetchGiTaggedProducts();
   }, []);
 
-  // Don't render the section if there are no GI-tagged products
   if (products.length === 0 && !loading) {
     return null;
   }
@@ -54,8 +51,7 @@ const GiTaggedProducts = () => {
         </div>
         <p className="mt-2 text-muted max-w-3xl mx-auto">
           Explore products with the Geographical Indication (GI) tag—a
-          certification of authentic origin and traditional craftsmanship,
-          ensuring you own a piece of true Indian heritage.
+          certification of authentic origin and traditional craftsmanship.
         </p>
       </div>
 

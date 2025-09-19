@@ -10,12 +10,14 @@ import Layout from "../components/Layout";
 import Footer from "../components/Footer";
 import SearchOverlay from "../components/SearchOverlay";
 import { ShapeOne, ShapeTwo } from "../components/DecorativeShapes";
+import NewArrivals from "../components/NewArrivals";
+// REMOVED: No longer importing QuickViewModal or useQuickView
 
 const Homepage = () => {
   const [isSearchOverlayOpen, setIsSearchOverlayOpen] = useState(false);
   const [offsetY, setOffsetY] = useState(0);
+  // REMOVED: All state and logic for quick view
 
-  // Scroll handler for parallax effect
   const handleScroll = () => setOffsetY(window.pageYOffset);
 
   useEffect(() => {
@@ -27,7 +29,6 @@ const Homepage = () => {
     <>
       <Navbar />
       <div className="bg-bg">
-        {/* Hero Section with Parallax Background */}
         <div className="relative bg-[#f0ebe5] overflow-hidden">
           <ShapeOne style={{ transform: `translateY(${offsetY * 0.3}px)` }} />
           <ShapeTwo style={{ transform: `translateY(${offsetY * 0.5}px)` }} />
@@ -36,36 +37,38 @@ const Homepage = () => {
           </main>
         </div>
 
-        {/* Section 1: Featured Products (Default Background) */}
+        {/* REMOVED: The 'onProductClick' prop has been removed from all these components */}
         <section className="py-16 md:py-24">
+          <Layout>
+            <NewArrivals />
+          </Layout>
+        </section>
+
+        <section className="py-16 md:py-24 bg-white">
           <Layout>
             <FeaturedProducts />
           </Layout>
         </section>
 
-        {/* Section 2: Trending Products (White Background) */}
-        <section className="py-16 md:py-24 bg-white">
+        <section className="py-16 md:py-24">
           <Layout>
             <TrendingProducts />
           </Layout>
         </section>
 
-        {/* Section 3: GI-Tagged Products (Default Background) */}
-        <section className="py-16 md:py-24">
+        <section className="py-16 md:py-24 bg-white">
           <Layout>
             <GiTaggedProducts />
           </Layout>
         </section>
 
-        {/* Section 4: Shop by State (White Background) */}
-        <section className="py-16 md:py-24 bg-white">
+        <section className="py-16 md:py-24">
           <Layout>
             <StatesGrid />
           </Layout>
         </section>
 
-        {/* Section 5: Collections (Default Background) */}
-        <section className="py-16 md:py-24">
+        <section className="py-16 md:py-24 bg-white">
           <Layout>
             <Collections />
           </Layout>
@@ -76,6 +79,7 @@ const Homepage = () => {
         isOpen={isSearchOverlayOpen}
         onClose={() => setIsSearchOverlayOpen(false)}
       />
+      {/* REMOVED: The QuickViewModal component has been deleted from here */}
     </>
   );
 };

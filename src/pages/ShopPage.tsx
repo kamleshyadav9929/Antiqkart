@@ -6,8 +6,10 @@ import Layout from "../components/Layout";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { SlidersHorizontal, X, ChevronDown } from "lucide-react";
+// REMOVED: These two imports are no longer needed and cause the error.
+// import QuickViewModal from "../components/QuickViewModal";
+// import { useQuickView } from "../hooks/useQuickView";
 
-// Define interfaces for our data
 interface Product {
   id: string;
   name: string;
@@ -44,15 +46,12 @@ const ShopPage = () => {
   const [collections, setCollections] = useState<Collection[]>([]);
   const [states, setStates] = useState<State[]>([]);
   const [loading, setLoading] = useState(true);
-
-  // State for filters and sorting
   const [selectedCollections, setSelectedCollections] = useState<string[]>([]);
   const [selectedStates, setSelectedStates] = useState<string[]>([]);
   const [selectedPrice, setSelectedPrice] = useState<string>("");
   const [sortBy, setSortBy] = useState("featured");
-
-  // State for filter panel (used for all screen sizes)
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  // REMOVED: The useQuickView hook is no longer used.
 
   useEffect(() => {
     const fetchData = async () => {
@@ -132,7 +131,6 @@ const ShopPage = () => {
 
   const FilterContent = () => (
     <>
-      {/* Sorting Dropdown inside panel */}
       <div className="relative mb-4">
         <select
           value={sortBy}
@@ -242,9 +240,7 @@ const ShopPage = () => {
               Shop All Products
             </h1>
 
-            {/* --- Main Content --- */}
             <main className="w-full">
-              {/* --- Universal Filter Button --- */}
               <div className="flex justify-end mb-4">
                 <button
                   className="flex items-center gap-x-2 text-sm font-semibold p-2 px-4 border rounded-md bg-white shadow-sm"
@@ -281,7 +277,6 @@ const ShopPage = () => {
       </div>
       <Footer />
 
-      {/* --- Universal Filter Panel --- */}
       <div
         className={`fixed inset-0 bg-black/40 z-50 transition-opacity duration-300 ${
           isFilterOpen ? "opacity-100" : "opacity-0 pointer-events-none"
@@ -321,6 +316,7 @@ const ShopPage = () => {
           </div>
         </div>
       </div>
+      {/* REMOVED: The QuickViewModal component has been deleted from here */}
     </>
   );
 };
