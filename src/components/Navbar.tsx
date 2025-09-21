@@ -48,9 +48,9 @@ const Navbar = () => {
               <img
                 src="/logo-round.png"
                 alt="AntiqKart Logo"
-                className="h-9 md:h-10 w-auto"
+                className="h-9 w-9 md:h-10 md:w-10 rounded-full object-cover"
               />
-              <span className="text-xl md:text-2xl font-serif font-semibold tracking-wide text-text hidden sm:block">
+              <span className="text-xl md:text-2xl font-serif font-semibold tracking-wide text-black hidden sm:block">
                 AntiqKart
               </span>
             </Link>
@@ -60,8 +60,8 @@ const Navbar = () => {
               <li key={link.name} className="relative group">
                 <Link
                   to={link.href}
-                  className={`relative flex items-center gap-x-2 text-sm font-medium transition-colors hover:text-accent ${
-                    currentPath === link.href ? "text-text" : "text-muted"
+                  className={`relative flex items-center gap-x-2 text-sm font-medium transition-colors hover:text-black ${
+                    currentPath === link.href ? "text-black" : "text-gray-800"
                   }`}
                 >
                   {link.name}
@@ -71,9 +71,9 @@ const Navbar = () => {
               </li>
             ))}
           </ul>
-          <div className="flex items-center gap-x-2 sm:gap-x-3 text-muted">
+          <div className="flex items-center gap-x-2 sm:gap-x-3 text-gray-800">
             <button
-              className="p-2 rounded-full hover:bg-gray-100 hover:text-text transition-colors"
+              className="p-2 rounded-full hover:bg-gray-100 hover:text-black transition-colors"
               onClick={() => setIsSearchOpen(true)}
               aria-label="Open search"
             >
@@ -82,7 +82,7 @@ const Navbar = () => {
             {/* --- THIS IS THE CART ICON WITH THE NUMBER BADGE --- */}
             <Link
               to="/cart"
-              className="p-2 rounded-full hover:bg-gray-100 hover:text-text transition-colors relative"
+              className="p-2 rounded-full hover:bg-gray-100 hover:text-black transition-colors relative"
               aria-label="View cart"
             >
               <ShoppingCart size={20} />
@@ -100,7 +100,7 @@ const Navbar = () => {
               <SignedOut>
                 <Link
                   to="/sign-in"
-                  className="text-sm font-semibold hover:text-accent transition-colors p-2"
+                  className="text-sm font-semibold hover:text-black transition-colors p-2"
                 >
                   Sign In
                 </Link>
@@ -118,7 +118,7 @@ const Navbar = () => {
   );
 };
 
-// ... (ShopMegaMenu, StatesMegaMenu, and MobileBottomNav components remain the same)
+// ... (ShopMegaMenu component remains the same)
 
 interface Collection {
   id: string;
@@ -168,7 +168,7 @@ const ShopMegaMenu = () => {
                       className="w-full h-full object-cover group-hover/item:scale-105 transition-transform duration-300"
                     />
                   </div>
-                  <h4 className="font-semibold text-sm text-gray-800 group-hover/item:text-accent">
+                  <h4 className="font-semibold text-sm text-gray-800 group-hover/item:text-black">
                     {item.name}
                   </h4>
                 </Link>
@@ -184,7 +184,7 @@ const ShopMegaMenu = () => {
         <div className="bg-gray-50 px-6 py-4 border-t border-gray-100 text-center">
           <Link
             to="/shop"
-            className="text-sm font-semibold text-accent hover:underline"
+            className="text-sm font-semibold text-black hover:underline"
           >
             View All Products &rarr;
           </Link>
@@ -229,7 +229,7 @@ const StatesMegaMenu = () => {
                 <Link
                   key={state.id}
                   to={`/states/${slugify(state.name)}`}
-                  className="block text-sm text-muted hover:text-accent hover:font-semibold transition-all duration-200"
+                  className="block text-sm text-gray-700 hover:text-black hover:font-semibold transition-all duration-200"
                 >
                   {state.name}
                 </Link>
@@ -244,7 +244,7 @@ const StatesMegaMenu = () => {
         <div className="mt-6 pt-4 border-t border-gray-100 text-center">
           <Link
             to="/states"
-            className="text-sm font-semibold text-accent hover:underline"
+            className="text-sm font-semibold text-black hover:underline"
           >
             View All States &rarr;
           </Link>
@@ -257,6 +257,8 @@ const StatesMegaMenu = () => {
 const MobileBottomNav = () => {
   const location = useLocation();
   const currentPath = location.pathname;
+  const accentColor = "text-slate-900"; // Re-using the button color for active state
+  const inactiveColor = "text-gray-600";
 
   const mobileNavLinks = [
     { name: "Home", href: "/", icon: Home },
@@ -279,12 +281,12 @@ const MobileBottomNav = () => {
                 <link.icon
                   size={22}
                   className={`transition-colors ${
-                    isActive ? "text-accent" : "text-muted"
+                    isActive ? accentColor : inactiveColor
                   }`}
                 />
                 <span
                   className={`text-xs font-medium transition-colors ${
-                    isActive ? "text-accent" : "text-muted"
+                    isActive ? accentColor : inactiveColor
                   }`}
                 >
                   {link.name}

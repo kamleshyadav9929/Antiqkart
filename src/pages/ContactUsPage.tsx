@@ -92,7 +92,7 @@ const ContactUsPage = () => {
                     <div>
                       <button
                         type="submit"
-                        className="w-full inline-flex items-center justify-center gap-x-2 py-2.5 px-4 bg-slate-800 text-white font-semibold rounded-md hover:bg-slate-700 transition-colors text-sm"
+                        className="w-full inline-flex items-center justify-center gap-x-2 py-2.5 px-4 bg-slate-950 text-white font-semibold rounded-md hover:bg-slate-800 transition-colors text-sm"
                       >
                         Send Message <Send size={16} />
                       </button>

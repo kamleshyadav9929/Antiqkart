@@ -45,7 +45,7 @@ const FeaturedProducts: React.FC = () => {
         to="/shop"
         className="flex h-full w-full flex-col items-center justify-center rounded-lg p-4 transition-transform hover:scale-105"
       >
-        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-800 text-white">
+        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-950 text-white">
           <ArrowRight size={24} />
         </div>
         <span className="mt-4 text-sm font-semibold text-gray-800">
@@ -69,7 +69,7 @@ const FeaturedProducts: React.FC = () => {
         <div className="hidden text-center md:block md:absolute md:top-1/2 md:right-0 md:-translate-y-1/2 md:mt-0">
           <Link
             to="/shop"
-            className="text-center text-xs font-bold text-white bg-slate-800 py-2.5 px-4 rounded-md transition-colors duration-300 hover:bg-slate-700 inline-flex items-center gap-x-2"
+            className="text-center text-xs font-bold text-white bg-slate-950 py-2.5 px-4 rounded-md transition-colors duration-300 hover:bg-slate-800 inline-flex items-center gap-x-2"
           >
             See All <ArrowRight size={14} />
           </Link>

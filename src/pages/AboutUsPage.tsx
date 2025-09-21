@@ -172,7 +172,7 @@ const AboutUsPage = () => {
               </p>
               <Link
                 to="/shop"
-                className="inline-flex items-center gap-x-2 bg-slate-800 text-white font-semibold py-3 px-8 rounded-full hover:bg-slate-700 transition-colors"
+                className="inline-flex items-center gap-x-2 bg-slate-950 text-white font-semibold py-3 px-8 rounded-full hover:bg-slate-800 transition-colors"
               >
                 Shop Now <ArrowRight size={20} />
               </Link>

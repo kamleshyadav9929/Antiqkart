@@ -3,12 +3,12 @@
 /* --- DESIGN UPGRADE: Defining a Professional Color Palette & Typography --- */
 :root {
   /* Colors */
-  --bg-primary: #fbf9f6; /* Warm, inviting off-white */
-  --text-primary: #3a3a3a; /* Softer, rich black for headings */
-  --text-secondary: #5d5d5d; /* Muted gray for body text */
-  --accent-primary: #b98b73; /* Sophisticated tan for buttons and highlights */
-  --accent-secondary: #e4c5af; /* Lighter tan for subtle backgrounds */
-  --border-color: #eaeaea; /* Soft border color */
+  --bg-primary: #ffffff; /* White background */
+  --text-primary: #000000; /* Solid black for headings */
+  --text-secondary: #4a4a4a; /* Darker gray for body text */
+  --accent-primary: #020617; /* Slate 950 for buttons and highlights */
+  --accent-secondary: #dbeafe; /* Lighter blue for subtle backgrounds */
+  --border-color: #e5e7eb; /* Soft border color */
 }
 
 * {
@@ -20,6 +20,7 @@ body {
   color: var(--text-secondary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden; /* Add this to prevent horizontal scrollbars */
 }
 
 /* Typography Rules */
@@ -28,16 +29,6 @@ body {
 }
 .font-sans {
   font-family: "Inter", sans-serif;
-}
-
-/* Applying default text colors for better hierarchy */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  color: var(--text-primary);
 }
 
 /* --- Utility Class for Scrollbar Hiding --- */

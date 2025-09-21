@@ -47,7 +47,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
         rel="noopener noreferrer"
         className="block"
       >
-        {/* FIX: Removed the padding class 'p-4' from the image itself to eliminate the inner border */}
         <div className="relative flex-shrink-0 flex items-center justify-center bg-gray-50 aspect-square">
           <img
             src={image}
@@ -64,21 +63,19 @@ const ProductCard: React.FC<ProductCardProps> = ({
           rel="noopener noreferrer"
           className="block mb-2"
         >
-          <h3 className="text-sm font-medium text-[var(--text-primary)] line-clamp-2 group-hover:text-[var(--accent-primary)] transition-colors">
+          <h3 className="text-sm font-medium text-slate-800 line-clamp-2 group-hover:text-black transition-colors">
             {name}
           </h3>
         </a>
 
-        <p className="text-lg font-bold text-[var(--text-primary)] mt-auto">
-          {formattedPrice}
-        </p>
+        <p className="text-lg font-bold text-black mt-auto">{formattedPrice}</p>
 
         <div className="mt-4 space-y-2">
           <a
             href={affiliateLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="block w-full text-center text-sm font-semibold text-white bg-[var(--accent-primary)] py-2.5 px-3 rounded-md hover:opacity-90 transition-opacity"
+            className="block w-full text-center text-sm font-semibold text-white bg-slate-950 py-2.5 px-3 rounded-md hover:opacity-90 transition-opacity"
           >
             View on Amazon
           </a>
@@ -86,12 +83,14 @@ const ProductCard: React.FC<ProductCardProps> = ({
             onClick={handleCartClick}
             className={`w-full flex items-center justify-center gap-x-2 text-sm font-semibold py-2.5 px-3 rounded-md border transition-colors duration-300 ${
               inCart
-                ? "bg-slate-800 text-white border-slate-800"
-                : "bg-white text-[var(--text-secondary)] border-[var(--border-color)] hover:bg-gray-50"
+                ? "bg-slate-950 text-white border-slate-950"
+                : "bg-white text-slate-700 border-gray-300 hover:bg-gray-50"
             }`}
           >
             <ShoppingBag size={16} />
-            <span className="sm:hidden">{inCart ? "In List" : "Add"}</span>
+            <span className="sm:hidden">
+              {inCart ? "In Cart" : "Add to cart"}
+            </span>
             <span className="hidden sm:inline">
               {inCart ? "In Wishlist" : "Add to Wishlist"}
             </span>

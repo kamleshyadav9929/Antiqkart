@@ -45,17 +45,20 @@ const Collections: React.FC<CollectionsProps> = ({ showAll = false }) => {
   const CollectionCard = ({ collection }: { collection: Collection }) => (
     <Link
       to={`/collections/${collection.name.toLowerCase().replace(/\s+/g, "-")}`}
-      className="group relative block rounded-2xl overflow-hidden shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+      className="group block"
     >
-      <div className="h-48 md:h-56">
-        <img
-          src={collection.image}
-          alt={collection.name}
-          className="w-full h-full object-cover transition-transform duration-300 ease-in-out group-hover:scale-105"
-        />
+      <div className="relative rounded-2xl overflow-hidden shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+        <div className="h-48 md:h-56">
+          <img
+            src={collection.image}
+            alt={collection.name}
+            className="w-full h-full object-cover transition-transform duration-300 ease-in-out group-hover:scale-105"
+          />
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
       </div>
-      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-4">
-        <h3 className="text-white text-lg font-semibold transform transition-transform duration-300 group-hover:-translate-y-1">
+      <div className="pt-3">
+        <h3 className="text-black text-base font-semibold">
           {collection.name}
         </h3>
       </div>
@@ -63,7 +66,10 @@ const Collections: React.FC<CollectionsProps> = ({ showAll = false }) => {
   );
 
   const SkeletonCard = () => (
-    <div className="w-full h-48 md:h-56 bg-gray-200 rounded-2xl animate-pulse"></div>
+    <div className="animate-pulse">
+      <div className="w-full h-48 md:h-56 bg-gray-200 rounded-2xl"></div>
+      <div className="h-5 mt-3 bg-gray-200 rounded w-3/4"></div>
+    </div>
   );
 
   return (
@@ -75,7 +81,7 @@ const Collections: React.FC<CollectionsProps> = ({ showAll = false }) => {
         {!showAll && (
           <Link
             to="/collections"
-            className="text-center text-xs font-bold text-white bg-slate-800 py-2.5 px-4 rounded-md transition-colors duration-300 hover:bg-slate-700 inline-flex items-center gap-x-2"
+            className="text-center text-xs font-bold text-white bg-slate-950 py-2.5 px-4 rounded-md transition-colors duration-300 hover:bg-slate-800 inline-flex items-center gap-x-2"
           >
             See All <ArrowRight size={14} />
           </Link>

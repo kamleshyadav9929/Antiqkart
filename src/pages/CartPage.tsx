@@ -60,7 +60,7 @@ const CartPage = () => {
                   </p>
                   <Link
                     to="/shop"
-                    className="mt-6 inline-block px-6 py-3 rounded-full bg-slate-800 text-white font-medium hover:bg-slate-700 transition-colors"
+                    className="mt-6 inline-block px-6 py-3 rounded-full bg-slate-950 text-white font-medium hover:bg-slate-800 transition-colors"
                   >
                     Continue Shopping
                   </Link>

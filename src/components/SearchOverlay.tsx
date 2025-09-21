@@ -162,7 +162,7 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({ isOpen, onClose }) => {
       </div>
       <div className="flex-shrink-0 px-4 md:px-8 lg:px-16 animate-slide-in-up">
         <div className="relative w-full max-w-2xl mx-auto">
-          <div className="group flex items-center bg-white border border-gray-200 rounded-full px-2 py-2 shadow-sm focus-within:ring-2 focus-within:ring-slate-800 transition-all">
+          <div className="group flex items-center bg-white border border-gray-200 rounded-full px-2 py-2 shadow-sm focus-within:ring-2 focus-within:ring-slate-950 transition-all">
             <input
               ref={searchInputRef}
               type="text"
@@ -173,7 +173,7 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({ isOpen, onClose }) => {
             />
             <button
               type="button"
-              className="flex-shrink-0 bg-slate-800 text-white rounded-full p-3"
+              className="flex-shrink-0 bg-slate-950 text-white rounded-full p-3"
             >
               <Search size={20} />
             </button>

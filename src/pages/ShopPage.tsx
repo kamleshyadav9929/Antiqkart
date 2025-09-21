@@ -186,10 +186,10 @@ const ShopPage = () => {
             step={500}
             value={priceRange}
             onChange={(value) => setPriceRange(value as [number, number])}
-            trackStyle={[{ backgroundColor: "#2e2a27" }]}
+            trackStyle={[{ backgroundColor: "#020617" }]}
             handleStyle={[
-              { borderColor: "#2e2a27" },
-              { borderColor: "#2e2a27" },
+              { borderColor: "#020617" },
+              { borderColor: "#020617" },
             ]}
           />
           <div className="flex justify-between mt-2 text-sm text-gray-600">
@@ -299,7 +299,7 @@ const ShopPage = () => {
               </button>
               <button
                 onClick={() => setIsFilterOpen(false)}
-                className="w-1/2 text-sm font-bold text-white bg-slate-800 py-3 px-4 rounded-md"
+                className="w-1/2 text-sm font-bold text-white bg-slate-950 py-3 px-4 rounded-md"
               >
                 Show Results
               </button>
