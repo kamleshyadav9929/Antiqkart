@@ -1,101 +1,122 @@
 import React from "react";
-import { ShoppingBag } from "lucide-react";
+import { Heart, Star } from "lucide-react";
 import { useCart } from "../hooks/useCart";
 
 interface ProductCardProps {
   id: string;
   image: string;
   name: string;
-  price?: string | number;
+  collectionName?: string;
   affiliateLink: string;
+  price?: string;
+  rating?: number;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({
   id,
   image,
   name,
-  price,
+  collectionName,
   affiliateLink,
+  price,
+  rating,
 }) => {
   const { addToCart, isItemInCart, removeFromCart } = useCart();
-  const inCart = isItemInCart(id);
+  const inWishlist = isItemInCart(id);
 
-  const handleCartClick = (e: React.MouseEvent) => {
+  const handleWishlistClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (inCart) {
+    if (inWishlist) {
       removeFromCart(id);
     } else {
       addToCart(id);
     }
   };
 
-  const formattedPrice =
-    price !== undefined
-      ? new Intl.NumberFormat("en-IN", {
-          style: "currency",
-          currency: "INR",
-          minimumFractionDigits: 0,
-        }).format(Number(price.toString().replace(/[^0-9.-]+/g, "")))
-      : "Price upon request";
-
   return (
-    <div className="group relative flex flex-col bg-white rounded-lg overflow-hidden border border-[var(--border-color)] transition-all duration-300 ease-in-out hover:shadow-xl hover:-translate-y-1">
-      <a
-        href={affiliateLink}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="block"
-      >
-        <div className="relative flex-shrink-0 flex items-center justify-center bg-gray-50 aspect-square">
-          <img
-            src={image}
-            alt={name}
-            className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
-          />
-        </div>
-      </a>
-
-      <div className="flex flex-col flex-grow p-4">
+    <div className="group flex flex-col bg-white rounded-2xl overflow-hidden border border-gray-200/70 shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+      {/* --- Image Section --- */}
+      <div className="relative bg-gray-50 aspect-square flex items-center justify-center">
         <a
           href={affiliateLink}
           target="_blank"
           rel="noopener noreferrer"
-          className="block mb-2"
+          className="block w-full h-full"
         >
-          <h3 className="text-sm font-medium text-slate-800 line-clamp-2 group-hover:text-black transition-colors">
-            {name}
-          </h3>
+          <img
+            src={image}
+            alt={name}
+            className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-110"
+          />
         </a>
+        {/* Wishlist Floating */}
+        <button
+          onClick={handleWishlistClick}
+          className={`absolute top-3 right-3 p-2 rounded-full shadow-md transition-colors ${
+            inWishlist
+              ? "bg-red-500 text-white"
+              : "bg-white text-gray-600 hover:bg-gray-100"
+          }`}
+          aria-label="Add to Wishlist"
+        >
+          <Heart size={18} fill={inWishlist ? "currentColor" : "none"} />
+        </button>
+      </div>
 
-        <p className="text-lg font-bold text-black mt-auto">{formattedPrice}</p>
+      {/* --- Content Section --- */}
+      <div className="p-4 flex flex-col flex-grow">
+        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+          {collectionName || "Antiqkart"}
+        </p>
 
-        <div className="mt-4 space-y-2">
-          <a
-            href={affiliateLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block w-full text-center text-sm font-semibold text-white bg-slate-950 py-2.5 px-3 rounded-md hover:opacity-90 transition-opacity"
-          >
-            View on Amazon
-          </a>
-          <button
-            onClick={handleCartClick}
-            className={`w-full flex items-center justify-center gap-x-2 text-sm font-semibold py-2.5 px-3 rounded-md border transition-colors duration-300 ${
-              inCart
-                ? "bg-slate-950 text-white border-slate-950"
-                : "bg-white text-slate-700 border-gray-300 hover:bg-gray-50"
-            }`}
-          >
-            <ShoppingBag size={16} />
-            <span className="sm:hidden">
-              {inCart ? "In Cart" : "Add to cart"}
+        {/* Name (Single line) */}
+        <h3
+          className="text-sm font-semibold text-slate-800 mt-1 truncate"
+          title={name}
+        >
+          {name}
+        </h3>
+
+        {/* Rating */}
+        {rating && rating > 0 && (
+          <div className="flex items-center gap-1 mt-1">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <Star
+                key={i}
+                size={14}
+                className={`${
+                  i < Math.floor(rating)
+                    ? "text-yellow-400 fill-yellow-400"
+                    : "text-gray-300"
+                }`}
+              />
+            ))}
+            <span className="text-xs text-gray-500 ml-1">({rating})</span>
+          </div>
+        )}
+
+        {/* Price */}
+        {price && (
+          <p className="mt-2 text-lg font-semibold text-slate-900 flex items-baseline">
+            ₹{price}
+            <span className="ml-1 text-[10px] text-gray-400 font-normal">
+              (price may vary)
             </span>
-            <span className="hidden sm:inline">
-              {inCart ? "In Wishlist" : "Add to Wishlist"}
-            </span>
-          </button>
-        </div>
+          </p>
+        )}
+
+        <div className="flex-grow" />
+
+        {/* --- Action --- */}
+        <a
+          href={affiliateLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-full text-center text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-slate-900 to-slate-700 py-2.5 px-3 rounded-lg hover:opacity-90 transition-all shadow-md hover:shadow-lg mt-4"
+        >
+          View on Amazon
+        </a>
       </div>
     </div>
   );

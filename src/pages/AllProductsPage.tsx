@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 import ProductCard from "../components/ProductCard";
-
 import Layout from "../components/Layout";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -74,7 +73,7 @@ const AllProductsPage = () => {
                       {collection.products.map((product) => (
                         <ProductCard
                           key={product.id}
-                          id={product.id} // Add this line
+                          id={product.id}
                           name={product.name}
                           image={product.image}
                           price={product.price}

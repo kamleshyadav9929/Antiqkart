@@ -9,7 +9,6 @@ import SkeletonCard from "../components/SkeletonCard";
 import { ShoppingBag } from "lucide-react";
 
 const CartPage = () => {
-  // We still get the sorted product details and loading state from the hook
   const { cartProductDetails, loading } = useCart();
 
   return (
@@ -26,30 +25,26 @@ const CartPage = () => {
             </p>
             <div className="mt-12">
               {loading ? (
-                // Skeleton loader remains the same
                 <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
                   {Array.from({ length: 5 }).map((_, index) => (
                     <SkeletonCard key={index} />
                   ))}
                 </div>
               ) : cartProductDetails.length > 0 ? (
-                // **UPDATED DISPLAY**
-                // We no longer need sections. We just map over the pre-sorted array
-                // and render the products in a single, clean grid.
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-4">
                   {cartProductDetails.map((product) => (
                     <ProductCard
                       key={product.id}
                       id={product.id}
                       name={product.name}
                       image={product.image}
-                      price={product.price}
+                      price={product.price?.toString()}
                       affiliateLink={product.affiliate_link}
+                      collectionName={product.collections?.name}
                     />
                   ))}
                 </div>
               ) : (
-                // The empty cart message remains the same
                 <div className="text-center py-16 border-2 border-dashed border-gray-300 rounded-xl">
                   <ShoppingBag size={48} className="mx-auto text-gray-400" />
                   <h2 className="mt-6 text-2xl font-semibold text-gray-800">

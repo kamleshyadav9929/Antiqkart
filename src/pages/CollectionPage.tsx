@@ -82,7 +82,6 @@ const CollectionPage = () => {
         .select("id, name, image, price, affiliate_link, created_at")
         .eq("collection_id", collectionData.id);
 
-      // FIX 1: Handle the productsError variable
       if (productsError) {
         console.error("Error fetching products:", productsError);
       }
@@ -94,7 +93,6 @@ const CollectionPage = () => {
   }, [collectionSlug]);
 
   const filteredAndSortedProducts = useMemo(() => {
-    // FIX 2: Use 'const' instead of 'let'
     const result = [...products].filter((product) =>
       product.name.toLowerCase().includes(searchTerm.toLowerCase())
     );

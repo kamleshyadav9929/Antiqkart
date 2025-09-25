@@ -35,13 +35,8 @@ const NewArrivals: React.FC = () => {
     fetchNewArrivals();
   }, []);
 
-  if (products.length === 0 && !loading) {
-    return null;
-  }
-
   return (
     <div>
-      {/* FIX: Centered header for consistency */}
       <div className="mb-10 text-center">
         <h2 className="text-3xl md:text-4xl font-serif font-semibold text-text">
           New Arrivals

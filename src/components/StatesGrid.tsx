@@ -64,7 +64,6 @@ const StatesGrid = () => {
         </h2>
       </div>
 
-      {/* Mobile: 3 in a row grid */}
       <div className="md:hidden grid grid-cols-3 gap-x-4 gap-y-6">
         {loading
           ? Array.from({ length: 9 }).map((_, index) => (
@@ -73,7 +72,6 @@ const StatesGrid = () => {
           : states.map(stateCard)}
       </div>
 
-      {/* Desktop: 8 in a row grid */}
       <div className="hidden md:grid md:grid-cols-8 gap-x-6 gap-y-8">
         {loading
           ? Array.from({ length: 16 }).map((_, index) => (

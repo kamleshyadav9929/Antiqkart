@@ -2,15 +2,13 @@ import React, { useState, useEffect, useRef, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "../lib/supabaseClient";
 import ProductCard from "./ProductCard";
-
 import { X, Search, MapPin, Layers } from "lucide-react";
 
-// --- Data Interfaces ---
 interface Product {
   id: string;
   name: string;
   image: string;
-  price?: number; // Price from database is a number
+  price?: number;
   affiliate_link: string;
 }
 
@@ -26,10 +24,8 @@ interface Collection {
   image: string;
 }
 
-// A union type to represent any possible item in the search results
 type SearchItem = Product | State | Collection;
 
-// --- Search Result Card for States & Collections ---
 const CategoryCard: React.FC<{
   item: State | Collection;
   type: "state" | "collection";
@@ -60,7 +56,6 @@ const CategoryCard: React.FC<{
   );
 };
 
-// --- Main Search Overlay Component ---
 interface SearchOverlayProps {
   isOpen: boolean;
   onClose: () => void;
@@ -192,7 +187,6 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({ isOpen, onClose }) => {
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 md:gap-4">
                     {section.data.map((item: SearchItem) => {
                       if (section.type === "product") {
-                        // TypeScript knows 'item' is a Product here
                         const productItem = item as Product;
                         return (
                           <ProductCard
@@ -205,7 +199,6 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({ isOpen, onClose }) => {
                           />
                         );
                       }
-                      // TypeScript knows 'item' is a State or Collection here
                       return (
                         <CategoryCard
                           key={`${section.type}-${item.id}`}

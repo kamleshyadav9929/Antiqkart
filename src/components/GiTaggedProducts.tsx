@@ -35,10 +35,6 @@ const GiTaggedProducts: React.FC = () => {
     fetchGiTaggedProducts();
   }, []);
 
-  if (products.length === 0 && !loading) {
-    return null;
-  }
-
   return (
     <div>
       <div className="mb-10 text-center">

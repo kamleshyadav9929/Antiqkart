@@ -1,82 +1,67 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
 import FeaturedProducts from "../components/FeaturedProducts";
 import TrendingProducts from "../components/TrendingProducts";
+import FestiveCollections from "../components/FestiveCollections";
 import GiTaggedProducts from "../components/GiTaggedProducts";
 import StatesGrid from "../components/StatesGrid";
 import Collections from "../components/Collections";
 import Layout from "../components/Layout";
 import Footer from "../components/Footer";
-import SearchOverlay from "../components/SearchOverlay";
 import NewArrivals from "../components/NewArrivals";
 
 const Homepage = () => {
-  const [isSearchOverlayOpen, setIsSearchOverlayOpen] = useState(false);
-
-  // Helper component for the angled sections
-  const AngledSection = ({
+  const Section = ({
     children,
-    className,
-    isLast = false,
+    className = "bg-white",
+    id,
   }: {
     children: React.ReactNode;
-    className: string;
-    isLast?: boolean;
-  }) => {
-    const clipPathStyle = isLast
-      ? { clipPath: "polygon(0 0, 100% 10%, 100% 100%, 0% 100%)" }
-      : { clipPath: "polygon(0 0, 100% 10%, 100% 90%, 0% 100%)" };
-
-    return (
-      <div
-        className={`relative -mt-16 md:-mt-24 ${className}`}
-        style={clipPathStyle}
-      >
-        <div className="py-24 md:py-36">
-          <Layout>{children}</Layout>
-        </div>
-      </div>
-    );
-  };
+    className?: string;
+    id?: string;
+  }) => (
+    <section id={id} className={`py-16 md:py-24 ${className}`}>
+      <Layout>{children}</Layout>
+    </section>
+  );
 
   return (
     <>
       <Navbar />
-      <div className="bg-white">
-        <main>
-          <Hero onSearchClick={() => setIsSearchOverlayOpen(true)} />
-        </main>
+      <main>
+        <Hero />
 
-        <AngledSection className="bg-white">
+        {/* --- FESTIVE SECTION MOVED TO TOP --- */}
+        <Section id="festive-specials" className="bg-amber-50/50">
+          <FestiveCollections />
+        </Section>
+
+        <Section>
           <NewArrivals />
-        </AngledSection>
+        </Section>
 
-        <AngledSection className="bg-slate-50">
+        <Section className="bg-slate-50">
           <FeaturedProducts />
-        </AngledSection>
+        </Section>
 
-        <AngledSection className="bg-white">
+        <Section>
           <TrendingProducts />
-        </AngledSection>
+        </Section>
 
-        <AngledSection className="bg-white">
+        <Section className="bg-slate-50">
           <GiTaggedProducts />
-        </AngledSection>
+        </Section>
 
-        <AngledSection className="bg-white">
+        <Section>
           <StatesGrid />
-        </AngledSection>
+        </Section>
 
-        <AngledSection className="bg-slate-50" isLast={true}>
+        <Section className="bg-slate-50">
           <Collections />
-        </AngledSection>
-      </div>
+        </Section>
+      </main>
       <Footer />
-      <SearchOverlay
-        isOpen={isSearchOverlayOpen}
-        onClose={() => setIsSearchOverlayOpen(false)}
-      />
     </>
   );
 };

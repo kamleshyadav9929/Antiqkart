@@ -50,10 +50,6 @@ const TrendingProducts: React.FC = () => {
     fetchTrendingProducts();
   }, []);
 
-  if (products.length === 0 && !loading) {
-    return null;
-  }
-
   return (
     <div>
       <div className="mb-10 text-center">

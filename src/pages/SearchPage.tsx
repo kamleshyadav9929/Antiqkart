@@ -28,7 +28,6 @@ const SearchResultCard = ({ result }: { result: SearchResult }) => {
     }
   };
 
-  // The ProductCard is already well-designed for products.
   if (result.result_type === "product") {
     return (
       <ProductCard
@@ -36,12 +35,10 @@ const SearchResultCard = ({ result }: { result: SearchResult }) => {
         name={result.name}
         image={result.image}
         affiliateLink={result.link}
-        price={undefined}
       />
     );
   }
 
-  // A simpler card for states and collections.
   return (
     <a
       href={result.link}
@@ -68,7 +65,6 @@ const SearchPage = () => {
   const [query, setQuery] = useState("");
 
   useEffect(() => {
-    // Get search query from URL
     const searchParams = new URLSearchParams(window.location.search);
     const q = searchParams.get("q") || "";
     setQuery(q);
@@ -80,7 +76,6 @@ const SearchPage = () => {
         return;
       }
       setLoading(true);
-      // Call the database function
       const { data, error } = await supabase.rpc("search_all", {
         search_term: q,
       });

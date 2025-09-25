@@ -7,7 +7,6 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { Search } from "lucide-react";
 
-// Define the structure for a Product
 interface Product {
   id: string;
   name: string;

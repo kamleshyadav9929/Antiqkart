@@ -20,12 +20,11 @@ const FeaturedProducts: React.FC = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
-      // Fetching more products initially to accommodate the longer mobile carousel
       const { data, error } = await supabase
         .from("products")
         .select("id, name, image, price, affiliate_link")
         .order("created_at", { ascending: false })
-        .limit(16); // Fetch up to 16 products
+        .limit(16);
 
       if (error) {
         console.error("Error fetching featured products:", error.message);
@@ -37,10 +36,8 @@ const FeaturedProducts: React.FC = () => {
     fetchProducts();
   }, []);
 
-  // A new component for the "See All" card with a transparent background
   const SeeAllCard = () => (
     <div className="flex-shrink-0 w-48">
-      {/* FIX: Removed background color classes for a transparent look */}
       <Link
         to="/shop"
         className="flex h-full w-full flex-col items-center justify-center rounded-lg p-4 transition-transform hover:scale-105"
@@ -76,7 +73,6 @@ const FeaturedProducts: React.FC = () => {
         </div>
       </div>
 
-      {/* --- Mobile View: Carousel with "See All" card at the end --- */}
       <div className="md:hidden relative">
         <div className="flex overflow-x-auto space-x-4 pb-4 -mx-4 px-4 scrollbar-hide">
           {loading ? (
@@ -87,7 +83,6 @@ const FeaturedProducts: React.FC = () => {
             ))
           ) : (
             <>
-              {/* FIX: Showing 11 products before the "See All" card */}
               {products.slice(0, 11).map((product) => (
                 <div key={product.id} className="flex-shrink-0 w-48">
                   <ProductCard
@@ -105,16 +100,14 @@ const FeaturedProducts: React.FC = () => {
         </div>
       </div>
 
-      {/* --- Desktop View: Standard Grid --- */}
       <div className="hidden md:grid md:grid-cols-4 lg:grid-cols-6 gap-4">
         {loading
           ? Array.from({ length: 12 }).map((_, index) => (
               <SkeletonCard key={index} />
             ))
-          : products.slice(0, 12).map(
-              (
-                product // Show 12 products on desktop
-              ) => (
+          : products
+              .slice(0, 12)
+              .map((product) => (
                 <ProductCard
                   key={product.id}
                   id={product.id}
@@ -123,8 +116,7 @@ const FeaturedProducts: React.FC = () => {
                   price={product.price}
                   affiliateLink={product.affiliate_link}
                 />
-              )
-            )}
+              ))}
       </div>
     </div>
   );
