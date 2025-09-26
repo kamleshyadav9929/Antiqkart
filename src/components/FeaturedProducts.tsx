@@ -11,6 +11,7 @@ interface Product {
   image: string;
   price?: string;
   affiliate_link: string;
+  rating?: number;
 }
 
 const FeaturedProducts: React.FC = () => {
@@ -22,7 +23,7 @@ const FeaturedProducts: React.FC = () => {
       setLoading(true);
       const { data, error } = await supabase
         .from("products")
-        .select("id, name, image, price, affiliate_link")
+        .select("id, name, image, price, affiliate_link, rating")
         .order("created_at", { ascending: false })
         .limit(16);
 
@@ -84,12 +85,16 @@ const FeaturedProducts: React.FC = () => {
           ) : (
             <>
               {products.slice(0, 11).map((product) => (
-                <div key={product.id} className="flex-shrink-0 w-48">
+                <div
+                  key={product.id}
+                  className="flex-shrink-0 w-48 h-full flex"
+                >
                   <ProductCard
                     id={product.id}
                     name={product.name}
                     image={product.image}
                     price={product.price}
+                    rating={product.rating}
                     affiliateLink={product.affiliate_link}
                   />
                 </div>
@@ -105,18 +110,18 @@ const FeaturedProducts: React.FC = () => {
           ? Array.from({ length: 12 }).map((_, index) => (
               <SkeletonCard key={index} />
             ))
-          : products
-              .slice(0, 12)
-              .map((product) => (
+          : products.slice(0, 12).map((product) => (
+              <div key={product.id} className="h-full flex">
                 <ProductCard
-                  key={product.id}
                   id={product.id}
                   name={product.name}
                   image={product.image}
                   price={product.price}
+                  rating={product.rating}
                   affiliateLink={product.affiliate_link}
                 />
-              ))}
+              </div>
+            ))}
       </div>
     </div>
   );

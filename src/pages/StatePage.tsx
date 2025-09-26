@@ -14,6 +14,7 @@ interface Product {
   price?: number;
   affiliate_link: string;
   created_at: string;
+  rating?: number;
 }
 
 const StatePage = () => {
@@ -65,14 +66,16 @@ const StatePage = () => {
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-4">
               {products.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  id={product.id}
-                  name={product.name}
-                  image={product.image}
-                  price={product.price?.toString()}
-                  affiliateLink={product.affiliate_link}
-                />
+                <div key={product.id} className="h-full">
+                  <ProductCard
+                    id={product.id}
+                    name={product.name}
+                    image={product.image}
+                    price={product.price?.toString()}
+                    rating={product.rating}
+                    affiliateLink={product.affiliate_link}
+                  />
+                </div>
               ))}
             </div>
           )}

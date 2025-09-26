@@ -15,6 +15,7 @@ interface Product {
   price?: number;
   affiliate_link: string;
   created_at: string;
+  rating?: number;
 }
 
 const sortOptions = [
@@ -79,7 +80,7 @@ const CollectionPage = () => {
 
       const { data: productsData, error: productsError } = await supabase
         .from("products")
-        .select("id, name, image, price, affiliate_link, created_at")
+        .select("id, name, image, price, affiliate_link, created_at, rating")
         .eq("collection_id", collectionData.id);
 
       if (productsError) {
@@ -209,14 +210,16 @@ const CollectionPage = () => {
             ) : filteredAndSortedProducts.length > 0 ? (
               <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-4">
                 {filteredAndSortedProducts.map((product) => (
-                  <ProductCard
-                    key={product.id}
-                    id={product.id}
-                    name={product.name}
-                    image={product.image}
-                    price={product.price?.toString()}
-                    affiliateLink={product.affiliate_link}
-                  />
+                  <div key={product.id} className="h-full">
+                    <ProductCard
+                      id={product.id}
+                      name={product.name}
+                      image={product.image}
+                      price={product.price?.toString()}
+                      rating={product.rating}
+                      affiliateLink={product.affiliate_link}
+                    />
+                  </div>
                 ))}
               </div>
             ) : (

@@ -9,6 +9,7 @@ interface Product {
   image: string;
   price?: string;
   affiliate_link: string;
+  rating?: number; // <-- Added rating
 }
 
 interface TrendingProductData {
@@ -29,8 +30,8 @@ const TrendingProducts: React.FC = () => {
         .select(
           `
           position,
-          products ( id, name, image, price, affiliate_link )
-        `
+          products ( id, name, image, price, affiliate_link, rating )
+        ` // <-- Added rating to select
         )
         .order("position", { ascending: true })
         .limit(10)
@@ -77,6 +78,7 @@ const TrendingProducts: React.FC = () => {
                     name={product.name}
                     image={product.image}
                     price={product.price}
+                    rating={product.rating} // <-- Passed rating
                     affiliateLink={product.affiliate_link}
                   />
                 </div>

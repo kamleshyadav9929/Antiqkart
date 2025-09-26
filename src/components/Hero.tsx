@@ -1,92 +1,150 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { ArrowRight, Award, BookOpen, Users, Gift } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { ArrowRight } from "lucide-react";
+import { motion, Variants } from "framer-motion";
+import { supabase } from "../lib/supabaseClient";
 
-// This is a local component now, living inside Hero.tsx
-const FeatureCard = ({
-  icon,
-  title,
-  description,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-}) => (
-  <div className="text-center p-4">
-    <div className="flex justify-center mb-3">
-      <div className="bg-[#D97706]/10 text-[#D97706] p-3 rounded-full">
-        {icon}
-      </div>
-    </div>
-    <h3 className="text-md font-semibold text-slate-800">{title}</h3>
-    <p className="mt-1 text-sm text-gray-600">{description}</p>
-  </div>
-);
+interface Product {
+  id: string;
+  name: string;
+  image: string;
+  affiliate_link: string;
+}
+
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15,
+    },
+  },
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: "easeOut",
+    },
+  },
+};
 
 const Hero = () => {
-  const scrollToFestive = () => {
-    const festiveSection = document.getElementById("festive-specials");
-    if (festiveSection) {
-      festiveSection.scrollIntoView({ behavior: "smooth" });
-    }
-  };
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchHeroProducts = async () => {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from("products")
+        .select("id, name, image, affiliate_link")
+        .order("created_at", { ascending: false })
+        .limit(5);
+
+      if (error) {
+        console.error("Error fetching hero products:", error.message);
+      } else if (data && data.length >= 5) {
+        setProducts(data);
+      }
+      setLoading(false);
+    };
+    fetchHeroProducts();
+  }, []);
+
+  if (loading || products.length < 5) {
+    return (
+      <div className="w-full h-[600px] md:h-[550px] bg-gray-100 animate-pulse"></div>
+    );
+  }
 
   return (
-    <section className="bg-[#F8F8F8] w-full py-16 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto text-center">
-        {/* Main Hero Text */}
-        <div className="space-y-4">
-          <h1 className="text-4xl sm:text-5xl font-serif font-bold text-[#1F2937] leading-tight">
-            Discover Rare & Timeless Treasures, Curated Just for You
+    <section className="bg-gradient-to-br from-gray-50 to-slate-100">
+      <motion.div
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 grid grid-cols-1 md:grid-cols-2 gap-8 items-center"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        {/* --- Left Column: Content (Links to main product) --- */}
+        <motion.a
+          href={products[0].affiliate_link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group relative z-10 text-center md:text-left"
+          variants={itemVariants}
+        >
+          <h1 className="text-4xl lg:text-5xl font-serif font-extrabold text-slate-900 leading-snug">
+            Beyond the Ordinary: <br />
+            <span className="text-amber-600">A Curation of Rare Finds</span>
           </h1>
-          <p className="text-lg text-[#4B5563] max-w-3xl mx-auto">
-            AntiqKart brings you authentic, handpicked antique and heritage
-            items from across India. Unlike mass marketplaces, we focus on
-            uniqueness, tradition, and the stories behind each product.
+          <p className="mt-6 text-xl text-slate-700">
+            Explore our handpicked selection of rare items and unique
+            collections, sourced for the discerning collector.
           </p>
-        </div>
+          <div className="mt-10">
+            <div className="inline-flex items-center justify-center gap-x-2 bg-slate-900 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition-transform group-hover:scale-105 group-hover:bg-slate-800">
+              Explore The Feature Collection{" "}
+              <ArrowRight
+                size={20}
+                className="transition-transform group-hover:translate-x-1"
+              />
+            </div>
+          </div>
+        </motion.a>
 
-        {/* Responsive CTA Buttons */}
-        <div className="mt-8 flex flex-col sm:flex-row sm:justify-center items-center gap-4">
-          <Link
-            to="/shop"
-            className="w-full sm:w-auto bg-[#D97706] text-white px-6 py-3 rounded-full hover:bg-[#b15b02] transition-colors font-semibold shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+        {/* --- Right Column: Image Collage (With individual links) --- */}
+        <motion.div
+          className="grid grid-cols-2 grid-rows-2 md:grid-cols-5 md:grid-rows-3 gap-3 h-[350px] md:h-[450px]"
+          variants={containerVariants}
+        >
+          {/* Main Image */}
+          <motion.a
+            href={products[0].affiliate_link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group col-span-1 row-span-2 md:col-span-3 md:row-span-3 rounded-lg overflow-hidden shadow-xl"
+            variants={itemVariants}
           >
-            Shop Rare Finds <ArrowRight size={18} />
-          </Link>
-          <Link
-            to="/festive-specials" // Changed from a button to a Link
-            className="w-full sm:w-auto border border-[#D97706] text-[#D97706] px-6 py-3 rounded-full hover:bg-[#D97706] hover:text-white transition-colors font-semibold shadow-md hover:shadow-lg"
+            <img
+              src={products[0].image}
+              alt={products[0].name}
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            />
+          </motion.a>
+          {/* Side Image 1 */}
+          <motion.a
+            href={products[1].affiliate_link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group col-span-1 row-span-1 md:col-span-2 md:row-span-2 rounded-lg overflow-hidden shadow-xl"
+            variants={itemVariants}
           >
-            Explore Festive Specials
-          </Link>
-        </div>
-      </div>
-      {/* Integrated Features Section */}
-      <div className="max-w-5xl mx-auto mt-16 border-t border-gray-200 pt-12">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <FeatureCard
-            icon={<Award size={24} />}
-            title="Curated Collection"
-            description="Rare and authentic items, handpicked for quality."
-          />
-          <FeatureCard
-            icon={<BookOpen size={24} />}
-            title="Stories Behind Products"
-            description="Learn the unique history of every item you purchase."
-          />
-          <FeatureCard
-            icon={<Users size={24} />}
-            title="Support Local Artisans"
-            description="Your purchase empowers and sustains skilled artisans."
-          />
-          <FeatureCard
-            icon={<Gift size={24} />}
-            title="Limited Editions"
-            description="Discover exclusive and one-of-a-kind treasures."
-          />
-        </div>
-      </div>
+            <img
+              src={products[1].image}
+              alt={products[1].name}
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            />
+          </motion.a>
+          {/* Side Image 2 */}
+          <motion.a
+            href={products[2].affiliate_link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group col-span-1 row-span-1 md:col-span-2 md:row-span-1 rounded-lg overflow-hidden shadow-xl"
+            variants={itemVariants}
+          >
+            <img
+              src={products[2].image}
+              alt={products[2].name}
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            />
+          </motion.a>
+        </motion.div>
+      </motion.div>
     </section>
   );
 };

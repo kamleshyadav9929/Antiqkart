@@ -19,6 +19,7 @@ interface Product {
   affiliate_link: string;
   collection_id: string;
   state_id: string;
+  rating?: number;
   popularity?: number;
 }
 
@@ -103,18 +104,46 @@ const ShopPage = () => {
 
   // Filter and sort products
   const filteredAndSortedProducts = useMemo(() => {
-    let filtered = [...products].filter((product) =>
-      product.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
-    if (selectedFestivals.length > 0) {
-      const festiveIds = selectedFestivals.flatMap(
-        (id) => festivalProductIds[id] || []
+    let filtered = [...products]
+      .filter((product) =>
+        product.name.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+      .filter(
+        (product) =>
+          (product.price || 0) >= priceRange[0] &&
+          (product.price || 0) <= priceRange[1]
       );
-      filtered = filtered.filter((p) => festiveIds.includes(p.id));
+
+    if (selectedCollections.length > 0) {
+      filtered = filtered.filter((p) =>
+        selectedCollections.includes(p.collection_id)
+      );
     }
 
-    // ... (rest of the filtering logic)
+    if (selectedStates.length > 0) {
+      filtered = filtered.filter((p) => selectedStates.includes(p.state_id));
+    }
+
+    if (selectedFestivals.length > 0) {
+      const festiveIds = new Set(
+        selectedFestivals.flatMap((id) => festivalProductIds[id] || [])
+      );
+      filtered = filtered.filter((p) => festiveIds.has(p.id));
+    }
+
+    switch (sortBy) {
+      case "price-asc":
+        filtered.sort((a, b) => (a.price || 0) - (b.price || 0));
+        break;
+      case "price-desc":
+        filtered.sort((a, b) => (b.price || 0) - (a.price || 0));
+        break;
+      case "popularity":
+        filtered.sort((a, b) => (b.popularity || 0) - (a.popularity || 0));
+        break;
+      default:
+        break;
+    }
 
     return filtered;
   }, [
@@ -136,7 +165,6 @@ const ShopPage = () => {
     );
   };
 
-  // ... (other handlers: handleCollectionChange, handleStateChange, clearFilters)
   const handleCollectionChange = (collectionId: string) => {
     setSelectedCollections((prev) =>
       prev.includes(collectionId)
@@ -156,13 +184,13 @@ const ShopPage = () => {
   const clearFilters = () => {
     setSelectedCollections([]);
     setSelectedStates([]);
+    setSelectedFestivals([]);
     setPriceRange([0, 10000]);
     setSearchTerm("");
   };
 
   const FilterContent = () => (
     <>
-      {/* --- IMPROVED PRICE SLIDER --- */}
       <FilterSection title="Price Range">
         <div className="px-1 pt-2">
           <Slider
@@ -195,8 +223,6 @@ const ShopPage = () => {
           </div>
         </div>
       </FilterSection>
-
-      {/* --- NEW FESTIVALS FILTER --- */}
       <FilterSection title="Festivals">
         {festivals.map((f) => (
           <Checkbox
@@ -208,7 +234,6 @@ const ShopPage = () => {
           />
         ))}
       </FilterSection>
-
       <FilterSection title="Collections">
         {collections.map((c) => (
           <Checkbox
@@ -220,7 +245,6 @@ const ShopPage = () => {
           />
         ))}
       </FilterSection>
-
       <FilterSection title="State">
         {states.map((s) => (
           <Checkbox
@@ -235,7 +259,6 @@ const ShopPage = () => {
     </>
   );
 
-  // ... (rest of the component, JSX, etc.)
   return (
     <>
       <Navbar />
@@ -246,7 +269,6 @@ const ShopPage = () => {
               Shop All Products
             </h1>
             <div className="flex items-start">
-              {/* Desktop Filters */}
               <aside className="hidden md:block w-64 lg:w-72 pr-8">
                 <div className="sticky top-24">
                   <h2 className="text-lg font-bold mb-4">Filters</h2>
@@ -281,7 +303,6 @@ const ShopPage = () => {
                       </span>{" "}
                       products
                     </p>
-                    {/* --- MODERN SORT DROPDOWN --- */}
                     <div className="relative" ref={sortDropdownRef}>
                       <button
                         onClick={() => setIsSortOpen(!isSortOpen)}
@@ -355,6 +376,7 @@ const ShopPage = () => {
                       {filteredAndSortedProducts.map((product: Product) => (
                         <motion.div
                           key={product.id}
+                          className="h-full" // <-- THE FIX
                           layout
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
@@ -366,6 +388,7 @@ const ShopPage = () => {
                             name={product.name}
                             image={product.image}
                             price={product.price?.toString()}
+                            rating={product.rating}
                             affiliateLink={product.affiliate_link}
                           />
                         </motion.div>
@@ -378,8 +401,6 @@ const ShopPage = () => {
           </div>
         </Layout>
       </div>
-      <Footer />
-      {/* Mobile Filter Overlay */}
       <div
         className={`fixed inset-0 bg-black/40 z-50 transition-opacity duration-300 ${
           isFilterOpen ? "opacity-100" : "opacity-0 pointer-events-none"

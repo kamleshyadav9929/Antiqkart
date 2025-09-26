@@ -9,6 +9,7 @@ interface Product {
   image: string;
   price?: string;
   affiliate_link: string;
+  rating?: number;
 }
 
 const NewArrivals: React.FC = () => {
@@ -20,7 +21,7 @@ const NewArrivals: React.FC = () => {
       setLoading(true);
       const { data, error } = await supabase
         .from("products")
-        .select("id, name, image, price, affiliate_link")
+        .select("id, name, image, price, affiliate_link, rating")
         .order("created_at", { ascending: false })
         .limit(10);
 
@@ -56,12 +57,16 @@ const NewArrivals: React.FC = () => {
                 </div>
               ))
             : products.map((product) => (
-                <div key={product.id} className="flex-shrink-0 w-64">
+                <div
+                  key={product.id}
+                  className="flex-shrink-0 w-64 h-full flex"
+                >
                   <ProductCard
                     id={product.id}
                     name={product.name}
                     image={product.image}
                     price={product.price}
+                    rating={product.rating}
                     affiliateLink={product.affiliate_link}
                   />
                 </div>
