@@ -1,17 +1,24 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { Search, ShoppingCart } from "lucide-react";
+import { NavLink, Link } from "react-router-dom";
+import {
+  Search,
+  ShoppingCart,
+  Home,
+  Store,
+  MapPin,
+  Layers,
+} from "lucide-react";
 import { SignedIn, SignedOut, UserButton } from "@clerk/clerk-react";
 import SearchOverlay from "./SearchOverlay";
 import { useCart } from "../hooks/useCart";
-import GooeyNav from "./GooeyNav"; // <-- Import the new component
+import GooeyNav from "./GooeyNav";
 
 const Navbar = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const { cartItems } = useCart();
 
-  // Define the navigation items for the GooeyNav
-  const navItems = [
+  // Desktop ke liye navigation links
+  const desktopNavItems = [
     { label: "Home", href: "/" },
     { label: "Shop", href: "/shop" },
     { label: "States", href: "/states" },
@@ -21,10 +28,19 @@ const Navbar = () => {
     { label: "Contact Us", href: "/contact" },
   ];
 
+  // Mobile ke dockbar ke liye links
+  const mobileNavItems = [
+    { label: "Home", href: "/", icon: <Home size={22} /> },
+    { label: "Shop", href: "/shop", icon: <Store size={22} /> },
+    { label: "States", href: "/states", icon: <MapPin size={22} /> },
+    { label: "Collections", href: "/collections", icon: <Layers size={22} /> },
+  ];
+
   return (
     <>
+      {/* Desktop aur Tablet ke liye Header */}
       <header className="sticky top-0 z-40 bg-slate-900 border-b border-slate-700">
-        <nav className="flex items-center justify-between px-4 sm:px-6 py-2 flex-wrap">
+        <nav className="flex items-center justify-between px-4 sm:px-6 py-2">
           {/* Logo */}
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-2">
@@ -39,24 +55,24 @@ const Navbar = () => {
             </Link>
           </div>
 
-          {/* Gooey Navigation - Centered and allowed to wrap */}
-          <div className="flex-grow flex justify-center min-w-0 px-2 sm:px-4 order-3 sm:order-2 w-full sm:w-auto mt-2 sm:mt-0">
-            <GooeyNav items={navItems} />
+          {/* Sirf Desktop ke liye Gooey Navigation */}
+          <div className="hidden md:flex flex-grow justify-center">
+            <GooeyNav items={desktopNavItems} />
           </div>
 
           {/* Right side icons */}
-          <div className="flex items-center gap-x-2 sm:gap-x-3 text-gray-300 order-2 sm:order-3">
+          <div className="flex items-center gap-x-2 sm:gap-x-3 text-gray-300">
             <button
               className="p-2 rounded-full hover:bg-slate-800 hover:text-white transition-colors"
               onClick={() => setIsSearchOpen(true)}
-              aria-label="Open search"
+              aria-label="Search kholen"
             >
               <Search size={20} />
             </button>
             <Link
               to="/cart"
               className="p-2 rounded-full hover:bg-slate-800 hover:text-white transition-colors relative"
-              aria-label="View cart"
+              aria-label="Cart dekhein"
             >
               <ShoppingCart size={20} />
               {cartItems.length > 0 && (
@@ -82,6 +98,28 @@ const Navbar = () => {
           </div>
         </nav>
       </header>
+
+      {/* Sirf Mobile ke liye DockBar Navigation */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-slate-900/80 backdrop-blur-sm border-t border-slate-700 p-1 z-50">
+        <div className="flex justify-around items-center">
+          {mobileNavItems.map((item) => (
+            <NavLink
+              key={item.href}
+              to={item.href}
+              end // 'end' prop use karein taaki 'Home' sirf root path par active ho
+              className={({ isActive }) =>
+                `flex flex-col items-center justify-center w-full p-2 rounded-lg transition-colors duration-200 ${
+                  isActive ? "text-amber-400" : "text-gray-400 hover:text-white"
+                }`
+              }
+            >
+              {item.icon}
+              <span className="text-xs mt-1">{item.label}</span>
+            </NavLink>
+          ))}
+        </div>
+      </nav>
+
       <SearchOverlay
         isOpen={isSearchOpen}
         onClose={() => setIsSearchOpen(false)}
