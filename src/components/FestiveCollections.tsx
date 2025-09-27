@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "../lib/supabaseClient";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 
 interface Festival {
   id: number;
@@ -13,19 +13,27 @@ interface Festival {
 const FestivalCard = ({ festival }: { festival: Festival }) => (
   <Link
     to={`/festive-specials/${festival.slug}`}
-    className="group block w-72 flex-shrink-0"
+    className="group block w-72 flex-shrink-0 [perspective:1000px]"
   >
-    <div className="relative rounded-xl overflow-hidden shadow-md transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-      <div className="h-48">
+    <div className="relative block h-full w-full rounded-xl shadow-md transition-all duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(8deg)_rotateX(-8deg)]">
+      <div className="absolute inset-0 rounded-xl overflow-hidden">
         <img
           src={festival.banner_image}
           alt={festival.name}
-          className="w-full h-full object-cover transition-transform duration-300 ease-in-out group-hover:scale-105"
+          className="h-full w-full object-cover transition-transform duration-300 ease-in-out group-hover:scale-105"
         />
+        <div className="absolute inset-0 bg-black/20"></div>
       </div>
-      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-      <div className="absolute bottom-0 left-0 p-4">
-        <h3 className="text-white text-lg font-semibold">{festival.name}</h3>
+      <div className="absolute bottom-0 w-full p-4 text-white">
+        <div className="rounded-lg bg-black/30 p-4 backdrop-blur-md border border-white/20">
+          <div className="flex justify-between items-center">
+            <h3 className="text-lg font-semibold">{festival.name}</h3>
+            <ArrowUpRight
+              size={20}
+              className="transform transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
+            />
+          </div>
+        </div>
       </div>
     </div>
   </Link>
@@ -63,12 +71,12 @@ const FestiveCollections = () => {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-10">
+      <div className="flex justify-between items-center mb-10 px-4 md:px-0">
         <div className="text-center md:text-left">
-          <h2 className="text-3xl md:text-4xl font-serif font-semibold text-text-main">
+          <h2 className="text-3xl md:text-4xl font-serif font-semibold text-text-main text-white">
             Festive Specials
           </h2>
-          <p className="mt-2 text-muted max-w-2xl">
+          <p className="mt-2 text-gray-300 max-w-2xl">
             Explore curated collections for every celebration.
           </p>
         </div>
@@ -81,7 +89,7 @@ const FestiveCollections = () => {
       </div>
 
       <div className="relative">
-        <div className="flex overflow-x-auto space-x-6 pb-4 -mx-4 px-4 scrollbar-hide">
+        <div className="flex overflow-x-auto space-x-6 pb-4 -mx-4 px-4 scrollbar-hide h-56">
           {loading
             ? Array.from({ length: 3 }).map((_, index) => (
                 <SkeletonCard key={index} />

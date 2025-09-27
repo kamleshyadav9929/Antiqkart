@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 import ProductCard from "./ProductCard";
 import SkeletonCard from "./SkeletonCard";
+import ElectricBorder from "./ElectricBorder";
 
 interface Product {
   id: string;
@@ -9,7 +10,7 @@ interface Product {
   image: string;
   price?: string;
   affiliate_link: string;
-  rating?: number; // <-- Added rating
+  rating?: number;
 }
 
 interface TrendingProductData {
@@ -31,7 +32,7 @@ const TrendingProducts: React.FC = () => {
           `
           position,
           products ( id, name, image, price, affiliate_link, rating )
-        ` // <-- Added rating to select
+        `
         )
         .order("position", { ascending: true })
         .limit(10)
@@ -63,8 +64,8 @@ const TrendingProducts: React.FC = () => {
         </p>
       </div>
 
-      <div className="relative">
-        <div className="flex overflow-x-auto space-x-4 pb-4 -mx-4 px-4 scrollbar-hide">
+      <div className="relative p-4">
+        <div className="flex overflow-x-auto space-x-4 pb-4 scrollbar-hide -mx-4 px-4">
           {loading
             ? Array.from({ length: 6 }).map((_, index) => (
                 <div key={index} className="flex-shrink-0 w-64">
@@ -73,14 +74,22 @@ const TrendingProducts: React.FC = () => {
               ))
             : products.map((product) => (
                 <div key={product.id} className="flex-shrink-0 w-64">
-                  <ProductCard
-                    id={product.id}
-                    name={product.name}
-                    image={product.image}
-                    price={product.price}
-                    rating={product.rating} // <-- Passed rating
-                    affiliateLink={product.affiliate_link}
-                  />
+                  <ElectricBorder
+                    color="#7df9ff"
+                    speed={2.5}
+                    chaos={0.2}
+                    thickness={2}
+                    style={{ borderRadius: "1rem" }}
+                  >
+                    <ProductCard
+                      id={product.id}
+                      name={product.name}
+                      image={product.image}
+                      price={product.price}
+                      rating={product.rating}
+                      affiliateLink={product.affiliate_link}
+                    />
+                  </ElectricBorder>
                 </div>
               ))}
         </div>

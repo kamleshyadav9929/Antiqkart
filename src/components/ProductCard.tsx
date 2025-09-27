@@ -71,19 +71,19 @@ const ProductCard: React.FC<ProductCardProps> = ({
   };
 
   return (
-    <div className="group flex flex-col bg-white rounded-2xl overflow-hidden border border-gray-200/70 shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1 h-full">
-      {/* --- Image Section --- */}
-      <div className="relative bg-gray-50 aspect-square flex-shrink-0">
+    <div className="flex flex-col h-full w-full bg-white rounded-2xl overflow-hidden border border-gray-200/70 shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+      {/* Taller Image Section */}
+      <div className="relative bg-gray-50 flex-shrink-0 h-64 w-full">
         <a
           href={affiliateLink}
           target="_blank"
           rel="noopener noreferrer"
-          className="block w-full h-full"
+          className="block w-full h-full bg-white"
         >
           <img
             src={image}
             alt={name}
-            className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-110"
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
           />
         </a>
         <button
@@ -99,25 +99,20 @@ const ProductCard: React.FC<ProductCardProps> = ({
         </button>
       </div>
 
-      {/* --- Content Section --- */}
-      <div className="p-4 flex flex-col flex-grow">
-        {/* TOP BLOCK */}
+      {/* Content Section */}
+      <div className="flex flex-col flex-grow p-4">
         <div className="flex-shrink-0">
           <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">
             {collectionName || "Antiqkart"}
           </p>
           <h3
-            className="text-sm font-semibold text-slate-800 mt-1 truncate"
+            className="h-10 text-sm font-semibold text-slate-800 mt-1 overflow-hidden"
             title={name}
           >
             {name}
           </h3>
         </div>
-
-        {/* FLEXIBLE SPACER - This is the key to the fix */}
         <div className="flex-grow" />
-
-        {/* BOTTOM BLOCK */}
         <div className="flex-shrink-0">
           {/* Rating */}
           <div className="h-[20px] mt-1">
@@ -128,19 +123,17 @@ const ProductCard: React.FC<ProductCardProps> = ({
               </div>
             )}
           </div>
-
           {/* Price */}
           <div className="mt-2">
             {price && (
               <p className="text-lg font-semibold text-slate-900 flex items-baseline">
                 ₹{price}
-                <span className="ml-1 text-[10px] text-gray-400 font-normal">
+                <span className="ml-1 text-[9px] text-gray-400 font-normal whitespace-nowrap">
                   (price may vary)
                 </span>
               </p>
             )}
           </div>
-
           {/* Action Button */}
           <div className="mt-4">
             <a

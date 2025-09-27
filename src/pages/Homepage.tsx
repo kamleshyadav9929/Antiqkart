@@ -4,7 +4,6 @@ import Hero from "../components/Hero";
 import FeaturedProducts from "../components/FeaturedProducts";
 import TrendingProducts from "../components/TrendingProducts";
 import FestiveCollections from "../components/FestiveCollections";
-import GiTaggedProducts from "../components/GiTaggedProducts";
 import StatesGrid from "../components/StatesGrid";
 import Collections from "../components/Collections";
 import Layout from "../components/Layout";
@@ -33,7 +32,7 @@ const Homepage = () => {
         <Hero />
 
         {/* --- FESTIVE SECTION MOVED TO TOP --- */}
-        <Section id="festive-specials" className="bg-amber-50/50">
+        <Section id="festive-specials" className="festive-background">
           <FestiveCollections />
         </Section>
 
@@ -47,10 +46,6 @@ const Homepage = () => {
 
         <Section>
           <TrendingProducts />
-        </Section>
-
-        <Section className="bg-slate-50">
-          <GiTaggedProducts />
         </Section>
 
         <Section>

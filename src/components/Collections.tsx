@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "../lib/supabaseClient";
 import { ArrowRight } from "lucide-react";
 
+// Collection ka structure define karte hain
 interface Collection {
   id: string;
   name: string;
@@ -29,7 +30,7 @@ const Collections: React.FC<CollectionsProps> = ({ showAll = false }) => {
       const { data, error } = await query;
 
       if (error) {
-        console.error("Error fetching collections:", error.message);
+        console.error("Collections fetch karne mein error:", error.message);
       } else {
         setCollections(data || []);
       }
@@ -42,33 +43,93 @@ const Collections: React.FC<CollectionsProps> = ({ showAll = false }) => {
   const mobileCollections = showAll ? collections : collections.slice(0, 6);
   const desktopCollections = showAll ? collections : collections.slice(0, 8);
 
-  const CollectionCard = ({ collection }: { collection: Collection }) => (
-    <Link
-      to={`/collections/${collection.name.toLowerCase().replace(/\s+/g, "-")}`}
-      className="group block"
-    >
-      <div className="relative rounded-2xl overflow-hidden shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
-        <div className="h-48 md:h-56">
+  // Yeh bilkul naya aur special Collection Card hai
+  const CollectionCard = ({ collection }: { collection: Collection }) => {
+    const cardRef = useRef<HTMLAnchorElement>(null);
+
+    const handleMouseMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
+      if (!cardRef.current) return;
+      const rect = cardRef.current.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      const midCardX = rect.width / 2;
+      const midCardY = rect.height / 2;
+
+      // Tilt effect ki intensity
+      const tiltX = ((x - midCardX) / midCardX) * 8;
+      const tiltY = ((y - midCardY) / midCardY) * -8;
+
+      cardRef.current.style.setProperty("--tilt-x", `${tiltX}deg`);
+      cardRef.current.style.setProperty("--tilt-y", `${tiltY}deg`);
+      cardRef.current.style.setProperty("--spotlight-x", `${x}px`);
+      cardRef.current.style.setProperty("--spotlight-y", `${y}px`);
+    };
+
+    const handleMouseLeave = () => {
+      if (!cardRef.current) return;
+      cardRef.current.style.setProperty("--tilt-x", "0deg");
+      cardRef.current.style.setProperty("--tilt-y", "0deg");
+    };
+
+    return (
+      <Link
+        ref={cardRef}
+        to={`/collections/${collection.name
+          .toLowerCase()
+          .replace(/\s+/g, "-")}`}
+        className="group block relative h-full w-full rounded-2xl bg-slate-900 shadow-xl transition-all duration-300 ease-out will-change-transform"
+        style={{
+          transformStyle: "preserve-3d",
+          transform:
+            "perspective(1000px) rotateY(var(--tilt-x, 0)) rotateX(var(--tilt-y, 0))",
+        }}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+      >
+        {/* Card ki Image */}
+        <div className="absolute inset-0 rounded-2xl overflow-hidden">
           <img
             src={collection.image}
             alt={collection.name}
-            className="w-full h-full object-cover transition-transform duration-300 ease-in-out group-hover:scale-105"
+            className="h-full w-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110"
           />
         </div>
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-      </div>
-      <div className="pt-3">
-        <h3 className="text-black text-base font-semibold">
-          {collection.name}
-        </h3>
-      </div>
-    </Link>
-  );
 
+        {/* Spotlight Effect */}
+        <div
+          className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+          style={{
+            background: `radial-gradient(350px circle at var(--spotlight-x, 50%) var(--spotlight-y, 50%), rgba(255,255,255,0.15), transparent 40%)`,
+          }}
+        />
+
+        {/* Overlay Gradient */}
+        <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+
+        {/* Inner Border Effect */}
+        <div className="absolute inset-0 rounded-2xl border-2 border-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+        {/* Card ka Content (Parallax Effect ke saath) */}
+        <div
+          className="absolute bottom-0 w-full p-4 md:p-6 text-white"
+          style={{ transform: "translateZ(50px)" }}
+        >
+          <h3 className="text-lg md:text-xl font-bold">{collection.name}</h3>
+          <div className="mt-2 flex items-center gap-x-2 text-sm opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+            <span>Explore Collection</span>
+            <ArrowRight size={16} />
+          </div>
+        </div>
+      </Link>
+    );
+  };
+
+  // Loading ke time dikhane wala Skeleton Card
   const SkeletonCard = () => (
     <div className="animate-pulse">
       <div className="w-full h-48 md:h-56 bg-gray-200 rounded-2xl"></div>
-      <div className="h-5 mt-3 bg-gray-200 rounded w-3/4"></div>
+      <div className="h-5 mt-4 bg-gray-200 rounded w-3/4"></div>
     </div>
   );
 
@@ -94,7 +155,9 @@ const Collections: React.FC<CollectionsProps> = ({ showAll = false }) => {
               <SkeletonCard key={index} />
             ))
           : mobileCollections.map((col) => (
-              <CollectionCard key={col.id} collection={col} />
+              <div key={col.id} className="h-48">
+                <CollectionCard collection={col} />
+              </div>
             ))}
       </div>
 
@@ -104,7 +167,9 @@ const Collections: React.FC<CollectionsProps> = ({ showAll = false }) => {
               <SkeletonCard key={index} />
             ))
           : desktopCollections.map((col) => (
-              <CollectionCard key={col.id} collection={col} />
+              <div key={col.id} className="h-56">
+                <CollectionCard collection={col} />
+              </div>
             ))}
       </div>
     </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { motion, Variants } from "framer-motion";
 import { supabase } from "../lib/supabaseClient";
@@ -69,7 +69,6 @@ const Hero = () => {
         initial="hidden"
         animate="visible"
       >
-        {/* --- Left Column: Content (Links to main product) --- */}
         <motion.a
           href={products[0].affiliate_link}
           target="_blank"
@@ -95,18 +94,15 @@ const Hero = () => {
             </div>
           </div>
         </motion.a>
-
-        {/* --- Right Column: Image Collage (With individual links) --- */}
         <motion.div
-          className="grid grid-cols-2 grid-rows-2 md:grid-cols-5 md:grid-rows-3 gap-3 h-[350px] md:h-[450px]"
+          className="hidden md:grid grid-cols-5 grid-rows-3 gap-3 h-[450px]"
           variants={containerVariants}
         >
-          {/* Main Image */}
           <motion.a
             href={products[0].affiliate_link}
             target="_blank"
             rel="noopener noreferrer"
-            className="group col-span-1 row-span-2 md:col-span-3 md:row-span-3 rounded-lg overflow-hidden shadow-xl"
+            className="group col-span-3 row-span-3 rounded-lg overflow-hidden shadow-xl"
             variants={itemVariants}
           >
             <img
@@ -115,12 +111,11 @@ const Hero = () => {
               className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
             />
           </motion.a>
-          {/* Side Image 1 */}
           <motion.a
             href={products[1].affiliate_link}
             target="_blank"
             rel="noopener noreferrer"
-            className="group col-span-1 row-span-1 md:col-span-2 md:row-span-2 rounded-lg overflow-hidden shadow-xl"
+            className="group col-span-2 row-span-2 rounded-lg overflow-hidden shadow-xl"
             variants={itemVariants}
           >
             <img
@@ -129,12 +124,11 @@ const Hero = () => {
               className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
             />
           </motion.a>
-          {/* Side Image 2 */}
           <motion.a
             href={products[2].affiliate_link}
             target="_blank"
             rel="noopener noreferrer"
-            className="group col-span-1 row-span-1 md:col-span-2 md:row-span-1 rounded-lg overflow-hidden shadow-xl"
+            className="group col-span-2 row-span-1 rounded-lg overflow-hidden shadow-xl"
             variants={itemVariants}
           >
             <img
@@ -143,6 +137,20 @@ const Hero = () => {
               className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
             />
           </motion.a>
+        </motion.div>
+        <motion.div className="md:hidden" variants={itemVariants}>
+          <a
+            href={products[0].affiliate_link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group block rounded-lg overflow-hidden shadow-xl"
+          >
+            <img
+              src={products[0].image}
+              alt={products[0].name}
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            />
+          </a>
         </motion.div>
       </motion.div>
     </section>

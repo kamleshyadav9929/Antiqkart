@@ -1,4 +1,3 @@
-import React from "react";
 import { motion } from "framer-motion";
 
 // Updated variants for a simple, smooth fade

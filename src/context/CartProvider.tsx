@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ReactNode } from "react";
+import { useState, useEffect, ReactNode } from "react";
 import { supabase } from "../lib/supabaseClient";
 import { Product, CartContext } from "./cart-context";
 
@@ -28,6 +28,36 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const [cartProductDetails, setCartProductDetails] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // FIX: This effect runs once on mount to validate and clean localStorage
+  useEffect(() => {
+    const validateCartOnLoad = async () => {
+      if (cartItems.length > 0) {
+        const productIds = cartItems.map((item) => item.productId);
+
+        const { data: validProducts, error } = await supabase
+          .from("products")
+          .select("id")
+          .in("id", productIds);
+
+        if (error) {
+          console.error("Error validating cart items:", error);
+          return;
+        }
+
+        const validProductIds = new Set((validProducts || []).map((p) => p.id));
+        const cleanedCartItems = cartItems.filter((item) =>
+          validProductIds.has(item.productId)
+        );
+
+        if (cleanedCartItems.length !== cartItems.length) {
+          setCartItems(cleanedCartItems);
+        }
+      }
+    };
+    validateCartOnLoad();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Run only once when the component mounts
 
   useEffect(() => {
     localStorage.setItem("antiqkart-cart", JSON.stringify(cartItems));
@@ -71,14 +101,11 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         return prev;
       }
 
-      // --- NEW: Call the Edge Function to increment popularity ---
-      // This is a "fire-and-forget" call so it doesn't slow down the UI.
       supabase.functions
         .invoke("increment-popularity", {
           body: { productId },
         })
         .catch((err) => console.error("Failed to increment popularity:", err));
-      // ---------------------------------------------------------
 
       return [...prev, { productId, addedAt: Date.now() }];
     });

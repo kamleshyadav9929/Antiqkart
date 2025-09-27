@@ -15,11 +15,15 @@
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.46.1",
+    "@gsap/react": "^2.1.2",
     "@supabase/supabase-js": "^2.57.2",
     "@tailwindcss/vite": "^4.1.13",
     "@vitejs/plugin-react-swc": "^4.0.1",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "embla-carousel-react": "^8.6.0",
     "framer-motion": "^12.23.12",
+    "gsap": "^3.13.0",
     "lucide-react": "^0.542.0",
     "rc-slider": "^11.1.9",
     "react": "^19.1.1",
@@ -27,6 +31,7 @@
     "react-globe.gl": "^2.36.0",
     "react-router-dom": "^7.8.2",
     "react-simple-typewriter": "^5.0.1",
+    "tailwind-merge": "^3.3.1",
     "three": "^0.180.0",
     "vite-plugin-checker": "^0.10.3",
     "vite-plugin-compression": "^0.5.1"

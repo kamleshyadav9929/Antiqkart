@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -17,7 +16,7 @@ const AboutUsPage = () => {
               <h1 className="text-4xl md:text-6xl font-serif font-bold text-gray-900">
                 The Heart of Indian Craftsmanship
               </h1>
-              <p className="mt-4 text-lg text-muted">
+              <p className="mt-4 text-lg text-gray-600">
                 A curated journey into the soul of India's artistic heritage,
                 bringing timeless treasures to your doorstep.
               </p>
@@ -29,7 +28,7 @@ const AboutUsPage = () => {
                 <h2 className="font-serif text-2xl text-text mb-2">
                   Affiliate Disclosure
                 </h2>
-                <div className="prose prose-lg text-muted max-w-none">
+                <div className="prose prose-lg text-gray-600 max-w-none">
                   <p>
                     <strong>
                       As an Amazon Associate, we earn from qualifying purchases.
@@ -53,7 +52,7 @@ const AboutUsPage = () => {
             {/* --- Our Story Section --- */}
             <section className="mb-16 max-w-4xl mx-auto">
               <h2 className="font-serif text-3xl text-text mb-4">Our Story</h2>
-              <div className="prose prose-lg text-muted max-w-none space-y-4">
+              <div className="prose prose-lg text-gray-600 max-w-none space-y-4">
                 <p>
                   AntiqKart was born from a deep-rooted passion for India's
                   incredible artistic traditions. We journey through vibrant
@@ -78,7 +77,7 @@ const AboutUsPage = () => {
               <h2 className="font-serif text-3xl text-text mb-4">
                 Our Curation Process
               </h2>
-              <div className="prose prose-lg text-muted max-w-none space-y-4">
+              <div className="prose prose-lg text-gray-600 max-w-none space-y-4">
                 <p>
                   Transparency is at the core of what we do. We are curators and
                   storytellers, not the direct sellers. Our process involves:
@@ -125,7 +124,7 @@ const AboutUsPage = () => {
                   <h3 className="text-xl font-semibold text-text">
                     Authentic Craftsmanship
                   </h3>
-                  <p className="mt-2 text-muted">
+                  <p className="mt-2 text-gray-600">
                     We celebrate items genuinely handcrafted by master artisans
                     using traditional techniques.
                   </p>
@@ -139,7 +138,7 @@ const AboutUsPage = () => {
                   <h3 className="text-xl font-semibold text-text">
                     Ethical Curation
                   </h3>
-                  <p className="mt-2 text-muted">
+                  <p className="mt-2 text-gray-600">
                     We showcase products from creators and sellers who value
                     fair trade and the preservation of their art.
                   </p>
@@ -153,7 +152,7 @@ const AboutUsPage = () => {
                   <h3 className="text-xl font-semibold text-text">
                     Timeless Quality
                   </h3>
-                  <p className="mt-2 text-muted">
+                  <p className="mt-2 text-gray-600">
                     We select the finest pieces that are built to last and be
                     cherished for generations.
                   </p>
@@ -166,7 +165,7 @@ const AboutUsPage = () => {
               <h2 className="text-3xl md:text-4xl font-serif font-bold text-text">
                 Explore Our Collection
               </h2>
-              <p className="mt-4 text-lg text-muted mb-8">
+              <p className="mt-4 text-lg text-gray-600 mb-8">
                 Begin your own journey into the rich tapestry of Indian art and
                 history.
               </p>
