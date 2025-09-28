@@ -43,7 +43,8 @@ function App() {
         />
         <Route path="/category/:categoryName" element={<CategoryPage />} />
         <Route path="/states" element={<StatesPage />} />
-        <Route path="/states/:stateId" element={<StatePage />} />
+        {/* CORRECTED ROUTE: Changed :stateId to :stateName to match the component */}
+        <Route path="/states/:stateName" element={<StatePage />} />
 
         {/* Festive Special Routes */}
         <Route path="/festive-specials" element={<FestiveLandingPage />} />

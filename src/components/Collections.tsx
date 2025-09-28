@@ -136,13 +136,18 @@ const Collections: React.FC<CollectionsProps> = ({ showAll = false }) => {
   return (
     <div>
       <div className="flex justify-between items-center mb-10">
-        <h2 className="text-3xl md:text-4xl font-serif font-semibold text-text-main">
-          Curated Collections
-        </h2>
+        <div>
+          <h2 className="text-3xl md:text-4xl font-serif font-bold text-slate-900">
+            Handpicked Collections
+          </h2>
+          <p className="mt-1 text-muted">
+            Expertly curated for the discerning collector.
+          </p>
+        </div>
         {!showAll && (
           <Link
             to="/collections"
-            className="text-center text-xs font-bold text-white bg-slate-950 py-2.5 px-4 rounded-md transition-colors duration-300 hover:bg-slate-800 inline-flex items-center gap-x-2"
+            className="hidden md:inline-flex items-center gap-x-2 text-center text-xs font-bold text-white bg-slate-950 py-2.5 px-4 rounded-md transition-colors duration-300 hover:bg-slate-800"
           >
             See All <ArrowRight size={14} />
           </Link>

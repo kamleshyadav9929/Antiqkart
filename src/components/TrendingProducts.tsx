@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 import ProductCard from "./ProductCard";
 import SkeletonCard from "./SkeletonCard";
+import { Flame } from "lucide-react";
 
 interface Product {
   id: string;
@@ -54,12 +55,14 @@ const TrendingProducts: React.FC = () => {
   return (
     <div>
       <div className="mb-10 text-center">
-        <h2 className="text-3xl md:text-4xl font-serif font-semibold text-text">
-          Trending Now
-        </h2>
+        <div className="flex justify-center items-center gap-x-2">
+          <Flame className="text-amber-500" size={32} />
+          <h2 className="text-3xl md:text-4xl font-serif font-bold text-slate-900">
+            Popular Right Now
+          </h2>
+        </div>
         <p className="mt-2 text-muted max-w-2xl mx-auto">
-          Discover what's popular right now among our curated collections of
-          authentic Indian handicrafts.
+          Discover what's trending among our curated collections.
         </p>
       </div>
 

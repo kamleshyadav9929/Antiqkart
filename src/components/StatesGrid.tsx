@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../../src/lib/supabaseClient";
+import { ArrowRight } from "lucide-react";
 
 interface State {
   id: string;
@@ -8,10 +9,7 @@ interface State {
 }
 
 const StateSkeleton = () => (
-  <div className="flex flex-col items-center space-y-2 animate-pulse">
-    <div className="w-20 h-20 md:w-24 md:h-24 bg-gray-300 rounded-full"></div>
-    <div className="h-4 bg-gray-300 rounded w-16"></div>
-  </div>
+  <div className="animate-pulse bg-gray-200 rounded-xl aspect-[3/4]"></div>
 );
 
 const StatesGrid = () => {
@@ -41,40 +39,35 @@ const StatesGrid = () => {
     <a
       key={state.id}
       href={`/states/${state.name.toLowerCase().replace(/\s+/g, "-")}`}
-      className="group flex flex-col items-center space-y-2 text-center"
+      className="group block rounded-xl overflow-hidden bg-slate-100 shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-1 border border-gray-200/80"
     >
-      <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-2 border-transparent group-hover:border-dark transition-all duration-300 p-1">
+      <div className="aspect-[4/3] w-full overflow-hidden">
         <img
           src={state.image}
           alt={state.name}
-          className="w-full h-full object-cover rounded-full transition-transform duration-300 group-hover:scale-110"
+          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
         />
       </div>
-      <p className="text-xs font-medium text-text-muted group-hover:text-dark transition-colors">
-        {state.name}
-      </p>
+      <div className="p-3">
+        <h3 className="font-semibold text-slate-800 text-sm">{state.name}</h3>
+      </div>
     </a>
   );
 
   return (
     <div>
-      <div className="text-center mb-10">
-        <h2 className="text-3xl md:text-4xl font-serif font-semibold text-text">
-          Shop by State
+      <div className="text-center mb-12">
+        <h2 className="text-3xl md:text-4xl font-serif font-bold text-slate-900">
+          From Every Corner of India
         </h2>
+        <p className="mt-2 text-muted max-w-2xl mx-auto">
+          Explore the unique artistic heritage, one state at a time.
+        </p>
       </div>
 
-      <div className="md:hidden grid grid-cols-3 gap-x-4 gap-y-6">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-5">
         {loading
-          ? Array.from({ length: 9 }).map((_, index) => (
-              <StateSkeleton key={index} />
-            ))
-          : states.map(stateCard)}
-      </div>
-
-      <div className="hidden md:grid md:grid-cols-8 gap-x-6 gap-y-8">
-        {loading
-          ? Array.from({ length: 16 }).map((_, index) => (
+          ? Array.from({ length: 12 }).map((_, index) => (
               <StateSkeleton key={index} />
             ))
           : states.map(stateCard)}

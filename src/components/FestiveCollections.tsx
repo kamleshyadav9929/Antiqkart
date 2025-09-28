@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "../lib/supabaseClient";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Sparkles } from "lucide-react";
 
 interface Festival {
   id: number;
   name: string;
   slug: string;
-  banner_image: string; // This must match the column name in your Supabase table
+  banner_image: string;
 }
 
 const FestivalCard = ({ festival }: { festival: Festival }) => (
@@ -28,7 +28,7 @@ const FestivalCard = ({ festival }: { festival: Festival }) => (
         </div>
       )}
     </div>
-    <h3 className="mt-3 text-sm font-semibold text-gray-200 group-hover:text-white truncate transition-colors">
+    <h3 className="mt-3 text-sm font-semibold text-gray-700 group-hover:text-slate-900 truncate transition-colors">
       {festival.name}
     </h3>
   </Link>
@@ -36,8 +36,8 @@ const FestivalCard = ({ festival }: { festival: Festival }) => (
 
 const SkeletonCard = () => (
   <div className="animate-pulse flex-shrink-0 w-48 text-center">
-    <div className="w-full h-48 bg-gray-600/50 rounded-2xl"></div>
-    <div className="h-4 bg-gray-600/50 rounded w-3/4 mx-auto mt-3"></div>
+    <div className="w-full h-48 bg-gray-200 rounded-2xl"></div>
+    <div className="h-4 bg-gray-300 rounded w-3/4 mx-auto mt-3"></div>
   </div>
 );
 
@@ -50,7 +50,7 @@ const FestiveCollections = () => {
       setLoading(true);
       const { data, error } = await supabase
         .from("festivals")
-        .select("id, name, slug, banner_image") // Ensure this select query is correct
+        .select("id, name, slug, banner_image")
         .order("start_date", { ascending: false })
         .limit(5);
 
@@ -67,18 +67,19 @@ const FestiveCollections = () => {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-10 px-4 md:px-0">
-        <div className="text-center md:text-left">
-          <h2 className="text-3xl md:text-4xl font-serif font-semibold text-text-main text-white">
-            Festive Specials
-          </h2>
-          <p className="mt-2 text-gray-300 max-w-2xl">
-            Explore curated collections for every celebration.
-          </p>
+      <div className="relative text-center mb-12">
+        <h2 className="text-3xl md:text-4xl font-serif font-bold text-slate-900">
+          Festive Specials
+        </h2>
+        <div className="absolute -top-3 -right-2 text-amber-400">
+          <Sparkles size={32} className="opacity-80" />
         </div>
+        <p className="mt-2 text-muted max-w-2xl mx-auto">
+          Explore curated collections for every celebration.
+        </p>
         <Link
           to="/festive-specials"
-          className="hidden md:inline-flex items-center gap-x-2 text-center text-xs font-bold text-white bg-slate-950 py-2.5 px-4 rounded-md transition-colors duration-300 hover:bg-slate-800"
+          className="mt-4 inline-flex md:hidden items-center gap-x-1.5 text-sm font-semibold text-slate-800 hover:text-amber-600 transition-colors"
         >
           View All <ArrowRight size={14} />
         </Link>

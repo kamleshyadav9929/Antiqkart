@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 import ProductCard from "./ProductCard";
 import SkeletonCard from "./SkeletonCard";
+import { ArrowRight } from "lucide-react";
 
 interface Product {
   id: string;
@@ -38,14 +39,22 @@ const NewArrivals: React.FC = () => {
 
   return (
     <div>
-      <div className="mb-10 text-center">
-        <h2 className="text-3xl md:text-4xl font-serif font-semibold text-text">
-          New Arrivals
-        </h2>
-        <p className="mt-2 text-muted max-w-2xl mx-auto">
-          Check out the latest additions to our curated collection of Indian
-          handicrafts.
-        </p>
+      <div className="flex justify-between items-end mb-8">
+        <div>
+          <h2 className="text-3xl md:text-4xl font-serif font-bold text-slate-900">
+            Fresh on the Shelves
+          </h2>
+          <p className="mt-1 text-muted max-w-2xl">
+            Our latest handcrafted additions.
+          </p>
+        </div>
+        <a
+          href="/shop"
+          className="hidden md:flex items-center gap-x-1.5 text-sm font-semibold text-slate-800 hover:text-amber-600 transition-colors"
+        >
+          <span>View All</span>
+          <ArrowRight size={16} />
+        </a>
       </div>
 
       <div className="relative">

@@ -32,7 +32,7 @@ const Homepage = () => {
         <Hero />
 
         {/* --- FESTIVE SECTION MOVED TO TOP --- */}
-        <Section id="festive-specials" className="festive-background">
+        <Section id="festive-specials" className="bg-slate-50">
           <FestiveCollections />
         </Section>
 

@@ -77,34 +77,6 @@ body {
   scrollbar-width: none;
 }
 
-/* --- Custom background for the Festive Section --- */
-.festive-background {
-  /* Make sure your image is in the 'public' folder */
-  background-image: url("https://t4.ftcdn.net/jpg/05/42/48/81/360_F_542488112_a4HBG9ZzHpyH3cZzpFwKQxGpLiAF3TwD.jpg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  position: relative;
-}
-
-/* Optional: Add an overlay to make text more readable */
-.festive-background::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5); /* Black overlay with 50% opacity */
-  z-index: 1;
-}
-
-/* Ensure the content is above the overlay */
-.festive-background > * {
-  position: relative;
-  z-index: 2;
-}
-
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);

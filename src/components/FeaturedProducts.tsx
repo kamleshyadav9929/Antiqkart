@@ -55,23 +55,14 @@ const FeaturedProducts: React.FC = () => {
 
   return (
     <div>
-      <div className="relative mb-10">
-        <div className="text-center">
-          <h2 className="text-3xl md:text-4xl font-serif font-semibold text-text">
-            Featured Products
-          </h2>
-          <p className="mt-2 text-muted max-w-2xl mx-auto">
-            Our handpicked selection of the finest Indian handicrafts.
-          </p>
-        </div>
-        <div className="hidden text-center md:block md:absolute md:top-1/2 md:right-0 md:-translate-y-1/2 md:mt-0">
-          <Link
-            to="/shop"
-            className="text-center text-xs font-bold text-white bg-slate-950 py-2.5 px-4 rounded-md transition-colors duration-300 hover:bg-slate-800 inline-flex items-center gap-x-2"
-          >
-            See All <ArrowRight size={14} />
-          </Link>
-        </div>
+      <div className="relative text-center mb-12">
+        <h2 className="text-3xl md:text-4xl font-serif font-bold text-slate-900 inline-block relative">
+          Featured Products
+          <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-2/3 h-0.5 bg-amber-400" />
+        </h2>
+        <p className="mt-4 text-muted max-w-2xl mx-auto">
+          Our handpicked selection of the finest Indian handicrafts.
+        </p>
       </div>
 
       <div className="md:hidden relative">
