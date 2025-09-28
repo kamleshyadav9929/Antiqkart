@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 import ProductCard from "./ProductCard";
 import SkeletonCard from "./SkeletonCard";
-import ElectricBorder from "./ElectricBorder";
 
 interface Product {
   id: string;
@@ -64,7 +63,7 @@ const TrendingProducts: React.FC = () => {
         </p>
       </div>
 
-      <div className="relative p-4">
+      <div className="relative">
         <div className="flex overflow-x-auto space-x-4 pb-4 scrollbar-hide -mx-4 px-4">
           {loading
             ? Array.from({ length: 6 }).map((_, index) => (
@@ -74,22 +73,15 @@ const TrendingProducts: React.FC = () => {
               ))
             : products.map((product) => (
                 <div key={product.id} className="flex-shrink-0 w-64">
-                  <ElectricBorder
-                    color="#7df9ff"
-                    speed={2.5}
-                    chaos={0.2}
-                    thickness={2}
-                    style={{ borderRadius: "1rem" }}
-                  >
-                    <ProductCard
-                      id={product.id}
-                      name={product.name}
-                      image={product.image}
-                      price={product.price}
-                      rating={product.rating}
-                      affiliateLink={product.affiliate_link}
-                    />
-                  </ElectricBorder>
+                  <ProductCard
+                    id={product.id}
+                    name={product.name}
+                    image={product.image}
+                    price={product.price}
+                    rating={product.rating}
+                    affiliateLink={product.affiliate_link}
+                    tag="Trending"
+                  />
                 </div>
               ))}
         </div>

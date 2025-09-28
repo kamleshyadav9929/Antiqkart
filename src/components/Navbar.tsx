@@ -3,42 +3,49 @@ import { NavLink, Link } from "react-router-dom";
 import {
   Search,
   ShoppingCart,
+  Menu,
+  X,
   Home,
   Store,
   MapPin,
   Layers,
+  Sparkles,
+  Info,
+  Mail,
 } from "lucide-react";
 import { SignedIn, SignedOut, UserButton } from "@clerk/clerk-react";
 import SearchOverlay from "./SearchOverlay";
 import { useCart } from "../hooks/useCart";
-import GooeyNav from "./GooeyNav";
 
 const Navbar = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { cartItems } = useCart();
 
-  // Desktop ke liye navigation links
-  const desktopNavItems = [
-    { label: "Home", href: "/" },
-    { label: "Shop", href: "/shop" },
-    { label: "States", href: "/states" },
-    { label: "Collections", href: "/collections" },
-    { label: "Festive Specials", href: "/festive-specials" },
-    { label: "About Us", href: "/about" },
-    { label: "Contact Us", href: "/contact" },
+  const navItems = [
+    { label: "Home", href: "/", icon: <Home size={20} /> },
+    { label: "Shop", href: "/shop", icon: <Store size={20} /> },
+    { label: "States", href: "/states", icon: <MapPin size={20} /> },
+    { label: "Collections", href: "/collections", icon: <Layers size={20} /> },
+    {
+      label: "Festive Specials",
+      href: "/festive-specials",
+      icon: <Sparkles size={20} />,
+    },
+    { label: "About Us", href: "/about", icon: <Info size={20} /> },
+    { label: "Contact Us", href: "/contact", icon: <Mail size={20} /> },
   ];
 
-  // Mobile ke dockbar ke liye links
-  const mobileNavItems = [
-    { label: "Home", href: "/", icon: <Home size={22} /> },
-    { label: "Shop", href: "/shop", icon: <Store size={22} /> },
-    { label: "States", href: "/states", icon: <MapPin size={22} /> },
-    { label: "Collections", href: "/collections", icon: <Layers size={22} /> },
-  ];
+  const handleMobileMenuToggle = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+  };
 
   return (
     <>
-      {/* Desktop aur Tablet ke liye Header */}
       <header className="sticky top-0 z-40 bg-slate-900 border-b border-slate-700">
         <nav className="flex items-center justify-between px-4 sm:px-6 py-2">
           {/* Logo */}
@@ -55,9 +62,26 @@ const Navbar = () => {
             </Link>
           </div>
 
-          {/* Sirf Desktop ke liye Gooey Navigation */}
+          {/* Desktop Navigation */}
           <div className="hidden md:flex flex-grow justify-center">
-            <GooeyNav items={desktopNavItems} />
+            <ul className="flex space-x-4">
+              {navItems.map((item) => (
+                <li key={item.href}>
+                  <NavLink
+                    to={item.href}
+                    className={({ isActive }) =>
+                      `px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                        isActive
+                          ? "bg-slate-800 text-white"
+                          : "text-gray-300 hover:bg-slate-800 hover:text-white"
+                      }`
+                    }
+                  >
+                    {item.label}
+                  </NavLink>
+                </li>
+              ))}
+            </ul>
           </div>
 
           {/* Right side icons */}
@@ -65,14 +89,14 @@ const Navbar = () => {
             <button
               className="p-2 rounded-full hover:bg-slate-800 hover:text-white transition-colors"
               onClick={() => setIsSearchOpen(true)}
-              aria-label="Search kholen"
+              aria-label="Open Search"
             >
               <Search size={20} />
             </button>
             <Link
               to="/cart"
               className="p-2 rounded-full hover:bg-slate-800 hover:text-white transition-colors relative"
-              aria-label="Cart dekhein"
+              aria-label="View Cart"
             >
               <ShoppingCart size={20} />
               {cartItems.length > 0 && (
@@ -82,7 +106,7 @@ const Navbar = () => {
               )}
             </Link>
             <div className="h-6 w-px bg-slate-700 mx-2 hidden sm:block" />
-            <div className="flex items-center">
+            <div className="hidden md:flex items-center">
               <SignedIn>
                 <UserButton afterSignOutUrl="/" />
               </SignedIn>
@@ -95,30 +119,60 @@ const Navbar = () => {
                 </Link>
               </SignedOut>
             </div>
+            {/* Hamburger Menu Button */}
+            <div className="md:hidden">
+              <button
+                onClick={handleMobileMenuToggle}
+                className="p-2 rounded-full hover:bg-slate-800 hover:text-white transition-colors"
+                aria-label="Toggle Menu"
+              >
+                {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+              </button>
+            </div>
           </div>
         </nav>
+        {/* Mobile Dropdown Menu */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden absolute top-full right-4 mt-2 w-64 bg-slate-800/95 backdrop-blur-sm rounded-lg shadow-lg border border-slate-700">
+            <ul className="p-2">
+              {navItems.map((item) => (
+                <li key={item.href}>
+                  <NavLink
+                    to={item.href}
+                    onClick={closeMobileMenu}
+                    className={({ isActive }) =>
+                      `flex items-center gap-x-3 px-3 py-2 rounded-md text-base font-medium transition-colors ${
+                        isActive
+                          ? "bg-slate-700 text-amber-400"
+                          : "text-gray-300 hover:bg-slate-700 hover:text-white"
+                      }`
+                    }
+                  >
+                    {item.icon}
+                    {item.label}
+                  </NavLink>
+                </li>
+              ))}
+              <li className="border-t border-slate-700 mt-2 pt-2">
+                <div className="px-3 py-2">
+                  <SignedIn>
+                    <UserButton afterSignOutUrl="/" />
+                  </SignedIn>
+                  <SignedOut>
+                    <Link
+                      to="/sign-in"
+                      onClick={closeMobileMenu}
+                      className="flex items-center gap-x-3 text-gray-300 hover:text-white"
+                    >
+                      Sign In
+                    </Link>
+                  </SignedOut>
+                </div>
+              </li>
+            </ul>
+          </div>
+        )}
       </header>
-
-      {/* Sirf Mobile ke liye DockBar Navigation */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-slate-900/80 backdrop-blur-sm border-t border-slate-700 p-1 z-50">
-        <div className="flex justify-around items-center">
-          {mobileNavItems.map((item) => (
-            <NavLink
-              key={item.href}
-              to={item.href}
-              end // 'end' prop use karein taaki 'Home' sirf root path par active ho
-              className={({ isActive }) =>
-                `flex flex-col items-center justify-center w-full p-2 rounded-lg transition-colors duration-200 ${
-                  isActive ? "text-amber-400" : "text-gray-400 hover:text-white"
-                }`
-              }
-            >
-              {item.icon}
-              <span className="text-xs mt-1">{item.label}</span>
-            </NavLink>
-          ))}
-        </div>
-      </nav>
 
       <SearchOverlay
         isOpen={isSearchOpen}

@@ -1,5 +1,5 @@
 import React from "react";
-import { Heart, Star } from "lucide-react";
+import { Heart, Star, Zap } from "lucide-react";
 import { useCart } from "../hooks/useCart";
 
 interface ProductCardProps {
@@ -10,6 +10,7 @@ interface ProductCardProps {
   affiliateLink: string;
   price?: string;
   rating?: number;
+  tag?: string;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({
@@ -20,6 +21,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   affiliateLink,
   price,
   rating,
+  tag,
 }) => {
   const { addToCart, isItemInCart, removeFromCart } = useCart();
   const inWishlist = isItemInCart(id);
@@ -97,6 +99,14 @@ const ProductCard: React.FC<ProductCardProps> = ({
         >
           <Heart size={18} fill={inWishlist ? "currentColor" : "none"} />
         </button>
+
+        {/* Tag Display */}
+        {tag && (
+          <div className="absolute top-3 left-3 bg-amber-400/90 text-slate-900 text-xs font-bold px-2.5 py-1 rounded-full flex items-center gap-x-1 shadow-sm">
+            {tag === "Trending" && <Zap size={12} />}
+            <span>{tag}</span>
+          </div>
+        )}
       </div>
 
       {/* Content Section */}
