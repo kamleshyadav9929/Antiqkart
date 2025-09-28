@@ -75,19 +75,19 @@ const ProductCard: React.FC<ProductCardProps> = ({
   };
 
   return (
-    <div className="flex flex-col h-full w-full bg-white rounded-2xl overflow-hidden border border-gray-200/70 shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+    <div className="flex flex-col h-full w-full bg-white rounded-2xl overflow-hidden shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
       {/* Image Section */}
-      <div className="relative bg-gray-100 flex-shrink-0 h-48 sm:h-64 w-full group">
+      <div className="relative bg-gray-100 flex-shrink-0 h-48 sm:h-64 w-full group overflow-hidden rounded-t-2xl">
         <a
           href={affiliateLink}
           target="_blank"
           rel="noopener noreferrer"
-          className="block w-full h-full p-2"
+          className="block w-full h-full"
         >
           <img
             src={image}
             alt={name}
-            className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
+            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
           />
         </a>
         <button
@@ -113,11 +113,13 @@ const ProductCard: React.FC<ProductCardProps> = ({
       {/* Content Section */}
       <div className="flex flex-col flex-grow p-2 sm:p-4">
         <div className="flex-shrink-0">
-          <p className="text-xs font-medium text-gray-500 uppercase tracking-wide truncate">
-            {collectionName || "Antiqkart"}
-          </p>
+          {collectionName && (
+            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide truncate">
+              {collectionName}
+            </p>
+          )}
           <h3
-            className="h-10 text-sm font-semibold text-slate-800 mt-1 overflow-hidden line-clamp-2"
+            className="text-sm font-semibold text-slate-800 mt-1 overflow-hidden h-10 line-clamp-2"
             title={name}
           >
             {name}
@@ -149,7 +151,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
             {price && (
               <p className="text-base sm:text-lg font-semibold text-slate-900 flex items-baseline">
                 ₹{price}
-                <span className="ml-1 text-[9px] text-gray-400 font-normal whitespace-nowrap hidden sm:inline">
+                <span className="ml-1 text-[9px] text-gray-400 font-normal whitespace-nowrap">
                   (price may vary)
                 </span>
               </p>

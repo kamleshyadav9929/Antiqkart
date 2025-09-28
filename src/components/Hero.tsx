@@ -1,14 +1,5 @@
-import { useEffect, useState } from "react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Layers, MapPin, ThumbsUp, Sparkles } from "lucide-react";
 import { motion, Variants } from "framer-motion";
-import { supabase } from "../lib/supabaseClient";
-
-interface Product {
-  id: string;
-  name: string;
-  image: string;
-  affiliate_link: string;
-}
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -16,6 +7,7 @@ const containerVariants: Variants = {
     opacity: 1,
     transition: {
       staggerChildren: 0.15,
+      delayChildren: 0.2,
     },
   },
 };
@@ -32,125 +24,91 @@ const itemVariants: Variants = {
   },
 };
 
+const Feature = ({
+  icon,
+  title,
+  description,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+}) => (
+  <motion.div className="flex items-start gap-4" variants={itemVariants}>
+    <motion.div
+      className="flex-shrink-0 mt-1 bg-amber-100 text-amber-600 p-3 rounded-full"
+      whileHover={{ scale: 1.1, rotate: 5 }}
+      transition={{ type: "spring", stiffness: 300 }}
+    >
+      {icon}
+    </motion.div>
+    <div>
+      <h3 className="font-semibold text-slate-800">{title}</h3>
+      <p className="text-sm text-slate-600">{description}</p>
+    </div>
+  </motion.div>
+);
+
 const Hero = () => {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchHeroProducts = async () => {
-      setLoading(true);
-      const { data, error } = await supabase
-        .from("products")
-        .select("id, name, image, affiliate_link")
-        .order("created_at", { ascending: false })
-        .limit(5);
-
-      if (error) {
-        console.error("Error fetching hero products:", error.message);
-      } else if (data && data.length >= 5) {
-        setProducts(data);
-      }
-      setLoading(false);
-    };
-    fetchHeroProducts();
-  }, []);
-
-  if (loading || products.length < 5) {
-    return (
-      <div className="w-full h-[600px] md:h-[550px] bg-gray-100 animate-pulse"></div>
-    );
-  }
-
   return (
     <section className="bg-gradient-to-br from-gray-50 to-slate-100">
       <motion.div
-        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 grid grid-cols-1 md:grid-cols-2 gap-8 items-center"
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20 grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10 items-center"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       >
-        <motion.a
-          href={products[0].affiliate_link}
-          target="_blank"
-          rel="noopener noreferrer"
+        {/* Left Side: Text Content */}
+        <motion.div
           className="group relative z-10 text-center md:text-left"
           variants={itemVariants}
         >
-          <h1 className="text-4xl lg:text-5xl font-serif font-extrabold text-slate-900 leading-snug">
+          <h1 className="text-4xl lg:text-5xl font-serif font-extrabold text-slate-900 leading-tight md:leading-snug">
             Beyond the Ordinary: <br />
             <span className="text-amber-600">A Curation of Rare Finds</span>
           </h1>
-          <p className="mt-6 text-xl text-slate-700">
-            Explore our handpicked selection of rare items and unique
-            collections, sourced for the discerning collector.
+          <p className="mt-4 md:mt-6 text-lg md:text-xl text-slate-700 max-w-lg mx-auto md:mx-0">
+            Explore our handpicked selection of authentic Indian handicrafts,
+            connecting you to a legacy of masterful art.
           </p>
-          <div className="mt-10">
-            <div className="inline-flex items-center justify-center gap-x-2 bg-slate-900 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition-transform group-hover:scale-105 group-hover:bg-slate-800">
-              Explore The Feature Collection{" "}
+          <div className="mt-8 md:mt-10">
+            <a
+              href="/shop"
+              className="inline-flex items-center justify-center gap-x-2 bg-slate-900 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition-transform hover:scale-105 hover:bg-slate-800 text-base"
+            >
+              Explore Collection{" "}
               <ArrowRight
                 size={20}
                 className="transition-transform group-hover:translate-x-1"
               />
-            </div>
+            </a>
           </div>
-        </motion.a>
+        </motion.div>
+
+        {/* Right Side: Features Section */}
         <motion.div
-          className="hidden md:grid grid-cols-5 grid-rows-3 gap-3 h-[450px]"
+          className="bg-white/60 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-gray-200/80 space-y-6"
           variants={containerVariants}
         >
-          <motion.a
-            href={products[0].affiliate_link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group col-span-3 row-span-3 rounded-lg overflow-hidden shadow-xl"
-            variants={itemVariants}
-          >
-            <img
-              src={products[0].image}
-              alt={products[0].name}
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-            />
-          </motion.a>
-          <motion.a
-            href={products[1].affiliate_link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group col-span-2 row-span-2 rounded-lg overflow-hidden shadow-xl"
-            variants={itemVariants}
-          >
-            <img
-              src={products[1].image}
-              alt={products[1].name}
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-            />
-          </motion.a>
-          <motion.a
-            href={products[2].affiliate_link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group col-span-2 row-span-1 rounded-lg overflow-hidden shadow-xl"
-            variants={itemVariants}
-          >
-            <img
-              src={products[2].image}
-              alt={products[2].name}
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-            />
-          </motion.a>
-        </motion.div>
-        <motion.div className="md:hidden" variants={itemVariants}>
-          <a
-            href={products[0].affiliate_link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group block rounded-lg overflow-hidden shadow-xl"
-          >
-            <img
-              src={products[0].image}
-              alt={products[0].name}
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-            />
-          </a>
+          <Feature
+            icon={<Layers size={24} />}
+            title="Curated Collections"
+            description="Discover handcrafted treasures in over 10+ unique categories."
+          />
+          <Feature
+            icon={<MapPin size={24} />}
+            title="Shop Your Favorite State"
+            description="Explore the rich artistic heritage from every corner of India."
+          />
+          <Feature
+            icon={<Sparkles size={24} />}
+            title="Handpicked Products"
+            description="Every item is selected by our team for its authenticity and quality."
+          />
+          <Feature
+            icon={<ThumbsUp size={24} />}
+            title="Most-Loved by You"
+            description="Find popular products that are trending and highly rated by our community."
+          />
         </motion.div>
       </motion.div>
     </section>

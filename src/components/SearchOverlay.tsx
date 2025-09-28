@@ -45,7 +45,7 @@ const CategoryCard: React.FC<{
         <img
           src={item.image}
           alt={item.name}
-          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105 rounded-t-xl"
         />
       </div>
       <div className="flex-grow p-4 flex justify-between items-center">

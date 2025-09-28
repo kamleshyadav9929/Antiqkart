@@ -67,12 +67,12 @@ const TrendingProducts: React.FC = () => {
         <div className="flex overflow-x-auto space-x-4 pb-4 scrollbar-hide -mx-4 px-4">
           {loading
             ? Array.from({ length: 6 }).map((_, index) => (
-                <div key={index} className="flex-shrink-0 w-64">
+                <div key={index} className="flex-shrink-0 w-48">
                   <SkeletonCard />
                 </div>
               ))
             : products.map((product) => (
-                <div key={product.id} className="flex-shrink-0 w-64">
+                <div key={product.id} className="flex-shrink-0 w-48">
                   <ProductCard
                     id={product.id}
                     name={product.name}

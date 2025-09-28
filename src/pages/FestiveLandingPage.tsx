@@ -43,7 +43,7 @@ const FestiveLandingPage = () => {
         <img
           src={festival.banner_image}
           alt={festival.name}
-          className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105"
+          className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105 rounded-xl"
         />
         <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
           <h2 className="text-3xl font-serif font-bold text-white text-center">
