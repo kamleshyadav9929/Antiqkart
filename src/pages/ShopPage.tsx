@@ -4,7 +4,6 @@ import ProductCard from "../components/ProductCard";
 import SkeletonCard from "../components/SkeletonCard";
 import Layout from "../components/Layout";
 import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 import { SlidersHorizontal, X, ChevronDown, Check, Search } from "lucide-react";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
@@ -440,7 +439,6 @@ const ShopPage = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </>
   );
 };

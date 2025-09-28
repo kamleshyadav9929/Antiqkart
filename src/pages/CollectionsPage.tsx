@@ -1,7 +1,6 @@
 import Navbar from "../components/Navbar";
 import Collections from "../components/Collections";
 import Layout from "../components/Layout";
-import Footer from "../components/Footer";
 
 const CollectionsPage = () => {
   return (
@@ -16,7 +15,6 @@ const CollectionsPage = () => {
           <Collections showAll={true} />
         </Layout>
       </main>
-      <Footer />
     </>
   );
 };

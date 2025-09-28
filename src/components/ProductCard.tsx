@@ -77,7 +77,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   return (
     <div className="flex flex-col h-full w-full bg-white rounded-2xl overflow-hidden shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
       {/* Image Section */}
-      <div className="relative bg-gray-100 flex-shrink-0 h-48 sm:h-64 w-full group overflow-hidden rounded-t-2xl">
+      <div className="relative flex-shrink-0 h-48 sm:h-64 w-full group overflow-hidden rounded-t-2xl">
         <a
           href={affiliateLink}
           target="_blank"
@@ -163,7 +163,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
               href={affiliateLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="block w-full text-center text-xs font-bold text-white bg-gradient-to-r from-slate-900 to-slate-700 py-2 px-2 sm:py-2.5 sm:px-3 rounded-lg hover:opacity-90 transition-all shadow-md hover:shadow-lg"
+              className="block w-full text-center text-xs font-bold text-white bg-amber-500 py-2 px-2 sm:py-2.5 sm:px-3 rounded-lg hover:bg-amber-600 transition-all shadow-md hover:shadow-lg"
             >
               View on Amazon
             </a>

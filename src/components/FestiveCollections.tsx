@@ -28,7 +28,7 @@ const FestivalCard = ({ festival }: { festival: Festival }) => (
         </div>
       )}
     </div>
-    <h3 className="mt-3 text-sm font-semibold text-gray-700 group-hover:text-slate-900 truncate transition-colors">
+    <h3 className="mt-3 text-sm font-semibold text-slate-800 group-hover:text-amber-600 truncate transition-colors">
       {festival.name}
     </h3>
   </Link>
@@ -69,9 +69,9 @@ const FestiveCollections = () => {
     <div>
       <div className="relative text-center mb-12">
         <h2 className="text-3xl md:text-4xl font-serif font-bold text-slate-900">
-          Festive Specials
+          Festive <span className="text-purple-500">Specials</span>
         </h2>
-        <div className="absolute -top-3 -right-2 text-amber-400">
+        <div className="absolute -top-3 -right-2 text-purple-400">
           <Sparkles size={32} className="opacity-80" />
         </div>
         <p className="mt-2 text-muted max-w-2xl mx-auto">
@@ -79,7 +79,7 @@ const FestiveCollections = () => {
         </p>
         <Link
           to="/festive-specials"
-          className="mt-4 inline-flex md:hidden items-center gap-x-1.5 text-sm font-semibold text-slate-800 hover:text-amber-600 transition-colors"
+          className="mt-4 inline-flex md:hidden items-center gap-x-1.5 text-sm font-semibold text-slate-800 hover:text-purple-600 transition-colors"
         >
           View All <ArrowRight size={14} />
         </Link>

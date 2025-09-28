@@ -5,7 +5,6 @@ import ProductCard from "../components/ProductCard";
 import SkeletonCard from "../components/SkeletonCard";
 import Layout from "../components/Layout";
 import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 import { Search, ChevronDown } from "lucide-react";
 
 interface Product {
@@ -232,7 +231,6 @@ const CollectionPage = () => {
           </div>
         </Layout>
       </main>
-      <Footer />
     </>
   );
 };

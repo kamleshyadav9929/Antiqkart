@@ -56,9 +56,8 @@ const FeaturedProducts: React.FC = () => {
   return (
     <div>
       <div className="relative text-center mb-12">
-        <h2 className="text-3xl md:text-4xl font-serif font-bold text-slate-900 inline-block relative">
-          Featured Products
-          <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-2/3 h-0.5 bg-amber-400" />
+        <h2 className="text-3xl md:text-4xl font-serif font-bold text-slate-900">
+          Featured <span className="text-amber-500">Products</span>
         </h2>
         <p className="mt-4 text-muted max-w-2xl mx-auto">
           Our handpicked selection of the finest Indian handicrafts.

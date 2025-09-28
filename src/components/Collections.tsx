@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { supabase } from "../lib/supabaseClient";
 import { ArrowRight } from "lucide-react";
 
-// Collection ka structure define karte hain
 interface Collection {
   id: string;
   name: string;
@@ -43,7 +42,6 @@ const Collections: React.FC<CollectionsProps> = ({ showAll = false }) => {
   const mobileCollections = showAll ? collections : collections.slice(0, 6);
   const desktopCollections = showAll ? collections : collections.slice(0, 8);
 
-  // Yeh bilkul naya aur special Collection Card hai
   const CollectionCard = ({ collection }: { collection: Collection }) => {
     const cardRef = useRef<HTMLAnchorElement>(null);
 
@@ -56,7 +54,6 @@ const Collections: React.FC<CollectionsProps> = ({ showAll = false }) => {
       const midCardX = rect.width / 2;
       const midCardY = rect.height / 2;
 
-      // Tilt effect ki intensity
       const tiltX = ((x - midCardX) / midCardX) * 8;
       const tiltY = ((y - midCardY) / midCardY) * -8;
 
@@ -87,7 +84,6 @@ const Collections: React.FC<CollectionsProps> = ({ showAll = false }) => {
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
       >
-        {/* Card ki Image */}
         <div className="absolute inset-0 rounded-2xl overflow-hidden">
           <img
             src={collection.image}
@@ -95,22 +91,14 @@ const Collections: React.FC<CollectionsProps> = ({ showAll = false }) => {
             className="h-full w-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110 rounded-2xl"
           />
         </div>
-
-        {/* Spotlight Effect */}
         <div
           className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
           style={{
             background: `radial-gradient(350px circle at var(--spotlight-x, 50%) var(--spotlight-y, 50%), rgba(255,255,255,0.15), transparent 40%)`,
           }}
         />
-
-        {/* Overlay Gradient */}
         <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
-
-        {/* Inner Border Effect */}
         <div className="absolute inset-0 rounded-2xl border-2 border-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-
-        {/* Card ka Content (Parallax Effect ke saath) */}
         <div
           className="absolute bottom-0 w-full p-4 md:p-6 text-white"
           style={{ transform: "translateZ(50px)" }}
@@ -125,7 +113,6 @@ const Collections: React.FC<CollectionsProps> = ({ showAll = false }) => {
     );
   };
 
-  // Loading ke time dikhane wala Skeleton Card
   const SkeletonCard = () => (
     <div className="animate-pulse">
       <div className="w-full h-48 md:h-56 bg-gray-200 rounded-2xl"></div>
@@ -138,7 +125,7 @@ const Collections: React.FC<CollectionsProps> = ({ showAll = false }) => {
       <div className="flex justify-between items-center mb-10">
         <div>
           <h2 className="text-3xl md:text-4xl font-serif font-bold text-slate-900">
-            Handpicked Collections
+            Handpicked <span className="text-rose-500">Collections</span>
           </h2>
           <p className="mt-1 text-muted">
             Expertly curated for the discerning collector.

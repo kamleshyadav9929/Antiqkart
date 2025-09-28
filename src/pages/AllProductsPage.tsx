@@ -3,7 +3,6 @@ import { supabase } from "../lib/supabaseClient";
 import ProductCard from "../components/ProductCard";
 import Layout from "../components/Layout";
 import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 
 interface Product {
   id: string;
@@ -87,7 +86,6 @@ const AllProductsPage = () => {
           )}
         </Layout>
       </main>
-      <Footer />
     </>
   );
 };

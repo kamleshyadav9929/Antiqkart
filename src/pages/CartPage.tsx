@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { useCart } from "../hooks/useCart";
 import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 import Layout from "../components/Layout";
 import ProductCard from "../components/ProductCard";
 import SkeletonCard from "../components/SkeletonCard";
@@ -64,7 +63,6 @@ const CartPage = () => {
           </div>
         </Layout>
       </main>
-      <Footer />
     </>
   );
 };

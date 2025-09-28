@@ -55,10 +55,10 @@ const TrendingProducts: React.FC = () => {
   return (
     <div>
       <div className="mb-10 text-center">
-        <div className="flex justify-center items-center gap-x-2">
+        <div className="flex justify-center items-center gap-x-3">
           <Flame className="text-amber-500" size={32} />
           <h2 className="text-3xl md:text-4xl font-serif font-bold text-slate-900">
-            Popular Right Now
+            Popular <span className="text-amber-500">Right Now</span>
           </h2>
         </div>
         <p className="mt-2 text-muted max-w-2xl mx-auto">

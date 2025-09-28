@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 import Layout from "../components/Layout";
 import { supabase } from "../lib/supabaseClient";
 
@@ -79,7 +78,6 @@ const FestiveLandingPage = () => {
               ))}
         </div>
       </Layout>
-      <Footer />
     </div>
   );
 };

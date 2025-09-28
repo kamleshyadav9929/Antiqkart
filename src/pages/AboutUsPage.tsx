@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 import Layout from "../components/Layout";
 import { Hand, Heart, Gem, ArrowRight } from "lucide-react";
 
@@ -179,7 +178,6 @@ const AboutUsPage = () => {
           </div>
         </Layout>
       </main>
-      <Footer />
     </>
   );
 };

@@ -57,7 +57,7 @@ const StatesGrid = () => {
     <div>
       <div className="text-center mb-12">
         <h2 className="text-3xl md:text-4xl font-serif font-bold text-slate-900">
-          From Every Corner of India
+          From Every Corner of <span className="text-green-500">India</span>
         </h2>
         <p className="mt-2 text-muted max-w-2xl mx-auto">
           Explore the unique artistic heritage, one state at a time.

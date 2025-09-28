@@ -42,7 +42,7 @@ const NewArrivals: React.FC = () => {
       <div className="flex justify-between items-end mb-8">
         <div>
           <h2 className="text-3xl md:text-4xl font-serif font-bold text-slate-900">
-            Fresh on the Shelves
+            Fresh on the <span className="text-sky-500">Shelves</span>
           </h2>
           <p className="mt-1 text-muted max-w-2xl">
             Our latest handcrafted additions.
@@ -50,7 +50,7 @@ const NewArrivals: React.FC = () => {
         </div>
         <a
           href="/shop"
-          className="hidden md:flex items-center gap-x-1.5 text-sm font-semibold text-slate-800 hover:text-amber-600 transition-colors"
+          className="hidden md:flex items-center gap-x-1.5 text-sm font-semibold text-slate-800 hover:text-sky-600 transition-colors"
         >
           <span>View All</span>
           <ArrowRight size={16} />

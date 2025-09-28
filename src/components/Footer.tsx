@@ -6,7 +6,6 @@ const Footer = () => {
     <footer className="bg-slate-800 text-gray-300 mt-16">
       <div className="max-w-7xl mx-auto px-6 lg:px-12 pt-16 pb-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-y-12 gap-x-8">
-          {/* Column 1: Brand & Newsletter (larger on desktop) */}
           <div className="lg:col-span-5">
             <Link to="/" className="inline-block mb-4">
               <img
@@ -26,12 +25,12 @@ const Footer = () => {
               <input
                 type="email"
                 placeholder="Your email address"
-                className="w-full px-4 py-2.5 bg-slate-700/60 border border-slate-600 rounded-md text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-slate-500 transition"
+                className="w-full px-4 py-2.5 bg-slate-700/60 border border-slate-600 rounded-md text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-500 transition"
                 aria-label="Email address"
               />
               <button
                 type="submit"
-                className="flex-shrink-0 bg-slate-950 text-white p-3 rounded-md hover:bg-slate-700 transition-colors"
+                className="flex-shrink-0 bg-amber-500 text-white p-3 rounded-md hover:bg-amber-600 transition-colors"
                 aria-label="Subscribe to newsletter"
               >
                 <Send size={18} />
@@ -39,13 +38,10 @@ const Footer = () => {
             </form>
           </div>
 
-          {/* Spacer Column */}
           <div className="hidden lg:block lg:col-span-1"></div>
 
-          {/* Combined Links Section for better mobile layout */}
           <div className="lg:col-span-6">
             <div className="grid grid-cols-3 gap-8">
-              {/* Column 2: Quick Links */}
               <div>
                 <h3 className="text-white font-semibold tracking-wider text-sm mb-4">
                   Explore
@@ -54,7 +50,7 @@ const Footer = () => {
                   <li>
                     <Link
                       to="/shop"
-                      className="hover:text-white transition-colors"
+                      className="hover:text-amber-400 transition-colors"
                     >
                       Shop
                     </Link>
@@ -62,7 +58,7 @@ const Footer = () => {
                   <li>
                     <Link
                       to="/states"
-                      className="hover:text-white transition-colors"
+                      className="hover:text-amber-400 transition-colors"
                     >
                       States
                     </Link>
@@ -70,7 +66,7 @@ const Footer = () => {
                   <li>
                     <Link
                       to="/collections"
-                      className="hover:text-white transition-colors"
+                      className="hover:text-amber-400 transition-colors"
                     >
                       Collections
                     </Link>
@@ -78,7 +74,6 @@ const Footer = () => {
                 </ul>
               </div>
 
-              {/* Column 3: Company Links */}
               <div>
                 <h3 className="text-white font-semibold tracking-wider text-sm mb-4">
                   Company
@@ -87,7 +82,7 @@ const Footer = () => {
                   <li>
                     <Link
                       to="/about"
-                      className="hover:text-white transition-colors"
+                      className="hover:text-amber-400 transition-colors"
                     >
                       About Us
                     </Link>
@@ -95,7 +90,7 @@ const Footer = () => {
                   <li>
                     <Link
                       to="/contact"
-                      className="hover:text-white transition-colors"
+                      className="hover:text-amber-400 transition-colors"
                     >
                       Contact Us
                     </Link>
@@ -103,7 +98,6 @@ const Footer = () => {
                 </ul>
               </div>
 
-              {/* Column 4: Social Media */}
               <div>
                 <h3 className="text-white font-semibold tracking-wider text-sm mb-4">
                   Follow Us
@@ -111,14 +105,14 @@ const Footer = () => {
                 <div className="flex space-x-3">
                   <a
                     href="#"
-                    className="p-2 rounded-full text-gray-400 hover:text-white hover:bg-slate-700 transition-colors"
+                    className="p-2 rounded-full text-gray-400 hover:text-white hover:bg-amber-500 transition-colors"
                     aria-label="Instagram"
                   >
                     <Instagram size={20} />
                   </a>
                   <a
                     href="#"
-                    className="p-2 rounded-full text-gray-400 hover:text-white hover:bg-slate-700 transition-colors"
+                    className="p-2 rounded-full text-gray-400 hover:text-white hover:bg-amber-500 transition-colors"
                     aria-label="Youtube"
                   >
                     <Youtube size={20} />
@@ -130,15 +124,14 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Bottom Bar */}
       <div className="bg-slate-900 py-4">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 flex flex-col sm:flex-row justify-between items-center text-center text-xs text-gray-400">
           <p>© {new Date().getFullYear()} AntiqKart. All rights reserved.</p>
           <div className="flex gap-x-4 mt-2 sm:mt-0">
-            <Link to="#" className="hover:text-white">
+            <Link to="/privacy-policy" className="hover:text-amber-400">
               Privacy Policy
             </Link>
-            <Link to="#" className="hover:text-white">
+            <Link to="#" className="hover:text-amber-400">
               Terms of Service
             </Link>
           </div>

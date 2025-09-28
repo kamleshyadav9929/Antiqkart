@@ -1,5 +1,4 @@
 import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 import Layout from "../components/Layout";
 import StatesGrid from "../components/StatesGrid";
 
@@ -21,7 +20,6 @@ const StatesPage = () => {
           <StatesGrid />
         </Layout>
       </main>
-      <Footer />
     </>
   );
 };

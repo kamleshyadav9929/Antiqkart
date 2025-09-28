@@ -72,8 +72,8 @@ const Navbar = () => {
                     className={({ isActive }) =>
                       `px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                         isActive
-                          ? "bg-slate-800 text-white"
-                          : "text-gray-300 hover:bg-slate-800 hover:text-white"
+                          ? "text-amber-400"
+                          : "text-gray-300 hover:text-amber-400"
                       }`
                     }
                   >

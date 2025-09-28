@@ -20,6 +20,7 @@ import SignInPage from "./pages/SignInPage";
 import SignUpPage from "./pages/SignUpPage";
 import StatePage from "./pages/StatePage";
 import StatesPage from "./pages/StatesPage";
+import PrivacyPolicyPage from "./pages/PrivacyPolicyPage"; // Import the new page
 
 function App() {
   return (
@@ -32,7 +33,8 @@ function App() {
         <Route path="/about" element={<AboutUsPage />} />
         <Route path="/contact" element={<ContactUsPage />} />
         <Route path="/cart" element={<CartPage />} />
-
+        <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />{" "}
+        {/* Add the new route */}
         {/* Product Discovery Routes */}
         <Route path="/products" element={<AllProductsPage />} />
         <Route path="/search" element={<SearchPage />} />
@@ -43,13 +45,10 @@ function App() {
         />
         <Route path="/category/:categoryName" element={<CategoryPage />} />
         <Route path="/states" element={<StatesPage />} />
-        {/* CORRECTED ROUTE: Changed :stateId to :stateName to match the component */}
         <Route path="/states/:stateName" element={<StatePage />} />
-
         {/* Festive Special Routes */}
         <Route path="/festive-specials" element={<FestiveLandingPage />} />
         <Route path="/festive-specials/:slug" element={<FestivalPage />} />
-
         {/* Authentication Routes */}
         <Route path="/sign-in" element={<SignInPage />} />
         <Route path="/sign-up" element={<SignUpPage />} />
