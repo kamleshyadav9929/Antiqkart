@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../../src/lib/supabaseClient";
-import { ArrowRight } from "lucide-react";
 
 interface State {
   id: string;
