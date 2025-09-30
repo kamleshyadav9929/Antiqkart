@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { NavLink, Link } from "react-router-dom";
 import {
   Search,
@@ -22,6 +22,15 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { cartItems } = useCart();
 
+  // This effect listens for a global "open-search-overlay" event
+  useEffect(() => {
+    const handleOpenSearch = () => setIsSearchOpen(true);
+    window.addEventListener("open-search-overlay", handleOpenSearch);
+    return () => {
+      window.removeEventListener("open-search-overlay", handleOpenSearch);
+    };
+  }, []);
+
   const navItems = [
     { label: "Home", href: "/", icon: <Home size={20} /> },
     { label: "Shop", href: "/shop", icon: <Store size={20} /> },
@@ -36,19 +45,13 @@ const Navbar = () => {
     { label: "Contact Us", href: "/contact", icon: <Mail size={20} /> },
   ];
 
-  const handleMobileMenuToggle = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
-
-  const closeMobileMenu = () => {
-    setIsMobileMenuOpen(false);
-  };
+  const handleMobileMenuToggle = () => setIsMobileMenuOpen(!isMobileMenuOpen);
+  const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
   return (
     <>
       <header className="sticky top-0 z-40 bg-slate-900 border-b border-slate-700">
         <nav className="flex items-center justify-between px-4 sm:px-6 py-2">
-          {/* Logo */}
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-2">
               <img
@@ -61,8 +64,6 @@ const Navbar = () => {
               </span>
             </Link>
           </div>
-
-          {/* Desktop Navigation */}
           <div className="hidden md:flex flex-grow justify-center">
             <ul className="flex space-x-4">
               {navItems.map((item) => (
@@ -83,8 +84,6 @@ const Navbar = () => {
               ))}
             </ul>
           </div>
-
-          {/* Right side icons */}
           <div className="flex items-center gap-x-2 sm:gap-x-3 text-gray-300">
             <button
               className="p-2 rounded-full hover:bg-slate-800 hover:text-white transition-colors"
@@ -119,7 +118,6 @@ const Navbar = () => {
                 </Link>
               </SignedOut>
             </div>
-            {/* Hamburger Menu Button */}
             <div className="md:hidden">
               <button
                 onClick={handleMobileMenuToggle}
@@ -131,7 +129,6 @@ const Navbar = () => {
             </div>
           </div>
         </nav>
-        {/* Mobile Dropdown Menu */}
         {isMobileMenuOpen && (
           <div className="md:hidden absolute top-full right-4 mt-2 w-64 bg-slate-800/95 backdrop-blur-sm rounded-lg shadow-lg border border-slate-700">
             <ul className="p-2">
@@ -173,7 +170,6 @@ const Navbar = () => {
           </div>
         )}
       </header>
-
       <SearchOverlay
         isOpen={isSearchOpen}
         onClose={() => setIsSearchOpen(false)}

@@ -1,6 +1,8 @@
 import React from "react";
 import { Heart, Star, Zap } from "lucide-react";
 import { useCart } from "../hooks/useCart";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css"; // Import the blur effect CSS
 
 interface ProductCardProps {
   id: string;
@@ -84,10 +86,12 @@ const ProductCard: React.FC<ProductCardProps> = ({
           rel="noopener noreferrer"
           className="block w-full h-full"
         >
-          <img
-            src={image}
+          <LazyLoadImage
             alt={name}
+            src={image}
+            effect="blur"
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            wrapperClassName="w-full h-full"
           />
         </a>
         <button
@@ -163,7 +167,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
               href={affiliateLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="block w-full text-center text-xs font-bold text-white bg-amber-500 py-2 px-2 sm:py-2.5 sm:px-3 rounded-lg hover:bg-amber-600 transition-all shadow-md hover:shadow-lg"
+              className="block w-full text-center text-xs font-bold text-white bg-slate-800 py-2 px-2 sm:py-2.5 sm:px-3 rounded-lg hover:bg-slate-900 transition-all shadow-md hover:shadow-lg"
             >
               View on Amazon
             </a>

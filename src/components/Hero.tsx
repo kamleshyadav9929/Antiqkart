@@ -1,129 +1,89 @@
-import { ArrowRight, Layers, MapPin, ThumbsUp, Sparkles } from "lucide-react";
-import { motion, Variants } from "framer-motion";
-
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.15,
-      delayChildren: 0.2,
-    },
-  },
-};
-
-const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.5,
-      ease: "easeOut",
-    },
-  },
-};
-
-const iconColors = [
-  "bg-amber-100 text-amber-600",
-  "bg-sky-100 text-sky-600",
-  "bg-rose-100 text-rose-600",
-  "bg-teal-100 text-teal-600",
-];
-
-const Feature = ({
-  icon,
-  title,
-  description,
-  index,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-  index: number;
-}) => (
-  <motion.div className="flex items-start gap-4" variants={itemVariants}>
-    <motion.div
-      className={`flex-shrink-0 mt-1 p-3 rounded-full ${
-        iconColors[index % iconColors.length]
-      }`}
-      whileHover={{ scale: 1.1, rotate: 5 }}
-      transition={{ type: "spring", stiffness: 300 }}
-    >
-      {icon}
-    </motion.div>
-    <div>
-      <h3 className="font-semibold text-slate-800">{title}</h3>
-      <p className="text-sm text-slate-600">{description}</p>
-    </div>
-  </motion.div>
-);
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import { Search } from "lucide-react";
 
 const Hero = () => {
+  // This function sends a global event that the Navbar will hear
+  const handleSearchClick = () => {
+    window.dispatchEvent(new CustomEvent("open-search-overlay"));
+  };
+
   return (
-    <section className="bg-gradient-to-br from-gray-50 to-slate-100">
+    <section className="relative bg-gray-50 overflow-hidden">
+      <div
+        className="absolute inset-0 opacity-20"
+        style={{
+          backgroundImage:
+            'url(\'data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23a0aec0" fill-opacity="0.4"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\')',
+        }}
+      ></div>
+
       <motion.div
-        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20 grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10 items-center"
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
+        className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32 text-center z-10"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
       >
-        {/* Left Side: Text Content */}
-        <motion.div
-          className="group relative z-10 text-center md:text-left"
-          variants={itemVariants}
+        <motion.h1
+          className="text-4xl lg:text-6xl font-serif font-extrabold leading-tight"
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
         >
-          <h1 className="text-4xl lg:text-5xl font-serif font-extrabold text-slate-900 leading-tight md:leading-snug">
-            Beyond the Ordinary: <br />
-            <span className="text-amber-600">A Curation of Rare Finds</span>
-          </h1>
-          <p className="mt-4 md:mt-6 text-lg md:text-xl text-slate-700 max-w-lg mx-auto md:mx-0">
-            Explore our handpicked selection of authentic Indian handicrafts,
-            connecting you to a legacy of masterful art.
-          </p>
-          <div className="mt-8 md:mt-10">
-            <a
-              href="/shop"
-              className="inline-flex items-center justify-center gap-x-2 bg-slate-900 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition-transform hover:scale-105 hover:bg-slate-800 text-base"
-            >
-              Explore Collection{" "}
-              <ArrowRight
-                size={20}
-                className="transition-transform group-hover:translate-x-1"
-              />
-            </a>
-          </div>
+          <span className="text-slate-900">Discover the </span>
+          <span className="text-amber-600">Soul</span>
+          <span className="text-slate-900"> of Indian </span>
+          <span className="text-amber-600">Artistry</span>
+        </motion.h1>
+
+        <motion.p
+          className="mt-4 text-lg md:text-xl text-slate-600 max-w-2xl mx-auto"
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.7, delay: 0.4, ease: "easeOut" }}
+        >
+          Your curated guide to authentic handicrafts, from the heart of every
+          state.
+        </motion.p>
+
+        <motion.div
+          className="mt-8 max-w-xl mx-auto"
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.7, delay: 0.6, ease: "easeOut" }}
+        >
+          <button
+            onClick={handleSearchClick}
+            className="group w-full flex items-center text-left bg-white border border-gray-200 rounded-full px-2 py-2 shadow-sm hover:ring-2 hover:ring-slate-800 transition-all"
+          >
+            {/* --- THIS IS THE FIX --- */}
+            <span className="flex-grow text-gray-500 pl-4 pr-2 truncate">
+              Search for 'Madhubani Painting' or 'Pashmina'...
+            </span>
+            <span className="flex-shrink-0 bg-slate-800 text-white rounded-full p-3">
+              <Search size={20} />
+            </span>
+          </button>
         </motion.div>
 
-        {/* Right Side: Features Section */}
         <motion.div
-          className="bg-white/60 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-gray-200/80 space-y-6"
-          variants={containerVariants}
+          className="mt-6 flex flex-row items-center justify-center gap-3 sm:gap-4"
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.7, delay: 0.8, ease: "easeOut" }}
         >
-          <Feature
-            icon={<Layers size={24} />}
-            title="Curated Collections"
-            description="Discover handcrafted treasures in over 10+ unique categories."
-            index={0}
-          />
-          <Feature
-            icon={<MapPin size={24} />}
-            title="Shop Your Favorite State"
-            description="Explore the rich artistic heritage from every corner of India."
-            index={1}
-          />
-          <Feature
-            icon={<Sparkles size={24} />}
-            title="Handpicked Products"
-            description="Every item is selected by our team for its authenticity and quality."
-            index={2}
-          />
-          <Feature
-            icon={<ThumbsUp size={24} />}
-            title="Most-Loved by You"
-            description="Find popular products that are trending and highly rated by our community."
-            index={3}
-          />
+          <Link
+            to="/shop"
+            className="w-full sm:w-auto inline-block bg-slate-900 text-white font-semibold py-3 px-6 sm:px-8 rounded-full shadow-md hover:bg-slate-800 transition-transform hover:scale-105 text-sm sm:text-base"
+          >
+            Shop Now
+          </Link>
+          <Link
+            to="/states"
+            className="w-full sm:w-auto inline-block bg-white text-slate-800 font-semibold py-3 px-6 sm:px-8 rounded-full shadow-md border border-gray-200 hover:bg-gray-100 transition-colors text-sm sm:text-base"
+          >
+            Visit Your State
+          </Link>
         </motion.div>
       </motion.div>
     </section>

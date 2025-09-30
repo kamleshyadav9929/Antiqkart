@@ -5,7 +5,7 @@ import FeaturedProducts from "../components/FeaturedProducts";
 import TrendingProducts from "../components/TrendingProducts";
 import FestiveCollections from "../components/FestiveCollections";
 import StatesGrid from "../components/StatesGrid";
-import Collections from "../components/Collections";
+import Collections from "../components/Collections"; // Using the original, powerful component
 import Layout from "../components/Layout";
 import Footer from "../components/Footer";
 import NewArrivals from "../components/NewArrivals";
@@ -35,7 +35,12 @@ const Homepage = () => {
           <NewArrivals />
         </Section>
 
+        {/* === YOUR POWERFUL COLLECTIONS COMPONENT, MOVED UP === */}
         <Section className="bg-slate-50">
+          <Collections />
+        </Section>
+
+        <Section>
           <FeaturedProducts />
         </Section>
 
@@ -49,10 +54,6 @@ const Homepage = () => {
 
         <Section>
           <StatesGrid />
-        </Section>
-
-        <Section className="bg-slate-50">
-          <Collections />
         </Section>
       </main>
       <Footer />

@@ -1,15 +1,24 @@
-import React, { useEffect, useState, useMemo, useRef } from "react";
+import React from "react";
 import { supabase } from "../lib/supabaseClient";
 import ProductCard from "../components/ProductCard";
 import SkeletonCard from "../components/SkeletonCard";
 import Layout from "../components/Layout";
 import Navbar from "../components/Navbar";
-import { SlidersHorizontal, X, ChevronDown, Check, Search } from "lucide-react";
+import { Link } from "react-router-dom";
+import {
+  SlidersHorizontal,
+  X,
+  Search,
+  ChevronDown,
+  Layers,
+  Check,
+  ShoppingBag,
+} from "lucide-react";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import { motion, AnimatePresence } from "framer-motion";
 
-// Interface Definitions
+// --- INTERFACES & CONSTANTS ---
 interface Product {
   id: string;
   name: string;
@@ -20,115 +29,146 @@ interface Product {
   state_id: string;
   rating?: number;
   popularity?: number;
+  created_at: string;
 }
-
 interface Collection {
   id: string;
   name: string;
+  image: string;
 }
-
 interface State {
   id: string;
   name: string;
   state_id: string;
 }
-
-interface Festival {
-  id: number;
-  name: string;
-}
-
 const sortOptions = [
+  { value: "latest", label: "Latest Arrivals" },
   { value: "popularity", label: "Popularity" },
   { value: "price-asc", label: "Price: Low to High" },
   { value: "price-desc", label: "Price: High to Low" },
 ];
 
-const ShopPage = () => {
-  // State variables
-  const [products, setProducts] = useState<Product[]>([]);
-  const [collections, setCollections] = useState<Collection[]>([]);
-  const [states, setStates] = useState<State[]>([]);
-  const [festivals, setFestivals] = useState<Festival[]>([]);
-  const [festivalProductIds, setFestivalProductIds] = useState<
-    Record<number, string[]>
-  >({});
-  const [loading, setLoading] = useState(true);
-  const [selectedCollections, setSelectedCollections] = useState<string[]>([]);
-  const [selectedStates, setSelectedStates] = useState<string[]>([]);
-  const [selectedFestivals, setSelectedFestivals] = useState<number[]>([]);
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 10000]);
-  const [sortBy, setSortBy] = useState("popularity");
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [isSortOpen, setIsSortOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
-  const sortDropdownRef = useRef<HTMLDivElement>(null);
+// --- CUSTOM APPLE-STYLE DROPDOWN ---
+const CustomDropdown = ({
+  selected,
+  onSelect,
+}: {
+  selected: string;
+  onSelect: (value: string) => void;
+}) => {
+  const [isOpen, setIsOpen] = React.useState(false);
+  const dropdownRef = React.useRef<HTMLDivElement>(null);
+  const selectedLabel = sortOptions.find(
+    (opt) => opt.value === selected
+  )?.label;
 
-  // Fetch all initial data
-  useEffect(() => {
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      )
+        setIsOpen(false);
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  return (
+    <div className="relative w-full sm:w-auto" ref={dropdownRef}>
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex items-center justify-between w-full min-w-max sm:w-48 border border-gray-300 rounded-md py-2 px-3 text-sm font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-slate-800 transition-colors hover:bg-gray-50"
+      >
+        <span>{selectedLabel}</span>
+        <ChevronDown
+          size={16}
+          className={`transform transition-transform duration-200 ${
+            isOpen ? "rotate-180" : ""
+          }`}
+        />
+      </button>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.ul
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="absolute z-10 top-full right-0 mt-2 w-full bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden"
+          >
+            {sortOptions.map((option) => (
+              <li
+                key={option.value}
+                onClick={() => {
+                  onSelect(option.value);
+                  setIsOpen(false);
+                }}
+                className="flex justify-between items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                {option.label}
+                {selected === option.value && (
+                  <Check size={16} className="text-slate-800" />
+                )}
+              </li>
+            ))}
+          </motion.ul>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
+// --- THE FINAL SHOP PAGE COMPONENT ---
+const ShopPage = () => {
+  const [products, setProducts] = React.useState<Product[]>([]);
+  const [collections, setCollections] = React.useState<Collection[]>([]);
+  const [states, setStates] = React.useState<State[]>([]);
+  const [loading, setLoading] = React.useState(true);
+
+  const [selectedCollections, setSelectedCollections] = React.useState<
+    string[]
+  >([]);
+  const [selectedStates, setSelectedStates] = React.useState<string[]>([]);
+  const [priceRange, setPriceRange] = React.useState<[number, number]>([
+    0, 10000,
+  ]);
+  const [tempPriceRange, setTempPriceRange] = React.useState<[number, number]>([
+    0, 10000,
+  ]);
+  const [sortBy, setSortBy] = React.useState("latest");
+  const [searchTerm, setSearchTerm] = React.useState("");
+  const [isFilterOpen, setIsFilterOpen] = React.useState(false);
+  const [showAllStates, setShowAllStates] = React.useState(false);
+
+  React.useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      const [
-        productRes,
-        collectionRes,
-        stateRes,
-        festivalRes,
-        festivalProductsRes,
-      ] = await Promise.all([
-        supabase.from("products").select("*"),
-        supabase.from("collections").select("id, name").order("name"),
+      const [productRes, collectionRes, stateRes] = await Promise.all([
+        supabase.from("products").select("*, collections(name), states(name)"),
+        supabase.from("collections").select("id, name, image").order("name"),
         supabase.from("states").select("id, name, state_id").order("name"),
-        supabase.from("festivals").select("id, name"),
-        supabase.from("festival_products").select("festival_id, product_id"),
       ]);
-
       if (productRes.data) setProducts(productRes.data as Product[]);
       if (collectionRes.data) setCollections(collectionRes.data);
       if (stateRes.data) setStates(stateRes.data as State[]);
-      if (festivalRes.data) setFestivals(festivalRes.data);
-      if (festivalProductsRes.data) {
-        const mapping = festivalProductsRes.data.reduce((acc, item) => {
-          if (!acc[item.festival_id]) {
-            acc[item.festival_id] = [];
-          }
-          acc[item.festival_id].push(item.product_id);
-          return acc;
-        }, {} as Record<number, string[]>);
-        setFestivalProductIds(mapping);
-      }
       setLoading(false);
     };
     fetchData();
   }, []);
 
-  // Filter and sort products
-  const filteredAndSortedProducts = useMemo(() => {
+  const filteredAndSortedProducts = React.useMemo(() => {
     let filtered = [...products]
-      .filter((product) =>
-        product.name.toLowerCase().includes(searchTerm.toLowerCase())
-      )
+      .filter((p) => p.name.toLowerCase().includes(searchTerm.toLowerCase()))
       .filter(
-        (product) =>
-          (product.price || 0) >= priceRange[0] &&
-          (product.price || 0) <= priceRange[1]
+        (p) =>
+          (p.price || 0) >= priceRange[0] && (p.price || 0) <= priceRange[1]
       );
-
-    if (selectedCollections.length > 0) {
+    if (selectedCollections.length > 0)
       filtered = filtered.filter((p) =>
         selectedCollections.includes(p.collection_id)
       );
-    }
-
-    if (selectedStates.length > 0) {
+    if (selectedStates.length > 0)
       filtered = filtered.filter((p) => selectedStates.includes(p.state_id));
-    }
-
-    if (selectedFestivals.length > 0) {
-      const festiveIds = new Set(
-        selectedFestivals.flatMap((id) => festivalProductIds[id] || [])
-      );
-      filtered = filtered.filter((p) => festiveIds.has(p.id));
-    }
 
     switch (sortBy) {
       case "price-asc":
@@ -141,119 +181,101 @@ const ShopPage = () => {
         filtered.sort((a, b) => (b.popularity || 0) - (a.popularity || 0));
         break;
       default:
+        filtered.sort(
+          (a, b) =>
+            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        );
         break;
     }
-
     return filtered;
   }, [
     products,
     searchTerm,
     selectedCollections,
     selectedStates,
-    selectedFestivals,
-    festivalProductIds,
     priceRange,
     sortBy,
   ]);
 
-  const handleFestivalChange = (festivalId: number) => {
-    setSelectedFestivals((prev) =>
-      prev.includes(festivalId)
-        ? prev.filter((id) => id !== festivalId)
-        : [...prev, festivalId]
-    );
-  };
-
-  const handleCollectionChange = (collectionId: string) => {
-    setSelectedCollections((prev) =>
-      prev.includes(collectionId)
-        ? prev.filter((id) => id !== collectionId)
-        : [...prev, collectionId]
-    );
-  };
-
-  const handleStateChange = (stateId: string) => {
-    setSelectedStates((prev) =>
-      prev.includes(stateId)
-        ? prev.filter((id) => id !== stateId)
-        : [...prev, stateId]
-    );
-  };
-
   const clearFilters = () => {
     setSelectedCollections([]);
     setSelectedStates([]);
-    setSelectedFestivals([]);
     setPriceRange([0, 10000]);
+    setTempPriceRange([0, 10000]);
     setSearchTerm("");
+    setSortBy("latest");
+  };
+
+  const toggleSelection = (
+    id: string,
+    setter: React.Dispatch<React.SetStateAction<string[]>>
+  ) => {
+    setter((prev) =>
+      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
+    );
   };
 
   const FilterContent = () => (
     <>
-      <FilterSection title="Price Range">
-        <div className="px-1 pt-2">
-          <Slider
-            range
-            min={0}
-            max={10000}
-            step={500}
-            value={priceRange}
-            onChange={(value) => setPriceRange(value as [number, number])}
-            trackStyle={[{ backgroundColor: "#020617" }]}
-            handleStyle={[
-              { borderColor: "#020617", backgroundColor: "#020617" },
-              { borderColor: "#020617", backgroundColor: "#020617" },
-            ]}
-          />
-          <div className="flex justify-between items-center mt-3 text-sm">
-            <input
-              type="number"
-              value={priceRange[0]}
-              onChange={(e) => setPriceRange([+e.target.value, priceRange[1]])}
-              className="w-20 p-1 border rounded"
-            />
-            <span>-</span>
-            <input
-              type="number"
-              value={priceRange[1]}
-              onChange={(e) => setPriceRange([priceRange[0], +e.target.value])}
-              className="w-20 p-1 border rounded"
-            />
-          </div>
+      <div className="md:hidden">
+        <FilterSection title="Sort By">
+          <CustomDropdown selected={sortBy} onSelect={setSortBy} />
+        </FilterSection>
+      </div>
+      <FilterSection title="Price Range (₹)">
+        <Slider
+          range
+          min={0}
+          max={10000}
+          step={100}
+          value={tempPriceRange}
+          onChange={(val) => setTempPriceRange(val as [number, number])}
+          onAfterChange={() => setPriceRange(tempPriceRange)}
+          className="mt-4"
+          trackStyle={[{ backgroundColor: "#fbbf24" }]}
+          handleStyle={[{ borderColor: "#fbbf24" }, { borderColor: "#fbbf24" }]}
+          railStyle={{ backgroundColor: "#e5e7eb" }}
+        />
+        <div className="flex justify-between text-sm mt-2 font-medium">
+          <span>₹{tempPriceRange[0]}</span>
+          <span>₹{tempPriceRange[1]}</span>
         </div>
-      </FilterSection>
-      <FilterSection title="Festivals">
-        {festivals.map((f) => (
-          <Checkbox
-            key={f.id}
-            id={`festival-${f.id}`}
-            label={f.name}
-            checked={selectedFestivals.includes(f.id)}
-            onChange={() => handleFestivalChange(f.id)}
-          />
-        ))}
       </FilterSection>
       <FilterSection title="Collections">
         {collections.map((c) => (
           <Checkbox
             key={c.id}
-            id={`cat-${c.id}`}
+            id={`col-${c.id}`}
             label={c.name}
             checked={selectedCollections.includes(c.id)}
-            onChange={() => handleCollectionChange(c.id)}
+            onChange={() => toggleSelection(c.id, setSelectedCollections)}
           />
         ))}
       </FilterSection>
-      <FilterSection title="State">
-        {states.map((s) => (
+      <FilterSection title="States">
+        {(showAllStates ? states : states.slice(0, 5)).map((s) => (
           <Checkbox
             key={s.id}
             id={`state-${s.state_id}`}
             label={s.name}
             checked={selectedStates.includes(s.state_id)}
-            onChange={() => handleStateChange(s.state_id)}
+            onChange={() => toggleSelection(s.state_id, setSelectedStates)}
           />
         ))}
+        {states.length > 5 && (
+          <button
+            onClick={() => setShowAllStates(!showAllStates)}
+            className="text-sm text-blue-600 hover:underline mt-2 flex items-center gap-x-1"
+          >
+            {showAllStates ? "Show Less" : `See All ${states.length} States`}{" "}
+            <ChevronDown
+              size={14}
+              className={`transition-transform ${
+                showAllStates ? "rotate-180" : ""
+              }`}
+            />
+          </button>
+        )}
       </FilterSection>
     </>
   );
@@ -264,9 +286,40 @@ const ShopPage = () => {
       <div className="bg-gray-50">
         <Layout>
           <div className="py-8">
-            <h1 className="text-4xl font-serif font-bold text-center mb-8">
-              Shop All Products
-            </h1>
+            <header className="py-8 text-center">
+              <h1 className="text-4xl md:text-5xl font-serif font-bold text-slate-900">
+                Discover Our Collection
+              </h1>
+            </header>
+            <section className="mb-12">
+              <h2 className="text-2xl font-serif font-semibold text-slate-800 mb-6 flex items-center gap-x-2">
+                <Layers size={24} className="text-rose-500" /> Curated
+                Collections
+              </h2>
+              <div className="flex overflow-x-auto space-x-4 pb-4 -mx-4 px-4 scrollbar-hide">
+                {collections.slice(0, 8).map((c) => (
+                  <Link
+                    key={c.id}
+                    to={`/collections/${c.name
+                      .toLowerCase()
+                      .replace(/\s+/g, "-")}`}
+                    className="group flex-shrink-0 w-36 sm:w-48"
+                  >
+                    <div className="aspect-square bg-slate-100 rounded-xl overflow-hidden shadow-sm transition-all duration-300 group-hover:shadow-lg group-hover:-translate-y-1">
+                      <img
+                        src={c.image}
+                        alt={c.name}
+                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
+                    </div>
+                    <h3 className="mt-2 text-sm text-center font-semibold text-slate-700 group-hover:text-rose-600 transition-colors truncate">
+                      {c.name}
+                    </h3>
+                  </Link>
+                ))}
+              </div>
+            </section>
+
             <div className="flex items-start">
               <aside className="hidden md:block w-64 lg:w-72 pr-8">
                 <div className="sticky top-24">
@@ -281,78 +334,26 @@ const ShopPage = () => {
                 </div>
               </aside>
 
-              <main className="w-full">
-                <div className="flex flex-col md:flex-row justify-between items-center mb-4 p-4 bg-white rounded-lg shadow-sm gap-4">
-                  <div className="relative w-full md:max-w-xs">
-                    <input
-                      type="text"
-                      placeholder="Search products..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-slate-800 text-sm"
-                    />
-                    <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                      <Search size={18} />
+              <main className="w-full isolate">
+                <div className="sticky top-[68px] z-10 bg-gray-50 pt-2 pb-4">
+                  <div className="flex flex-row justify-between items-center bg-white rounded-lg shadow-md gap-2 p-2 sm:p-4 sm:gap-4">
+                    <div className="relative flex-grow">
+                      <input
+                        type="text"
+                        placeholder="Search products..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-slate-800 text-sm"
+                      />
+                      <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                        <Search size={18} />
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex items-center gap-x-4 w-full md:w-auto justify-between">
-                    <p className="text-sm text-gray-600">
-                      <span className="font-bold text-gray-900">
-                        {filteredAndSortedProducts.length}
-                      </span>{" "}
-                      products
-                    </p>
-                    <div className="relative" ref={sortDropdownRef}>
-                      <button
-                        onClick={() => setIsSortOpen(!isSortOpen)}
-                        className="flex items-center gap-x-2 text-sm font-medium text-gray-700"
-                      >
-                        Sort by:{" "}
-                        <span className="font-semibold text-gray-900">
-                          {
-                            sortOptions.find((opt) => opt.value === sortBy)
-                              ?.label
-                          }
-                        </span>
-                        <ChevronDown
-                          size={16}
-                          className={`transition-transform duration-200 ${
-                            isSortOpen ? "rotate-180" : ""
-                          }`}
-                        />
-                      </button>
-                      <AnimatePresence>
-                        {isSortOpen && (
-                          <motion.div
-                            initial={{ opacity: 0, y: -10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -10 }}
-                            className="absolute top-full right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg z-10"
-                          >
-                            <ul>
-                              {sortOptions.map((option) => (
-                                <li key={option.value}>
-                                  <button
-                                    onClick={() => {
-                                      setSortBy(option.value);
-                                      setIsSortOpen(false);
-                                    }}
-                                    className="w-full text-left flex items-center justify-between px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                  >
-                                    {option.label}
-                                    {sortBy === option.value && (
-                                      <Check size={16} />
-                                    )}
-                                  </button>
-                                </li>
-                              ))}
-                            </ul>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
+                    <div className="hidden sm:block">
+                      <CustomDropdown selected={sortBy} onSelect={setSortBy} />
                     </div>
                     <button
-                      className="md:hidden flex items-center gap-x-2 text-sm font-semibold p-2 px-3 border rounded-md bg-white"
+                      className="md:hidden flex-shrink-0 p-2.5 border rounded-full bg-white shadow-sm"
                       onClick={() => setIsFilterOpen(true)}
                     >
                       <SlidersHorizontal size={16} />
@@ -360,101 +361,133 @@ const ShopPage = () => {
                   </div>
                 </div>
 
-                {loading ? (
-                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-4">
-                    {Array.from({ length: 12 }).map((_, i) => (
-                      <SkeletonCard key={i} />
-                    ))}
-                  </div>
-                ) : (
-                  <motion.div
-                    layout
-                    className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-4"
-                  >
-                    <AnimatePresence>
-                      {filteredAndSortedProducts.map((product: Product) => (
-                        <motion.div
-                          key={product.id}
-                          className="h-full"
-                          layout
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          transition={{ duration: 0.3 }}
-                        >
-                          <ProductCard
-                            id={product.id}
-                            name={product.name}
-                            image={product.image}
-                            price={product.price?.toString()}
-                            rating={product.rating}
-                            affiliateLink={product.affiliate_link}
-                          />
-                        </motion.div>
+                <div className="mt-4">
+                  {loading ? (
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                      {Array.from({ length: 12 }).map((_, i) => (
+                        <SkeletonCard key={i} />
                       ))}
-                    </AnimatePresence>
-                  </motion.div>
-                )}
+                    </div>
+                  ) : filteredAndSortedProducts.length > 0 ? (
+                    <motion.div
+                      layout
+                      className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+                    >
+                      <AnimatePresence>
+                        {filteredAndSortedProducts.map((product) => (
+                          <motion.div
+                            key={product.id}
+                            className="h-full"
+                            layout
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.3 }}
+                          >
+                            <ProductCard
+                              id={product.id}
+                              name={product.name}
+                              image={product.image}
+                              price={product.price?.toString()}
+                              rating={product.rating}
+                              affiliateLink={product.affiliate_link}
+                            />
+                          </motion.div>
+                        ))}
+                      </AnimatePresence>
+                    </motion.div>
+                  ) : (
+                    <div className="text-center py-20 px-4">
+                      <ShoppingBag
+                        size={48}
+                        className="mx-auto text-amber-400 mb-4"
+                      />
+                      <p className="text-lg font-semibold text-slate-700">
+                        No matching treasures found...
+                      </p>
+                      <p className="text-slate-500 mt-2">
+                        but awesome products are on their way! Please wait.
+                      </p>
+                    </div>
+                  )}
+                </div>
               </main>
             </div>
           </div>
         </Layout>
       </div>
-      <div
-        className={`fixed inset-0 bg-black/40 z-50 transition-opacity duration-300 ${
-          isFilterOpen ? "opacity-100" : "opacity-0 pointer-events-none"
-        }`}
-        onClick={() => setIsFilterOpen(false)}
-      >
-        <div
-          className={`absolute inset-y-0 left-0 w-4/5 max-w-sm bg-white shadow-xl transform transition-transform duration-300 ${
-            isFilterOpen ? "translate-x-0" : "-translate-x-full"
-          }`}
-          onClick={(e) => e.stopPropagation()}
-        >
-          <div className="flex flex-col h-full">
-            <div className="flex justify-between items-center p-4 border-b">
-              <h2 className="text-lg font-bold">Filters</h2>
-              <button onClick={() => setIsFilterOpen(false)}>
-                <X size={24} />
-              </button>
-            </div>
-            <div className="flex-grow p-4 overflow-y-auto">
-              <FilterContent />
-            </div>
-            <div className="p-4 border-t flex gap-x-4">
-              <button
-                onClick={clearFilters}
-                className="w-1/2 text-sm font-bold py-3 px-4 rounded-md border"
-              >
-                Clear
-              </button>
-              <button
-                onClick={() => setIsFilterOpen(false)}
-                className="w-1/2 text-sm font-bold text-white bg-slate-950 py-3 px-4 rounded-md"
-              >
-                Show Results
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+
+      <AnimatePresence>
+        {isFilterOpen && (
+          <motion.div
+            className="fixed inset-0 z-50"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <div
+              className="absolute inset-0 bg-black/40"
+              onClick={() => setIsFilterOpen(false)}
+            ></div>
+            <motion.div
+              className="absolute inset-y-0 right-0 w-4/5 max-w-sm bg-white shadow-xl flex flex-col"
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            >
+              <div className="flex justify-between items-center p-4 border-b">
+                <h2 className="text-lg font-bold">Filters</h2>
+                <button onClick={() => setIsFilterOpen(false)}>
+                  <X size={24} />
+                </button>
+              </div>
+              <div className="flex-grow p-4 overflow-y-auto">
+                <FilterContent />
+              </div>
+              <div className="p-4 border-t flex gap-x-4">
+                <button
+                  onClick={() => {
+                    clearFilters();
+                    setIsFilterOpen(false);
+                  }}
+                  className="w-1/2 text-sm font-bold py-3 px-4 rounded-md border"
+                >
+                  Clear
+                </button>
+                <button
+                  onClick={() => setIsFilterOpen(false)}
+                  className="w-1/2 text-sm font-bold text-white bg-slate-950 py-3 px-4 rounded-md"
+                >
+                  Show Results
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 };
+
 const FilterSection = ({
   title,
   children,
+  className,
 }: {
   title: string;
   children: React.ReactNode;
+  className?: string;
 }) => (
-  <div className="py-4 border-b border-gray-200">
-    <h3 className="font-semibold text-gray-800">{title}</h3>
+  <div
+    className={`py-4 border-b border-gray-200 last:border-b-0 ${
+      className || ""
+    }`}
+  >
+    <h3 className="font-semibold text-gray-800 mb-2">{title}</h3>
     <div className="mt-2 space-y-2">{children}</div>
   </div>
 );
-
 const Checkbox = ({
   id,
   label,
@@ -468,16 +501,17 @@ const Checkbox = ({
 }) => (
   <label
     htmlFor={id}
-    className="flex items-center text-sm text-gray-600 cursor-pointer"
+    className="flex items-center text-sm text-gray-700 cursor-pointer hover:text-slate-900 transition-colors"
   >
     <input
       type="checkbox"
       id={id}
       checked={checked}
       onChange={onChange}
-      className="h-4 w-4 rounded border-gray-300 text-slate-600 focus:ring-slate-500"
+      className="h-4 w-4 rounded border-gray-300 text-slate-600 focus:ring-slate-500 focus:ring-1"
     />
     <span className="ml-3">{label}</span>
   </label>
 );
+
 export default ShopPage;
