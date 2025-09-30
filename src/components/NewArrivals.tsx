@@ -41,7 +41,7 @@ const NewArrivals: React.FC = () => {
     <div>
       <div className="flex justify-between items-end mb-8">
         <div>
-          <h2 className="text-3xl md:text-4xl font-serif font-bold text-slate-900">
+          <h2 className="section-title section-title-left text-3xl md:text-4xl font-serif font-bold text-slate-900">
             Fresh on the <span className="text-sky-500">Shelves</span>
           </h2>
           <p className="mt-1 text-muted max-w-2xl">
@@ -61,14 +61,14 @@ const NewArrivals: React.FC = () => {
         <div className="flex overflow-x-auto space-x-4 pb-4 -mx-4 px-4 scrollbar-hide">
           {loading
             ? Array.from({ length: 6 }).map((_, index) => (
-                <div key={index} className="flex-shrink-0 w-48">
+                <div key={index} className="flex-shrink-0 w-48 md:w-56">
                   <SkeletonCard />
                 </div>
               ))
             : products.map((product) => (
                 <div
                   key={product.id}
-                  className="flex-shrink-0 w-48 h-full flex"
+                  className="flex-shrink-0 w-48 md:w-56 h-full flex"
                 >
                   <ProductCard
                     id={product.id}

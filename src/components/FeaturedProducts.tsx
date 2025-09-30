@@ -56,7 +56,7 @@ const FeaturedProducts: React.FC = () => {
   return (
     <div>
       <div className="relative text-center mb-12">
-        <h2 className="text-3xl md:text-4xl font-serif font-bold text-slate-900">
+        <h2 className="section-title text-3xl md:text-4xl font-serif font-bold text-slate-900">
           Featured <span className="text-amber-500">Products</span>
         </h2>
         <p className="mt-4 text-muted max-w-2xl mx-auto">

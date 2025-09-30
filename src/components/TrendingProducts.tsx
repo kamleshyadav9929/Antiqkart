@@ -13,10 +13,7 @@ interface Product {
   rating?: number;
 }
 
-interface TrendingProductData {
-  position: number;
-  products: Product | null;
-}
+// The old TrendingProductData interface is no longer needed.
 
 const TrendingProducts: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -26,25 +23,22 @@ const TrendingProducts: React.FC = () => {
     const fetchTrendingProducts = async () => {
       setLoading(true);
 
+      // --- UPDATED QUERY ---
+      // This now fetches directly from the 'products' table where 'is_trending' is true.
+      // It sorts by 'popularity' to show the most popular trending items first.
       const { data, error } = await supabase
-        .from("trending_products")
-        .select(
-          `
-          position,
-          products ( id, name, image, price, affiliate_link, rating )
-        `
-        )
-        .order("position", { ascending: true })
-        .limit(10)
-        .returns<TrendingProductData[]>();
+        .from("products")
+        .select("id, name, image, price, affiliate_link, rating")
+        .eq("is_trending", true)
+        .order("popularity", { ascending: false })
+        .limit(10);
+      // --- END OF UPDATED QUERY ---
 
       if (error) {
         console.error("Error fetching trending products:", error.message);
       } else if (data) {
-        const trending = data
-          .map((item) => item.products)
-          .filter(Boolean) as Product[];
-        setProducts(trending);
+        // The data is now a direct array of products, so no mapping is needed.
+        setProducts(data);
       }
       setLoading(false);
     };

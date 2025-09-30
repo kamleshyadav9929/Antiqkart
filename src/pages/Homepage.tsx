@@ -31,17 +31,16 @@ const Homepage = () => {
       <main>
         <Hero />
 
-        {/* --- FESTIVE SECTION MOVED TO TOP --- */}
-        <Section id="festive-specials" className="bg-slate-50">
-          <FestiveCollections />
-        </Section>
-
         <Section>
           <NewArrivals />
         </Section>
 
         <Section className="bg-slate-50">
           <FeaturedProducts />
+        </Section>
+
+        <Section id="festive-specials" className="bg-white">
+          <FestiveCollections />
         </Section>
 
         <Section>

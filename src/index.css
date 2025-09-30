@@ -157,3 +157,193 @@ body {
     @apply bg-background text-foreground;
   }
 }
+/* In src/index.css */
+
+.section-title {
+  position: relative;
+  padding-bottom: 1rem; /* Creates space between the title and the underline */
+}
+
+.section-title::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4rem; /* 64px */
+  height: 3px;
+  background-color: #fcd34d; /* A nice amber/gold color */
+  border-radius: 9999px;
+}
+
+/* Modifier for left-aligned titles */
+.section-title-left::after {
+  left: 0;
+  transform: translateX(0);
+}
+/* In src/index.css */
+
+/* Keyframes for the glowing animation */
+@keyframes glowing-underline {
+  0% {
+    filter: drop-shadow(0 0 2px rgba(252, 211, 77, 0.6)); /* amber-300 */
+    opacity: 0.7;
+  }
+  50% {
+    filter: drop-shadow(0 0 8px rgba(252, 211, 77, 1));
+    opacity: 1;
+  }
+  100% {
+    filter: drop-shadow(0 0 2px rgba(252, 211, 77, 0.6));
+    opacity: 0.7;
+  }
+}
+
+.section-title {
+  position: relative;
+  padding-bottom: 1.25rem; /* Increased padding to give the underline space */
+}
+
+/* The custom SVG underline */
+.section-title::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 12px;
+  background-image: url('data:image/svg+xml,%3Csvg width="100" height="12" viewBox="0 0 100 12" fill="none" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M2 6C17.3333 11.3333 82.6 -5.4 98 6" stroke="%23FCD34D" stroke-width="4" stroke-linecap="round"/%3E%3C/svg%3E');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  /* Applying the animation */
+  animation: glowing-underline 3.5s infinite ease-in-out;
+}
+
+/* Modifier for left-aligned titles */
+.section-title-left::after {
+  left: 0;
+  transform: translateX(0);
+}
+/* In src/index.css */
+
+/* Keyframes for the CENTERED glowing underline */
+@keyframes glowing-underline-center {
+  0% {
+    filter: drop-shadow(0 0 3px rgba(245, 158, 11, 0.7)); /* amber-500 */
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    filter: drop-shadow(0 0 10px rgba(253, 224, 71, 1)); /* yellow-400 */
+    transform: translateX(-50%) scale(1.05);
+  }
+  100% {
+    filter: drop-shadow(0 0 3px rgba(245, 158, 11, 0.7));
+    transform: translateX(-50%) scale(1);
+  }
+}
+
+/* Keyframes for the LEFT-ALIGNED glowing underline */
+@keyframes glowing-underline-left {
+  0% {
+    filter: drop-shadow(0 0 3px rgba(245, 158, 11, 0.7));
+    transform: translateX(0) scale(1);
+  }
+  50% {
+    filter: drop-shadow(0 0 10px rgba(253, 224, 71, 1));
+    transform: translateX(0) scale(1.05);
+  }
+  100% {
+    filter: drop-shadow(0 0 3px rgba(245, 158, 11, 0.7));
+    transform: translateX(0) scale(1);
+  }
+}
+
+.section-title {
+  position: relative;
+  padding-bottom: 1.25rem;
+}
+
+.section-title::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 100px;
+  height: 12.5px;
+  /* New custom SVG with a color gradient */
+  background-image: url('data:image/svg+xml,%3Csvg width="120" height="15" viewBox="0 0 120 15" fill="none" xmlns="http://www.w3.org/2000/svg"%3E%3Cdefs%3E%3ClinearGradient id="glowGradient" x1="0" y1="7.5" x2="120" y2="7.5" gradientUnits="userSpaceOnUse"%3E%3Cstop stop-color="%23F59E0B"/%3E%3Cstop offset="0.5" stop-color="%23FDE047"/%3E%3Cstop offset="1" stop-color="%23F59E0B"/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d="M2 8C12 4 40 -2 58 8L60 10L62 8C80 -2 108 4 118 8" stroke="url(%23glowGradient)" stroke-width="3" stroke-linecap="round"/%3E%3C/svg%3E');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  /* Default animation is for centered titles */
+  animation: glowing-underline-center 4s infinite ease-in-out;
+}
+
+/* Modifier for left-aligned titles uses the other animation */
+.section-title-left::after {
+  left: 0;
+  animation-name: glowing-underline-left;
+}
+/* In src/index.css */
+
+/* Keyframes for the CENTERED ethereal glow animation */
+@keyframes ethereal-glow-center {
+  0%,
+  100% {
+    filter: drop-shadow(
+      0 0 4px rgba(254, 240, 138, 0.5)
+    ); /* Soft yellow glow */
+    opacity: 0.8;
+    transform: translateX(-50%);
+  }
+  50% {
+    filter: drop-shadow(
+      0 0 12px rgba(245, 158, 11, 0.8)
+    ); /* Intense amber glow */
+    opacity: 1;
+    transform: translateX(-50%);
+  }
+}
+
+/* Keyframes for the LEFT-ALIGNED ethereal glow animation */
+@keyframes ethereal-glow-left {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 4px rgba(254, 240, 138, 0.5));
+    opacity: 0.8;
+    transform: translateX(0);
+  }
+  50% {
+    filter: drop-shadow(0 0 12px rgba(245, 158, 11, 0.8));
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.section-title {
+  position: relative;
+  padding-bottom: 1.5rem; /* More space for the new, larger underline */
+}
+
+.section-title::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 400px; /* Wider to cover more of the heading */
+  height: 5px; /* Adjusted height for the new design's aspect ratio */
+  /* New ornate SVG with a radial color gradient for a multi-toned effect */
+  background-image: url('data:image/svg+xml,%3Csvg width="200" height="20" viewBox="0 0 200 20" fill="none" xmlns="http://www.w3.org/2000/svg"%3E%3Cdefs%3E%3CradialGradient id="glowRadial" cx="50%25" cy="50%25" r="50%25" fx="50%25" fy="50%25"%3E%3Cstop offset="0%25" stop-color="%23FEF08A" /%3E%3Cstop offset="75%25" stop-color="%23F59E0B" /%3E%3Cstop offset="100%25" stop-color="%23D97706" /%3E%3C/radialGradient%3E%3C/defs%3E%3Cpath d="M100 10 C 80 0, 70 20, 50 10 C 30 0, 10 20, 2 10" stroke="url(%23glowRadial)" stroke-width="2" stroke-linecap="round"/%3E%3Cpath d="M100 10 C 120 0, 130 20, 150 10 C 170 0, 190 20, 198 10" stroke="url(%23glowRadial)" stroke-width="2" stroke-linecap="round"/%3E%3C/svg%3E');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  animation: ethereal-glow-center 5s infinite ease-in-out;
+}
+
+/* Modifier for left-aligned titles uses the other animation */
+.section-title-left::after {
+  left: 0;
+  animation-name: ethereal-glow-left;
+}
