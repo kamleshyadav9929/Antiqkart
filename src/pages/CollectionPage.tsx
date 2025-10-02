@@ -6,16 +6,7 @@ import SkeletonCard from "../components/SkeletonCard";
 import Layout from "../components/Layout";
 import Navbar from "../components/Navbar";
 import { Search, ChevronDown } from "lucide-react";
-
-interface Product {
-  id: string;
-  name: string;
-  image: string;
-  price?: number;
-  affiliate_link: string;
-  created_at: string;
-  rating?: number;
-}
+import { Product } from "../context/cart-context";
 
 const sortOptions = [
   { value: "newest", label: "Newest" },
@@ -86,7 +77,7 @@ const CollectionPage = () => {
         console.error("Error fetching products:", productsError);
       }
 
-      if (productsData) setProducts(productsData);
+      if (productsData) setProducts(productsData as Product[]);
       setLoading(false);
     };
     fetchCollectionData();
@@ -106,10 +97,12 @@ const CollectionPage = () => {
       case "alpha-asc":
         result.sort((a, b) => a.name.localeCompare(b.name));
         break;
-      default:
+      default: // "newest"
+        // FIX: Provide a fallback value for optional 'created_at' property
         result.sort(
           (a, b) =>
-            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+            new Date(b.created_at || 0).getTime() -
+            new Date(a.created_at || 0).getTime()
         );
         break;
     }
@@ -210,14 +203,7 @@ const CollectionPage = () => {
               <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-4">
                 {filteredAndSortedProducts.map((product) => (
                   <div key={product.id} className="h-full">
-                    <ProductCard
-                      id={product.id}
-                      name={product.name}
-                      image={product.image}
-                      price={product.price?.toString()}
-                      rating={product.rating}
-                      affiliateLink={product.affiliate_link}
-                    />
+                    <ProductCard product={product} />
                   </div>
                 ))}
               </div>

@@ -1,9 +1,7 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-
-// Helper component to scroll to top on page change
+import { Routes, Route } from "react-router-dom";
 import ScrollToTop from "./components/ScrollToTop";
 
-// Import all page components from your 'pages' directory
+// Import all page components
 import Homepage from "./pages/Homepage";
 import AboutUsPage from "./pages/AboutUsPage";
 import AllProductsPage from "./pages/AllProductsPage";
@@ -16,26 +14,24 @@ import FestivalPage from "./pages/FestivalPage";
 import FestiveLandingPage from "./pages/FestiveLandingPage";
 import SearchPage from "./pages/SearchPage";
 import ShopPage from "./pages/ShopPage";
-import SignInPage from "./pages/SignInPage";
-import SignUpPage from "./pages/SignUpPage";
 import StatePage from "./pages/StatePage";
 import StatesPage from "./pages/StatesPage";
-import PrivacyPolicyPage from "./pages/PrivacyPolicyPage"; // Import the new page
+import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
+import AuthPage from "./pages/AuthPage";
 
 function App() {
   return (
-    <BrowserRouter>
+    // The <BrowserRouter> tags have been removed from this file
+    <>
       <ScrollToTop />
       <Routes>
-        {/* Core Pages */}
+        {/* All your application routes */}
         <Route path="/" element={<Homepage />} />
         <Route path="/shop" element={<ShopPage />} />
         <Route path="/about" element={<AboutUsPage />} />
         <Route path="/contact" element={<ContactUsPage />} />
         <Route path="/cart" element={<CartPage />} />
-        <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />{" "}
-        {/* Add the new route */}
-        {/* Product Discovery Routes */}
+        <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
         <Route path="/products" element={<AllProductsPage />} />
         <Route path="/search" element={<SearchPage />} />
         <Route path="/collections" element={<CollectionsPage />} />
@@ -46,14 +42,11 @@ function App() {
         <Route path="/category/:categoryName" element={<CategoryPage />} />
         <Route path="/states" element={<StatesPage />} />
         <Route path="/states/:stateName" element={<StatePage />} />
-        {/* Festive Special Routes */}
         <Route path="/festive-specials" element={<FestiveLandingPage />} />
         <Route path="/festive-specials/:slug" element={<FestivalPage />} />
-        {/* Authentication Routes */}
-        <Route path="/sign-in" element={<SignInPage />} />
-        <Route path="/sign-up" element={<SignUpPage />} />
+        <Route path="/auth" element={<AuthPage />} />
       </Routes>
-    </BrowserRouter>
+    </>
   );
 }
 

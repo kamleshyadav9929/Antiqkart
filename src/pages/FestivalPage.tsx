@@ -6,19 +6,10 @@ import Layout from "../components/Layout";
 import { supabase } from "../lib/supabaseClient";
 import ProductCard from "../components/ProductCard";
 import SkeletonCard from "../components/SkeletonCard";
+import { Product } from "../context/cart-context";
 
-// Define the shape of a Product object
-interface Product {
-  id: number;
-  name: string;
-  image: string;
-  price?: string;
-  affiliate_link: string;
-  rating?: number;
-}
-
-// Define the shape of a Festival object
 interface Festival {
+  id: number; // <-- Added ID to use in the product query
   name: string;
   banner_image: string;
 }
@@ -34,43 +25,35 @@ const FestivalPage = () => {
       if (!slug) return;
       setLoading(true);
 
-      // Fetch the festival and its related products in one go
-      const { data, error } = await supabase
+      // Step 1: Fetch the festival details first
+      const { data: festivalData, error: festivalError } = await supabase
         .from("festivals")
-        .select(
-          `
-          name,
-          banner_image,
-          festival_products (
-            products (
-              id,
-              name,
-              image,
-              price,
-              affiliate_link,
-              rating
-            )
-          )
-        `
-        )
+        .select("id, name, banner_image")
         .eq("slug", slug)
         .single();
 
-      if (error) {
-        console.error("Error fetching festival data:", error.message);
+      if (festivalError || !festivalData) {
+        console.error("Error fetching festival:", festivalError?.message);
+        setLoading(false);
+        return;
+      }
+      setFestival(festivalData);
+
+      // Step 2: Use the festival's ID to fetch all products linked to it
+      // This query is simpler and more direct than the old one.
+      const { data: productsData, error: productsError } = await supabase
+        .from("products")
+        .select("id, name, image, price, affiliate_link, rating")
+        .eq("festival_id", festivalData.id); // <-- The key change is here
+
+      if (productsError) {
+        console.error(
+          "Error fetching products for festival:",
+          productsError.message
+        );
         setProducts([]);
-      } else if (data) {
-        setFestival({
-          name: data.name,
-          banner_image: data.banner_image,
-        });
-
-        // This is a simpler, corrected way to extract the products
-        const validProducts = data.festival_products
-          .map((item: any) => item.products)
-          .filter(Boolean); // Filter out any null or undefined products
-
-        setProducts(validProducts);
+      } else {
+        setProducts((productsData as Product[]) || []);
       }
       setLoading(false);
     };
@@ -111,12 +94,7 @@ const FestivalPage = () => {
                 {products.map((product) => (
                   <ProductCard
                     key={product.id}
-                    id={product.id.toString()}
-                    name={product.name}
-                    image={product.image}
-                    price={product.price}
-                    rating={product.rating}
-                    affiliateLink={product.affiliate_link}
+                    product={{ ...product, id: product.id.toString() }}
                   />
                 ))}
               </div>

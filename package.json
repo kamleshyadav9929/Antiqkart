@@ -14,9 +14,11 @@
     "analyze": "vite build --watch --mode production && vite-plugin-visualizer"
   },
   "dependencies": {
-    "@clerk/clerk-react": "^5.46.1",
     "@gsap/react": "^2.1.2",
-    "@supabase/supabase-js": "^2.57.2",
+    "@supabase/auth-ui-react": "^0.4.7",
+    "@supabase/auth-ui-shared": "^0.1.8",
+    "@supabase/supabase-js": "^2.58.0",
+    "@tailwindcss/postcss": "^4.1.14",
     "@tailwindcss/vite": "^4.1.13",
     "@vitejs/plugin-react-swc": "^4.0.1",
     "class-variance-authority": "^0.7.1",
@@ -42,7 +44,7 @@
     "@types/react": "^19.1.10",
     "@types/react-dom": "^19.1.7",
     "@types/react-lazy-load-image-component": "^1.6.4",
-    "@vitejs/plugin-react": "^5.0.0",
+    "@vitejs/plugin-react": "^5.0.4",
     "autoprefixer": "^10.4.21",
     "eslint": "^9.33.0",
     "eslint-plugin-react-hooks": "^5.2.0",

@@ -3,14 +3,7 @@ import { supabase } from "../lib/supabaseClient";
 import ProductCard from "../components/ProductCard";
 import Layout from "../components/Layout";
 import Navbar from "../components/Navbar";
-
-interface Product {
-  id: string;
-  name: string;
-  image: string;
-  price?: string;
-  affiliate_link: string;
-}
+import { Product } from "../context/cart-context";
 
 interface CollectionWithProducts {
   id: string;
@@ -42,7 +35,7 @@ const AllProductsPage = () => {
       if (error) {
         console.error("Error fetching products by collection:", error.message);
       } else {
-        setCollectionsWithProducts(data || []);
+        setCollectionsWithProducts((data as CollectionWithProducts[]) || []);
       }
       setLoading(false);
     };
@@ -70,14 +63,7 @@ const AllProductsPage = () => {
                     </h2>
                     <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2 md:gap-4">
                       {collection.products.map((product) => (
-                        <ProductCard
-                          key={product.id}
-                          id={product.id}
-                          name={product.name}
-                          image={product.image}
-                          price={product.price}
-                          affiliateLink={product.affiliate_link}
-                        />
+                        <ProductCard key={product.id} product={product} />
                       ))}
                     </div>
                   </section>

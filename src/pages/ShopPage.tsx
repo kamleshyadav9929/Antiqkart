@@ -17,20 +17,8 @@ import {
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import { motion, AnimatePresence } from "framer-motion";
+import { Product } from "../context/cart-context";
 
-// --- INTERFACES & CONSTANTS ---
-interface Product {
-  id: string;
-  name: string;
-  image: string;
-  price?: number;
-  affiliate_link: string;
-  collection_id: string;
-  state_id: string;
-  rating?: number;
-  popularity?: number;
-  created_at: string;
-}
 interface Collection {
   id: string;
   name: string;
@@ -48,7 +36,6 @@ const sortOptions = [
   { value: "price-desc", label: "Price: High to Low" },
 ];
 
-// --- CUSTOM APPLE-STYLE DROPDOWN ---
 const CustomDropdown = ({
   selected,
   onSelect,
@@ -118,7 +105,6 @@ const CustomDropdown = ({
   );
 };
 
-// --- THE FINAL SHOP PAGE COMPONENT ---
 const ShopPage = () => {
   const [products, setProducts] = React.useState<Product[]>([]);
   const [collections, setCollections] = React.useState<Collection[]>([]);
@@ -144,10 +130,11 @@ const ShopPage = () => {
     const fetchData = async () => {
       setLoading(true);
       const [productRes, collectionRes, stateRes] = await Promise.all([
-        supabase.from("products").select("*, collections(name), states(name)"),
+        supabase.from("products").select("*, collections(name)"),
         supabase.from("collections").select("id, name, image").order("name"),
         supabase.from("states").select("id, name, state_id").order("name"),
       ]);
+
       if (productRes.data) setProducts(productRes.data as Product[]);
       if (collectionRes.data) setCollections(collectionRes.data);
       if (stateRes.data) setStates(stateRes.data as State[]);
@@ -164,11 +151,13 @@ const ShopPage = () => {
           (p.price || 0) >= priceRange[0] && (p.price || 0) <= priceRange[1]
       );
     if (selectedCollections.length > 0)
-      filtered = filtered.filter((p) =>
-        selectedCollections.includes(p.collection_id)
+      filtered = filtered.filter(
+        (p) => p.collection_id && selectedCollections.includes(p.collection_id)
       );
     if (selectedStates.length > 0)
-      filtered = filtered.filter((p) => selectedStates.includes(p.state_id));
+      filtered = filtered.filter(
+        (p) => p.state_id && selectedStates.includes(p.state_id)
+      );
 
     switch (sortBy) {
       case "price-asc":
@@ -180,10 +169,12 @@ const ShopPage = () => {
       case "popularity":
         filtered.sort((a, b) => (b.popularity || 0) - (a.popularity || 0));
         break;
-      default:
+      default: // "latest"
+        // FIX: Provide a fallback value for optional 'created_at' property
         filtered.sort(
           (a, b) =>
-            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+            new Date(b.created_at || 0).getTime() -
+            new Date(a.created_at || 0).getTime()
         );
         break;
     }
@@ -253,7 +244,7 @@ const ShopPage = () => {
         ))}
       </FilterSection>
       <FilterSection title="States">
-        {(showAllStates ? states : states.slice(0, 5)).map((s) => (
+        {(showAllStates ? states : states.slice(0, 10)).map((s) => (
           <Checkbox
             key={s.id}
             id={`state-${s.state_id}`}
@@ -262,7 +253,7 @@ const ShopPage = () => {
             onChange={() => toggleSelection(s.state_id, setSelectedStates)}
           />
         ))}
-        {states.length > 5 && (
+        {states.length > 10 && (
           <button
             onClick={() => setShowAllStates(!showAllStates)}
             className="text-sm text-blue-600 hover:underline mt-2 flex items-center gap-x-1"
@@ -320,8 +311,8 @@ const ShopPage = () => {
               </div>
             </section>
 
-            <div className="flex items-start">
-              <aside className="hidden md:block w-64 lg:w-72 pr-8">
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
+              <aside className="hidden md:block md:col-span-1">
                 <div className="sticky top-24">
                   <h2 className="text-lg font-bold mb-4">Filters</h2>
                   <FilterContent />
@@ -334,34 +325,32 @@ const ShopPage = () => {
                 </div>
               </aside>
 
-              <main className="w-full isolate">
-                <div className="sticky top-[68px] z-10 bg-gray-50 pt-2 pb-4">
-                  <div className="flex flex-row justify-between items-center bg-white rounded-lg shadow-md gap-2 p-2 sm:p-4 sm:gap-4">
-                    <div className="relative flex-grow">
-                      <input
-                        type="text"
-                        placeholder="Search products..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-slate-800 text-sm"
-                      />
-                      <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                        <Search size={18} />
-                      </div>
+              <main className="md:col-span-4">
+                <div className="flex flex-row justify-between items-center bg-white rounded-lg shadow-md gap-2 p-2 sm:p-4 sm:gap-4 mb-4">
+                  <div className="relative flex-grow">
+                    <input
+                      type="text"
+                      placeholder="Search products..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-slate-800 text-sm"
+                    />
+                    <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                      <Search size={18} />
                     </div>
-                    <div className="hidden sm:block">
-                      <CustomDropdown selected={sortBy} onSelect={setSortBy} />
-                    </div>
-                    <button
-                      className="md:hidden flex-shrink-0 p-2.5 border rounded-full bg-white shadow-sm"
-                      onClick={() => setIsFilterOpen(true)}
-                    >
-                      <SlidersHorizontal size={16} />
-                    </button>
                   </div>
+                  <div className="hidden sm:block">
+                    <CustomDropdown selected={sortBy} onSelect={setSortBy} />
+                  </div>
+                  <button
+                    className="md:hidden flex-shrink-0 p-2.5 border rounded-full bg-white shadow-sm"
+                    onClick={() => setIsFilterOpen(true)}
+                  >
+                    <SlidersHorizontal size={16} />
+                  </button>
                 </div>
 
-                <div className="mt-4">
+                <div>
                   {loading ? (
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                       {Array.from({ length: 12 }).map((_, i) => (
@@ -384,14 +373,7 @@ const ShopPage = () => {
                             exit={{ opacity: 0 }}
                             transition={{ duration: 0.3 }}
                           >
-                            <ProductCard
-                              id={product.id}
-                              name={product.name}
-                              image={product.image}
-                              price={product.price?.toString()}
-                              rating={product.rating}
-                              affiliateLink={product.affiliate_link}
-                            />
+                            <ProductCard product={product} />
                           </motion.div>
                         ))}
                       </AnimatePresence>

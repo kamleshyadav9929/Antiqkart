@@ -1,47 +1,55 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Heart, Star, Zap } from "lucide-react";
 import { useCart } from "../hooks/useCart";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import "react-lazy-load-image-component/src/effects/blur.css"; // Import the blur effect CSS
-
+import "react-lazy-load-image-component/src/effects/blur.css";
+import { Product } from "../context/cart-context";
+import { useUser } from "../hooks/useUser";
 interface ProductCardProps {
-  id: string;
-  image: string;
-  name: string;
-  collectionName?: string;
-  affiliateLink: string;
-  price?: string;
-  rating?: number;
+  product: Product;
   tag?: string;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({
-  id,
-  image,
-  name,
-  collectionName,
-  affiliateLink,
-  price,
-  rating,
-  tag,
-}) => {
+const ProductCard: React.FC<ProductCardProps> = ({ product, tag }) => {
   const { addToCart, isItemInCart, removeFromCart } = useCart();
-  const inWishlist = isItemInCart(id);
+  const { user } = useUser();
+  const navigate = useNavigate();
 
-  const handleWishlistClick = (e: React.MouseEvent) => {
+  if (!product) {
+    return null;
+  }
+
+  const productId = product.id;
+  const inWishlist = isItemInCart(productId);
+
+  const handleWishlistClick = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+
+    if (!user) {
+      navigate("/auth");
+      return;
+    }
+
     if (inWishlist) {
-      removeFromCart(id);
+      await removeFromCart(productId);
     } else {
-      addToCart(id);
+      try {
+        await addToCart(product);
+      } catch (error) {
+        // If addToCart throws the error, we catch it and navigate to the auth page.
+        console.error("Redirecting to login:", error);
+        navigate("/auth");
+      }
     }
   };
 
   const renderStars = () => {
+    const rating = product.rating || 0;
     const totalStars = 5;
-    const fullStars = Math.floor(rating || 0);
-    const partialStarFill = Math.round(((rating || 0) - fullStars) * 100);
+    const fullStars = Math.floor(rating);
+    const partialStarFill = Math.round((rating - fullStars) * 100);
     const stars = [];
     const starSize = 14;
 
@@ -78,17 +86,16 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
   return (
     <div className="flex flex-col h-full w-full bg-white rounded-2xl overflow-hidden shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-      {/* Image Section */}
       <div className="relative flex-shrink-0 h-48 sm:h-64 w-full group overflow-hidden rounded-t-2xl">
         <a
-          href={affiliateLink}
+          href={product.affiliate_link}
           target="_blank"
           rel="noopener noreferrer"
           className="block w-full h-full"
         >
           <LazyLoadImage
-            alt={name}
-            src={image}
+            alt={product.name}
+            src={product.image}
             effect="blur"
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
             wrapperClassName="w-full h-full"
@@ -96,14 +103,18 @@ const ProductCard: React.FC<ProductCardProps> = ({
         </a>
         <button
           onClick={handleWishlistClick}
-          className={`absolute top-3 right-3 p-2 rounded-full shadow-md transition-colors ${
-            inWishlist
-              ? "bg-red-500 text-white"
+          className={`absolute top-3 right-3 p-2 rounded-full shadow-md transition-all duration-200 cursor-pointer ${
+            inWishlist && user
+              ? "bg-red-500 text-white hover:bg-red-600"
               : "bg-white text-gray-600 hover:bg-gray-100"
           }`}
-          aria-label="Add to Wishlist"
+          aria-label={inWishlist ? "Remove from Wishlist" : "Add to Wishlist"}
         >
-          <Heart size={18} fill={inWishlist ? "currentColor" : "none"} />
+          <Heart
+            size={18}
+            className={inWishlist && user ? "fill-current" : ""}
+            fill={inWishlist && user ? "currentColor" : "none"}
+          />
         </button>
 
         {tag && (
@@ -114,57 +125,53 @@ const ProductCard: React.FC<ProductCardProps> = ({
         )}
       </div>
 
-      {/* Content Section */}
       <div className="flex flex-col flex-grow p-2 sm:p-4">
         <div className="flex-shrink-0">
-          {collectionName && (
+          {product.collections?.name && (
             <p className="text-xs font-medium text-gray-500 uppercase tracking-wide truncate">
-              {collectionName}
+              {product.collections.name}
             </p>
           )}
           <h3
             className="text-sm font-semibold text-slate-800 mt-1 overflow-hidden h-10 line-clamp-2"
-            title={name}
+            title={product.name}
           >
-            {name}
+            {product.name}
           </h3>
         </div>
         <div className="flex-grow" />
         <div className="flex-shrink-0">
-          {/* Responsive Rating Display */}
           <div className="h-[20px] mt-1">
-            {rating && rating > 0 && (
+            {product.rating && product.rating > 0 && (
               <>
-                {/* Compact rating for mobile */}
                 <div className="flex items-center gap-1 sm:hidden">
                   <Star size={14} className="text-amber-500 fill-amber-500" />
                   <span className="text-xs text-gray-600 font-semibold">
-                    {rating.toFixed(1)}
+                    {product.rating.toFixed(1)}
                   </span>
                 </div>
-                {/* Full stars for sm and up */}
                 <div className="hidden sm:flex items-center gap-1">
                   {renderStars()}
-                  <span className="text-xs text-gray-500 ml-1">({rating})</span>
+                  <span className="text-xs text-gray-500 ml-1">
+                    ({product.rating})
+                  </span>
                 </div>
               </>
             )}
           </div>
-          {/* Price */}
           <div className="mt-2">
-            {price && (
+            {product.price && (
               <p className="text-base sm:text-lg font-semibold text-slate-900 flex items-baseline">
-                ₹{price}
+                ₹{product.price}
                 <span className="ml-1 text-[9px] text-gray-400 font-normal whitespace-nowrap">
                   (price may vary)
                 </span>
               </p>
             )}
           </div>
-          {/* Button */}
           <div className="mt-3 sm:mt-4">
             <a
-              href={affiliateLink}
+              href={product.affiliate_link}
               target="_blank"
               rel="noopener noreferrer"
               className="block w-full text-center text-xs font-bold text-white bg-slate-800 py-2 px-2 sm:py-2.5 sm:px-3 rounded-lg hover:bg-slate-900 transition-all shadow-md hover:shadow-lg"

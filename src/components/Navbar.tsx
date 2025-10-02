@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link, useNavigate } from "react-router-dom";
 import {
   Search,
   ShoppingCart,
@@ -13,23 +13,32 @@ import {
   Info,
   Mail,
 } from "lucide-react";
-import { SignedIn, SignedOut, UserButton } from "@clerk/clerk-react";
 import SearchOverlay from "./SearchOverlay";
 import { useCart } from "../hooks/useCart";
+import { useUser } from "../hooks/useUser";
+import { supabase } from "../lib/supabaseClient";
 
 const Navbar = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { cartItems } = useCart();
+  const { cartProductDetails } = useCart();
+  const { user } = useUser();
+  const navigate = useNavigate();
 
-  // This effect listens for a global "open-search-overlay" event
   useEffect(() => {
     const handleOpenSearch = () => setIsSearchOpen(true);
     window.addEventListener("open-search-overlay", handleOpenSearch);
-    return () => {
+    return () =>
       window.removeEventListener("open-search-overlay", handleOpenSearch);
-    };
   }, []);
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    navigate("/");
+  };
+
+  const handleMobileMenuToggle = () => setIsMobileMenuOpen(!isMobileMenuOpen);
+  const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
   const navItems = [
     { label: "Home", href: "/", icon: <Home size={20} /> },
@@ -45,12 +54,9 @@ const Navbar = () => {
     { label: "Contact Us", href: "/contact", icon: <Mail size={20} /> },
   ];
 
-  const handleMobileMenuToggle = () => setIsMobileMenuOpen(!isMobileMenuOpen);
-  const closeMobileMenu = () => setIsMobileMenuOpen(false);
-
   return (
     <>
-      <header className="sticky top-0 z-40 bg-slate-900 border-b border-slate-700">
+      <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-gray-200">
         <nav className="flex items-center justify-between px-4 sm:px-6 py-2">
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-2">
@@ -59,34 +65,38 @@ const Navbar = () => {
                 alt="AntiqKart Logo"
                 className="h-9 w-9 md:h-10 md:w-10 rounded-full object-cover"
               />
-              <span className="text-xl md:text-2xl font-serif font-semibold tracking-wide text-white hidden sm:block">
+              <span className="text-xl md:text-2xl font-serif font-semibold tracking-wide text-slate-900 hidden sm:block">
                 AntiqKart
               </span>
             </Link>
           </div>
           <div className="hidden md:flex flex-grow justify-center">
             <ul className="flex space-x-4">
-              {navItems.map((item) => (
-                <li key={item.href}>
-                  <NavLink
-                    to={item.href}
-                    className={({ isActive }) =>
-                      `px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                        isActive
-                          ? "text-amber-400"
-                          : "text-gray-300 hover:text-amber-400"
-                      }`
-                    }
-                  >
-                    {item.label}
-                  </NavLink>
-                </li>
-              ))}
+              {navItems.slice(0, 5).map(
+                (
+                  item // Show first 5 items on desktop
+                ) => (
+                  <li key={item.href}>
+                    <NavLink
+                      to={item.href}
+                      className={({ isActive }) =>
+                        `px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                          isActive
+                            ? "text-amber-600"
+                            : "text-gray-600 hover:text-amber-600"
+                        }`
+                      }
+                    >
+                      {item.label}
+                    </NavLink>
+                  </li>
+                )
+              )}
             </ul>
           </div>
-          <div className="flex items-center gap-x-2 sm:gap-x-3 text-gray-300">
+          <div className="flex items-center gap-x-2 sm:gap-x-3 text-gray-600">
             <button
-              className="p-2 rounded-full hover:bg-slate-800 hover:text-white transition-colors"
+              className="p-2 rounded-full hover:bg-gray-100 hover:text-slate-900 transition-colors"
               onClick={() => setIsSearchOpen(true)}
               aria-label="Open Search"
             >
@@ -94,34 +104,38 @@ const Navbar = () => {
             </button>
             <Link
               to="/cart"
-              className="p-2 rounded-full hover:bg-slate-800 hover:text-white transition-colors relative"
+              className="p-2 rounded-full hover:bg-gray-100 hover:text-slate-900 transition-colors relative"
               aria-label="View Cart"
             >
               <ShoppingCart size={20} />
-              {cartItems.length > 0 && (
+              {cartProductDetails && cartProductDetails.length > 0 && (
                 <span className="absolute -top-1 -right-1 text-xs bg-amber-500 text-white font-bold rounded-full h-5 w-5 flex items-center justify-center">
-                  {cartItems.length}
+                  {cartProductDetails.length}
                 </span>
               )}
             </Link>
-            <div className="h-6 w-px bg-slate-700 mx-2 hidden sm:block" />
+            <div className="h-6 w-px bg-gray-200 mx-2 hidden sm:block" />
             <div className="hidden md:flex items-center">
-              <SignedIn>
-                <UserButton afterSignOutUrl="/" />
-              </SignedIn>
-              <SignedOut>
+              {user ? (
+                <button
+                  onClick={handleSignOut}
+                  className="text-sm font-semibold hover:text-slate-900 transition-colors p-2"
+                >
+                  Sign Out
+                </button>
+              ) : (
                 <Link
-                  to="/sign-in"
-                  className="text-sm font-semibold hover:text-white transition-colors p-2"
+                  to="/auth"
+                  className="text-sm font-semibold hover:text-slate-900 transition-colors p-2"
                 >
                   Sign In
                 </Link>
-              </SignedOut>
+              )}
             </div>
             <div className="md:hidden">
               <button
                 onClick={handleMobileMenuToggle}
-                className="p-2 rounded-full hover:bg-slate-800 hover:text-white transition-colors"
+                className="p-2 rounded-full hover:bg-gray-100 hover:text-slate-900 transition-colors"
                 aria-label="Toggle Menu"
               >
                 {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
@@ -130,7 +144,7 @@ const Navbar = () => {
           </div>
         </nav>
         {isMobileMenuOpen && (
-          <div className="md:hidden absolute top-full right-4 mt-2 w-64 bg-slate-800/95 backdrop-blur-sm rounded-lg shadow-lg border border-slate-700">
+          <div className="md:hidden absolute top-full right-4 mt-2 w-64 bg-white/95 backdrop-blur-sm rounded-lg shadow-lg border border-gray-200">
             <ul className="p-2">
               {navItems.map((item) => (
                 <li key={item.href}>
@@ -140,8 +154,8 @@ const Navbar = () => {
                     className={({ isActive }) =>
                       `flex items-center gap-x-3 px-3 py-2 rounded-md text-base font-medium transition-colors ${
                         isActive
-                          ? "bg-slate-700 text-amber-400"
-                          : "text-gray-300 hover:bg-slate-700 hover:text-white"
+                          ? "bg-amber-50 text-amber-600"
+                          : "text-gray-600 hover:bg-gray-100 hover:text-slate-900"
                       }`
                     }
                   >
@@ -150,20 +164,27 @@ const Navbar = () => {
                   </NavLink>
                 </li>
               ))}
-              <li className="border-t border-slate-700 mt-2 pt-2">
+              <li className="border-t border-gray-200 mt-2 pt-2">
                 <div className="px-3 py-2">
-                  <SignedIn>
-                    <UserButton afterSignOutUrl="/" />
-                  </SignedIn>
-                  <SignedOut>
+                  {user ? (
+                    <button
+                      onClick={() => {
+                        handleSignOut();
+                        closeMobileMenu();
+                      }}
+                      className="flex items-center gap-x-3 text-gray-600 hover:text-slate-900 w-full text-left"
+                    >
+                      Sign Out
+                    </button>
+                  ) : (
                     <Link
-                      to="/sign-in"
+                      to="/auth"
                       onClick={closeMobileMenu}
-                      className="flex items-center gap-x-3 text-gray-300 hover:text-white"
+                      className="flex items-center gap-x-3 text-gray-600 hover:text-slate-900"
                     >
                       Sign In
                     </Link>
-                  </SignedOut>
+                  )}
                 </div>
               </li>
             </ul>

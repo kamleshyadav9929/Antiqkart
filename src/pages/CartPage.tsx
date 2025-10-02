@@ -31,15 +31,7 @@ const CartPage = () => {
               ) : cartProductDetails.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-4">
                   {cartProductDetails.map((product) => (
-                    <ProductCard
-                      key={product.id}
-                      id={product.id}
-                      name={product.name}
-                      image={product.image}
-                      price={product.price?.toString()}
-                      affiliateLink={product.affiliate_link}
-                      collectionName={product.collections?.name}
-                    />
+                    <ProductCard key={product.id} product={product} />
                   ))}
                 </div>
               ) : (

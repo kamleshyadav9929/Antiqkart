@@ -3,14 +3,7 @@ import { Link } from "react-router-dom";
 import { supabase } from "../lib/supabaseClient";
 import ProductCard from "./ProductCard";
 import { X, Search, MapPin, Layers } from "lucide-react";
-
-interface Product {
-  id: string;
-  name: string;
-  image: string;
-  price?: number;
-  affiliate_link: string;
-}
+import { Product } from "../context/cart-context";
 
 interface State {
   id: string;
@@ -79,7 +72,7 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({ isOpen, onClose }) => {
         supabase.from("states").select("id, name, image"),
         supabase.from("collections").select("id, name, image"),
       ]);
-      if (productsRes.data) setAllProducts(productsRes.data);
+      if (productsRes.data) setAllProducts(productsRes.data as Product[]);
       if (statesRes.data) setAllStates(statesRes.data);
       if (collectionsRes.data) setAllCollections(collectionsRes.data);
       setLoading(false);
@@ -191,11 +184,7 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({ isOpen, onClose }) => {
                         return (
                           <ProductCard
                             key={`product-${productItem.id}`}
-                            id={productItem.id}
-                            name={productItem.name}
-                            image={productItem.image}
-                            price={productItem.price?.toString()}
-                            affiliateLink={productItem.affiliate_link}
+                            product={productItem}
                           />
                         );
                       }

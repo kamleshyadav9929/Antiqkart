@@ -6,16 +6,7 @@ import SkeletonCard from "../components/SkeletonCard";
 import Layout from "../components/Layout";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-
-interface Product {
-  id: string;
-  name: string;
-  image: string;
-  price?: number;
-  affiliate_link: string;
-  created_at: string;
-  rating?: number;
-}
+import { Product } from "../context/cart-context";
 
 const StatePage = () => {
   const { stateName: stateSlug } = useParams<{ stateName: string }>();
@@ -41,7 +32,7 @@ const StatePage = () => {
       if (error) {
         console.error("Error fetching products for state:", error.message);
       } else {
-        setProducts(data || []);
+        setProducts((data as Product[]) || []);
       }
       setLoading(false);
     };
@@ -67,14 +58,7 @@ const StatePage = () => {
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-4">
               {products.map((product) => (
                 <div key={product.id} className="h-full">
-                  <ProductCard
-                    id={product.id}
-                    name={product.name}
-                    image={product.image}
-                    price={product.price?.toString()}
-                    rating={product.rating}
-                    affiliateLink={product.affiliate_link}
-                  />
+                  <ProductCard product={product} />
                 </div>
               ))}
             </div>

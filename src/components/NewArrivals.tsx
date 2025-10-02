@@ -3,15 +3,7 @@ import { supabase } from "../lib/supabaseClient";
 import ProductCard from "./ProductCard";
 import SkeletonCard from "./SkeletonCard";
 import { ArrowRight } from "lucide-react";
-
-interface Product {
-  id: string;
-  name: string;
-  image: string;
-  price?: string;
-  affiliate_link: string;
-  rating?: number;
-}
+import { Product } from "../context/cart-context";
 
 const NewArrivals: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -22,14 +14,14 @@ const NewArrivals: React.FC = () => {
       setLoading(true);
       const { data, error } = await supabase
         .from("products")
-        .select("id, name, image, price, affiliate_link, rating")
+        .select("*, collections(name)")
         .order("created_at", { ascending: false })
         .limit(10);
 
       if (error) {
         console.error("Error fetching new arrivals:", error.message);
       } else {
-        setProducts(data || []);
+        setProducts((data as Product[]) || []);
       }
       setLoading(false);
     };
@@ -70,14 +62,7 @@ const NewArrivals: React.FC = () => {
                   key={product.id}
                   className="flex-shrink-0 w-48 md:w-56 h-full flex"
                 >
-                  <ProductCard
-                    id={product.id}
-                    name={product.name}
-                    image={product.image}
-                    price={product.price}
-                    rating={product.rating}
-                    affiliateLink={product.affiliate_link}
-                  />
+                  <ProductCard product={product} />
                 </div>
               ))}
         </div>

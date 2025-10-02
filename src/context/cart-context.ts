@@ -4,21 +4,29 @@ export interface Product {
   id: string;
   name: string;
   image: string;
-  price?: string | number;
+  price?: number;
   affiliate_link: string;
-  // Changed to reflect the database structure
-  collections: { name: string } | null;
+  rating?: number;
+  collections?: { name: string } | null;
+  created_at?: string; // FIX: Made optional to allow for cases where it's not available
+  popularity?: number;
+  collection_id?: string;
+  state_id?: string;
+  [key: string]: unknown;
 }
 
-export interface CartContextType {
-  cartItems: string[];
+interface CartContextType {
   cartProductDetails: Product[];
   loading: boolean;
-  addToCart: (productId: string) => void;
+  addToCart: (product: Product) => void;
   removeFromCart: (productId: string) => void;
   isItemInCart: (productId: string) => boolean;
 }
 
-export const CartContext = createContext<CartContextType | undefined>(
-  undefined
-);
+export const CartContext = createContext<CartContextType>({
+  cartProductDetails: [],
+  loading: false,
+  addToCart: () => {},
+  removeFromCart: () => {},
+  isItemInCart: () => false,
+});

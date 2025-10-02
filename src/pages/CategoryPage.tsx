@@ -6,15 +6,7 @@ import Layout from "../components/Layout";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { Search } from "lucide-react";
-
-interface Product {
-  id: string;
-  name: string;
-  image: string;
-  price?: string;
-  affiliate_link: string;
-  category: string;
-}
+import { Product } from "../context/cart-context";
 
 const CategoryPage = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -32,15 +24,16 @@ const CategoryPage = () => {
 
     const fetchProducts = async () => {
       setLoading(true);
+      // FIX: Select all fields ('*') to ensure the data matches the Product type
       const { data, error } = await supabase
         .from("products")
-        .select("id, name, image, price, affiliate_link, category")
+        .select("*")
         .eq("category", category);
 
       if (error) {
         console.error("Error fetching products:", error.message);
       } else {
-        setProducts(data || []);
+        setProducts((data as Product[]) || []);
       }
       setLoading(false);
     };
@@ -87,14 +80,7 @@ const CategoryPage = () => {
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
               {filteredProducts.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  id={product.id}
-                  name={product.name}
-                  image={product.image}
-                  price={product.price}
-                  affiliateLink={product.affiliate_link}
-                />
+                <ProductCard key={product.id} product={product} />
               ))}
             </div>
           )}

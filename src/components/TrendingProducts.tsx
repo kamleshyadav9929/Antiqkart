@@ -3,15 +3,7 @@ import { supabase } from "../lib/supabaseClient";
 import ProductCard from "./ProductCard";
 import SkeletonCard from "./SkeletonCard";
 import { Flame } from "lucide-react";
-
-interface Product {
-  id: string;
-  name: string;
-  image: string;
-  price?: string;
-  affiliate_link: string;
-  rating?: number;
-}
+import { Product } from "../context/cart-context";
 
 // The old TrendingProductData interface is no longer needed.
 
@@ -38,7 +30,7 @@ const TrendingProducts: React.FC = () => {
         console.error("Error fetching trending products:", error.message);
       } else if (data) {
         // The data is now a direct array of products, so no mapping is needed.
-        setProducts(data);
+        setProducts(data as Product[]);
       }
       setLoading(false);
     };
@@ -70,15 +62,7 @@ const TrendingProducts: React.FC = () => {
               ))
             : products.map((product) => (
                 <div key={product.id} className="flex-shrink-0 w-48">
-                  <ProductCard
-                    id={product.id}
-                    name={product.name}
-                    image={product.image}
-                    price={product.price}
-                    rating={product.rating}
-                    affiliateLink={product.affiliate_link}
-                    tag="Trending"
-                  />
+                  <ProductCard product={product} tag="Trending" />
                 </div>
               ))}
         </div>
