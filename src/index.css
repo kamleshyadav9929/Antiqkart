@@ -1,4 +1,139 @@
+/* src/index.css */
 @import "tailwindcss";
+
+/* Custom animations for unique homepage sections */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes glow {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+@keyframes wave {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes gradient-shift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* --- NEW Clean & Sleek Textured Backgrounds --- */
+.bg-subtle-dots {
+  background-color: #f8f9fa;
+  background-image: radial-gradient(#d1d5db 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+.bg-subtle-lines {
+  background-color: #ffffff;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.bg-subtle-cross {
+  background-color: #f9fafb;
+  background-image: url('data:image/svg+xml,%3Csvg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="%23d1d5db" fill-opacity="0.4" fill-rule="evenodd"%3E%3Cpath d="M.5 10a9.5 9.5 0 1 0 19 0a9.5 9.5 0 1 0-19 0zM10 2.5a7.5 7.5 0 1 1 0 15a7.5 7.5 0 1 1 0-15z"/%3E%3C/g%3E%3C/svg%3E');
+}
+
+.bg-white-texture {
+  background-color: #ffffff;
+  background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="4" height="4" viewBox="0 0 4 4"%3E%3Cpath fill="%23f3f4f6" fill-opacity="0.8" d="M1 3h1v1H1V3zm2-2h1v1H3V1z"%3E%3C/path%3E%3C/svg%3E');
+}
+
+.bg-gray-texture {
+  background-color: #f3f4f6;
+  background-image: url('data:image/svg+xml,%3Csvg width="6" height="6" viewBox="0 0 6 6" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="%23e5e7eb" fill-opacity="0.7" fill-rule="evenodd"%3E%3Cpath d="M5 0h1L0 6V5zM6 5v1H5z"/%3E%3C/g%3E%3C/svg%3E');
+}
+
+.animate-spin-slow {
+  animation: spin-slow 3s linear infinite;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  animation: shimmer 2s linear infinite;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  background-size: 200px 100%;
+}
+
+/* Scrollbar hide for horizontal scrolling */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
 
 /* --- DESIGN UPGRADE: Defining a Professional Color Palette & Typography --- */
 :root {
@@ -158,16 +293,9 @@ body {
   }
 }
 
-/*
-  --- SECTION HEADING UNDERLINES REMOVED ---
-  The keyframes and the .section-title::after rules that
-  created the animated underlines have been deleted from this file.
-*/
 .section-title {
   position: relative;
-  /* Removed padding-bottom that was creating space for the underline */
 }
 
 .section-title-left::after {
-  /* This rule is now empty and can be removed if desired, but is kept for potential future use */
 }

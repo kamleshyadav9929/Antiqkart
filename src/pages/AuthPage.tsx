@@ -108,23 +108,23 @@ VITE_SUPABASE_ANON_KEY=your_anon_key_here`}
 
   // Render a beautiful custom auth form
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 flex items-center justify-center p-2 sm:p-4">
+      <div className="w-full max-w-sm sm:max-w-md">
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="mx-auto w-16 h-16 bg-gradient-to-r from-slate-600 to-slate-800 rounded-2xl flex items-center justify-center mb-4">
-            <span className="text-white text-2xl font-bold">AK</span>
+        <div className="text-center mb-4 sm:mb-8">
+          <div className="mx-auto w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-slate-600 to-slate-800 rounded-2xl flex items-center justify-center mb-3 sm:mb-4">
+            <span className="text-white text-lg sm:text-2xl font-bold">AK</span>
           </div>
-          <h1 className="text-3xl font-serif font-bold text-slate-900 mb-2">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-serif font-bold text-slate-900 mb-1 sm:mb-2">
             Welcome to AntiQkart
           </h1>
-          <p className="text-slate-600">
+          <p className="text-slate-600 text-sm sm:text-base">
             {isSignUp ? "Create your account" : "Sign in to your account"}
           </p>
         </div>
 
         {/* Auth Card */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-8">
+        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-4 sm:p-6 md:p-8">
           {error && (
             <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl text-sm">
               {error}
@@ -135,7 +135,7 @@ VITE_SUPABASE_ANON_KEY=your_anon_key_here`}
           <button
             onClick={handleGoogleAuth}
             disabled={googleLoading || authLoading}
-            className="w-full mb-6 bg-white border-2 border-gray-200 text-gray-700 py-3 px-4 rounded-xl hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 flex items-center justify-center gap-3 font-medium shadow-sm"
+            className="w-full mb-4 sm:mb-6 bg-white border-2 border-gray-200 text-gray-700 py-2.5 sm:py-3 px-3 sm:px-4 rounded-xl hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 flex items-center justify-center gap-2 sm:gap-3 font-medium shadow-sm text-sm sm:text-base"
           >
             {googleLoading ? (
               <div className="w-5 h-5 border-2 border-gray-300 border-t-gray-700 rounded-full animate-spin"></div>
@@ -163,29 +163,29 @@ VITE_SUPABASE_ANON_KEY=your_anon_key_here`}
           </button>
 
           {/* Divider */}
-          <div className="relative my-6">
+          <div className="relative my-4 sm:my-6">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-gray-200"></div>
             </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-white text-gray-500">
+            <div className="relative flex justify-center text-xs sm:text-sm">
+              <span className="px-3 sm:px-4 bg-white text-gray-500">
                 Or continue with email
               </span>
             </div>
           </div>
 
           {/* Email/Password Form */}
-          <form onSubmit={handleAuth} className="space-y-5">
+          <form onSubmit={handleAuth} className="space-y-4 sm:space-y-5">
             <div>
               <label
                 htmlFor="email"
-                className="block text-sm font-medium text-gray-700 mb-2"
+                className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2"
               >
                 Email address
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-gray-400" />
+                <div className="absolute inset-y-0 left-0 pl-2.5 sm:pl-3 flex items-center pointer-events-none">
+                  <Mail className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
                 </div>
                 <input
                   type="email"
@@ -193,7 +193,7 @@ VITE_SUPABASE_ANON_KEY=your_anon_key_here`}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-500 focus:border-transparent transition-all duration-200"
+                  className="w-full pl-8 sm:pl-10 pr-3 sm:pr-4 py-2.5 sm:py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-500 focus:border-transparent transition-all duration-200 text-sm sm:text-base"
                   placeholder="Enter your email"
                 />
               </div>
@@ -202,13 +202,13 @@ VITE_SUPABASE_ANON_KEY=your_anon_key_here`}
             <div>
               <label
                 htmlFor="password"
-                className="block text-sm font-medium text-gray-700 mb-2"
+                className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2"
               >
                 Password
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-gray-400" />
+                <div className="absolute inset-y-0 left-0 pl-2.5 sm:pl-3 flex items-center pointer-events-none">
+                  <Lock className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
                 </div>
                 <input
                   type={showPassword ? "text" : "password"}
@@ -216,18 +216,18 @@ VITE_SUPABASE_ANON_KEY=your_anon_key_here`}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-500 focus:border-transparent transition-all duration-200"
+                  className="w-full pl-8 sm:pl-10 pr-10 sm:pr-12 py-2.5 sm:py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-500 focus:border-transparent transition-all duration-200 text-sm sm:text-base"
                   placeholder="Enter your password"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                  className="absolute inset-y-0 right-0 pr-2.5 sm:pr-3 flex items-center"
                 >
                   {showPassword ? (
-                    <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                    <EyeOff className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400 hover:text-gray-600" />
                   ) : (
-                    <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                    <Eye className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400 hover:text-gray-600" />
                   )}
                 </button>
               </div>
@@ -236,7 +236,7 @@ VITE_SUPABASE_ANON_KEY=your_anon_key_here`}
             <button
               type="submit"
               disabled={authLoading || googleLoading}
-              className="w-full bg-gradient-to-r from-slate-600 to-slate-800 text-white py-3 px-4 rounded-xl hover:from-slate-700 hover:to-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 disabled:opacity-50 transition-all duration-200 font-medium shadow-lg"
+              className="w-full bg-gradient-to-r from-slate-600 to-slate-800 text-white py-2.5 sm:py-3 px-3 sm:px-4 rounded-xl hover:from-slate-700 hover:to-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 disabled:opacity-50 transition-all duration-200 font-medium shadow-lg text-sm sm:text-base"
             >
               {authLoading ? (
                 <div className="flex items-center justify-center gap-2">
@@ -252,11 +252,11 @@ VITE_SUPABASE_ANON_KEY=your_anon_key_here`}
           </form>
 
           {/* Toggle Sign In/Up */}
-          <div className="mt-6 text-center">
+          <div className="mt-4 sm:mt-6 text-center">
             <button
               type="button"
               onClick={() => setIsSignUp(!isSignUp)}
-              className="text-slate-600 hover:text-slate-800 text-sm font-medium transition-colors duration-200"
+              className="text-slate-600 hover:text-slate-800 text-xs sm:text-sm font-medium transition-colors duration-200"
             >
               {isSignUp
                 ? "Already have an account? Sign in"
@@ -266,7 +266,7 @@ VITE_SUPABASE_ANON_KEY=your_anon_key_here`}
         </div>
 
         {/* Footer */}
-        <div className="text-center mt-8 text-sm text-slate-500">
+        <div className="text-center mt-4 sm:mt-8 text-xs sm:text-sm text-slate-500 px-2">
           By continuing, you agree to our Terms of Service and Privacy Policy
         </div>
       </div>

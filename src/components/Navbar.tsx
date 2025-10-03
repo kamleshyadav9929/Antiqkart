@@ -12,6 +12,8 @@ import {
   Sparkles,
   Info,
   Mail,
+  User,
+  LogOut,
 } from "lucide-react";
 import SearchOverlay from "./SearchOverlay";
 import { useCart } from "../hooks/useCart";
@@ -117,18 +119,28 @@ const Navbar = () => {
             <div className="h-6 w-px bg-gray-200 mx-2 hidden sm:block" />
             <div className="hidden md:flex items-center">
               {user ? (
-                <button
-                  onClick={handleSignOut}
-                  className="text-sm font-semibold hover:text-slate-900 transition-colors p-2"
-                >
-                  Sign Out
-                </button>
+                <div className="flex items-center gap-2">
+                  {/* Profile Picture */}
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-r from-amber-500 to-orange-600 flex items-center justify-center text-white font-semibold text-sm">
+                    {user.email?.charAt(0).toUpperCase() || "U"}
+                  </div>
+                  <button
+                    onClick={handleSignOut}
+                    className="flex items-center gap-1 text-sm font-medium text-gray-600 hover:text-slate-900 transition-colors p-2 rounded-lg hover:bg-gray-100"
+                    title="Sign Out"
+                  >
+                    <LogOut size={16} />
+                    <span className="hidden lg:inline">Sign Out</span>
+                  </button>
+                </div>
               ) : (
                 <Link
                   to="/auth"
-                  className="text-sm font-semibold hover:text-slate-900 transition-colors p-2"
+                  className="flex items-center gap-1 text-sm font-medium text-gray-600 hover:text-slate-900 transition-colors p-2 rounded-lg hover:bg-gray-100"
+                  title="Sign In"
                 >
-                  Sign In
+                  <User size={16} />
+                  <span className="hidden lg:inline">Sign In</span>
                 </Link>
               )}
             </div>
@@ -167,21 +179,29 @@ const Navbar = () => {
               <li className="border-t border-gray-200 mt-2 pt-2">
                 <div className="px-3 py-2">
                   {user ? (
-                    <button
-                      onClick={() => {
-                        handleSignOut();
-                        closeMobileMenu();
-                      }}
-                      className="flex items-center gap-x-3 text-gray-600 hover:text-slate-900 w-full text-left"
-                    >
-                      Sign Out
-                    </button>
+                    <div className="flex items-center gap-x-3">
+                      {/* Mobile Profile Picture */}
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-r from-amber-500 to-orange-600 flex items-center justify-center text-white font-semibold text-sm">
+                        {user.email?.charAt(0).toUpperCase() || "U"}
+                      </div>
+                      <button
+                        onClick={() => {
+                          handleSignOut();
+                          closeMobileMenu();
+                        }}
+                        className="flex items-center gap-x-3 text-gray-600 hover:text-slate-900 w-full text-left"
+                      >
+                        <LogOut size={20} />
+                        Sign Out
+                      </button>
+                    </div>
                   ) : (
                     <Link
                       to="/auth"
                       onClick={closeMobileMenu}
                       className="flex items-center gap-x-3 text-gray-600 hover:text-slate-900"
                     >
+                      <User size={20} />
                       Sign In
                     </Link>
                   )}
