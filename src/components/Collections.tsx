@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "../lib/supabaseClient";
-import { ArrowRight } from "lucide-react";
 
 interface Collection {
   id: string;
@@ -29,7 +28,7 @@ const Collections: React.FC<CollectionsProps> = ({ showAll = false }) => {
       const { data, error } = await query;
 
       if (error) {
-        console.error("Collections fetch karne mein error:", error.message);
+        console.error("Collections fetch error:", error.message);
       } else {
         setCollections(data || []);
       }
@@ -39,110 +38,38 @@ const Collections: React.FC<CollectionsProps> = ({ showAll = false }) => {
     fetchCollections();
   }, [showAll]);
 
-  const CollectionCard = ({ collection }: { collection: Collection }) => {
-    const cardRef = useRef<HTMLAnchorElement>(null);
-
-    const handleMouseMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
-      if (!cardRef.current) return;
-      const rect = cardRef.current.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-
-      const midCardX = rect.width / 2;
-      const midCardY = rect.height / 2;
-
-      const tiltX = ((x - midCardX) / midCardX) * 8;
-      const tiltY = ((y - midCardY) / midCardY) * -8;
-
-      cardRef.current.style.setProperty("--tilt-x", `${tiltX}deg`);
-      cardRef.current.style.setProperty("--tilt-y", `${tiltY}deg`);
-      cardRef.current.style.setProperty("--spotlight-x", `${x}px`);
-      cardRef.current.style.setProperty("--spotlight-y", `${y}px`);
-    };
-
-    const handleMouseLeave = () => {
-      if (!cardRef.current) return;
-      cardRef.current.style.setProperty("--tilt-x", "0deg");
-      cardRef.current.style.setProperty("--tilt-y", "0deg");
-    };
-
-    return (
+  const CollectionCard = ({ collection }: { collection: Collection }) => (
+    <div className="flex-shrink-0 w-40 sm:w-56 text-center">
       <Link
-        ref={cardRef}
         to={`/collections/${collection.name
           .toLowerCase()
           .replace(/\s+/g, "-")}`}
-        className="group block relative h-64 sm:h-72 md:h-80 w-full rounded-3xl overflow-hidden shadow-2xl transition-all duration-500 ease-out will-change-transform hover:shadow-rose-500/20"
-        style={{
-          transformStyle: "preserve-3d",
-          transform:
-            "perspective(1200px) rotateY(var(--tilt-x, 0)) rotateX(var(--tilt-y, 0))",
-        }}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
+        className="group block"
       >
-        <div className="absolute inset-0 rounded-3xl overflow-hidden">
-          <div className="relative h-full w-full">
-            <img
-              src={collection.image}
-              alt={collection.name}
-              className="h-full w-full object-cover transition-all duration-700 ease-out group-hover:scale-125 group-hover:rotate-2"
-            />
-            <div className="absolute inset-0 bg-gradient-to-br from-rose-500/20 via-transparent to-purple-600/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-          </div>
+        <div className="aspect-square bg-gray-100 rounded-xl overflow-hidden shadow-sm transition-all duration-300 group-hover:shadow-lg group-hover:-translate-y-1">
+          <img
+            src={collection.image}
+            alt={collection.name}
+            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+          />
         </div>
-        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
-          <div className="absolute top-4 left-4 w-2 h-2 bg-rose-400 rounded-full animate-bounce delay-100"></div>
-          <div className="absolute top-8 right-6 w-1.5 h-1.5 bg-pink-300 rounded-full animate-bounce delay-300"></div>
-          <div className="absolute bottom-12 left-8 w-1 h-1 bg-purple-400 rounded-full animate-bounce delay-500"></div>
-          <div className="absolute bottom-16 right-4 w-1.5 h-1.5 bg-rose-300 rounded-full animate-bounce delay-700"></div>
-        </div>
-        <div
-          className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-          style={{
-            background: `radial-gradient(circle at var(--spotlight-x, 50%) var(--spotlight-y, 50%), 
-                          rgba(255, 182, 193, 0.3) 0%, 
-                          rgba(255, 105, 180, 0.1) 30%, 
-                          transparent 60%)`,
-          }}
-        />
-        <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6">
-          <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
-            <h3 className="text-white font-bold text-lg sm:text-xl mb-2 group-hover:text-rose-300 transition-colors duration-300">
-              {collection.name}
-            </h3>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center text-rose-300 text-sm opacity-0 group-hover:opacity-100 transition-all duration-500 delay-200">
-                <span className="font-medium">Explore Collection</span>
-                <ArrowRight
-                  size={16}
-                  className="ml-2 transform group-hover:translate-x-1 transition-transform duration-300"
-                />
-              </div>
-              <div className="w-8 h-8 bg-rose-500/20 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 delay-300">
-                <div className="w-2 h-2 bg-rose-400 rounded-full animate-pulse"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="absolute inset-0 rounded-3xl border-2 border-transparent group-hover:border-rose-500/30 transition-colors duration-500"></div>
-        <div className="absolute top-2 right-2 w-6 h-6 border-t-2 border-r-2 border-rose-400/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-400"></div>
-        <div className="absolute bottom-2 left-2 w-6 h-6 border-b-2 border-l-2 border-pink-400/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-600"></div>
+        <h3 className="mt-2 text-sm font-semibold text-slate-700 group-hover:text-rose-600 transition-colors truncate">
+          {collection.name}
+        </h3>
       </Link>
-    );
-  };
+    </div>
+  );
 
   const SkeletonCard = () => (
-    <div className="animate-pulse">
-      <div className="w-full h-48 md:h-56 bg-gray-200 rounded-2xl"></div>
-      <div className="h-5 mt-4 bg-gray-200 rounded w-3/4"></div>
+    <div className="flex-shrink-0 w-40 sm:w-56 animate-pulse">
+      <div className="aspect-square bg-gray-200 rounded-xl"></div>
+      <div className="h-4 mt-2 bg-gray-200 rounded w-3/4 mx-auto"></div>
     </div>
   );
 
   return (
     <div className="relative z-10">
-      <div className="relative text-center mb-16 md:mb-20">
+      <div className="relative text-center mb-12 md:mb-16">
         <div className="relative inline-block">
           <div className="absolute -inset-4 bg-gradient-to-r from-rose-500/10 to-pink-500/10 rounded-3xl blur-xl"></div>
           <div className="relative bg-white/80 backdrop-blur-sm rounded-2xl px-8 py-6 border border-rose-200/50 shadow-xl">
@@ -170,26 +97,14 @@ const Collections: React.FC<CollectionsProps> = ({ showAll = false }) => {
       </div>
 
       <div className="relative">
-        <div className="flex overflow-x-auto space-x-4 sm:space-x-6 pb-6 -mx-4 px-4 scrollbar-hide">
+        <div className="flex overflow-x-auto space-x-4 pb-4 -mx-4 px-4 scrollbar-hide">
           {loading
-            ? Array.from({ length: 8 }).map((_, index) => (
-                <div
-                  key={index}
-                  className="flex-shrink-0 w-48 sm:w-56 md:w-64 lg:w-72"
-                >
-                  <SkeletonCard />
-                </div>
+            ? Array.from({ length: 6 }).map((_, index) => (
+                <SkeletonCard key={index} />
               ))
-            : collections
-                .slice(0, showAll ? collections.length : 12)
-                .map((collection) => (
-                  <div
-                    key={collection.id}
-                    className="flex-shrink-0 w-48 sm:w-56 md:w-64 lg:w-72"
-                  >
-                    <CollectionCard collection={collection} />
-                  </div>
-                ))}
+            : collections.map((collection) => (
+                <CollectionCard key={collection.id} collection={collection} />
+              ))}
         </div>
       </div>
     </div>

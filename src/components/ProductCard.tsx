@@ -2,10 +2,9 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Heart, Star, Zap } from "lucide-react";
 import { useCart } from "../hooks/useCart";
-import { LazyLoadImage } from "react-lazy-load-image-component";
-import "react-lazy-load-image-component/src/effects/blur.css";
 import { Product } from "../context/cart-context";
 import { useUser } from "../hooks/useUser";
+
 interface ProductCardProps {
   product: Product;
   tag?: string;
@@ -93,12 +92,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, tag }) => {
           rel="noopener noreferrer"
           className="block w-full h-full"
         >
-          <LazyLoadImage
+          <img
             alt={product.name}
             src={product.image}
-            effect="blur"
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-            wrapperClassName="w-full h-full"
           />
         </a>
         <button

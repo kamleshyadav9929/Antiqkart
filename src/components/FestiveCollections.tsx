@@ -1,10 +1,8 @@
 import { useState, useEffect } from "react";
-
 import { supabase } from "../lib/supabaseClient";
 import ProductCard from "./ProductCard";
 import SkeletonCard from "./SkeletonCard";
-
-import { Product } from "../context/cart-context"; // Import Product type
+import { Product } from "../context/cart-context";
 
 const FestiveCollections = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -56,35 +54,16 @@ const FestiveCollections = () => {
           </div>
         </div>
         <p className="mt-6 text-slate-600 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed px-4">
-          🎉 Explore curated products for every celebration and festival!
+          Explore curated products for every celebration and festival!
         </p>
       </div>
 
-      <div className="relative md:hidden">
-        <div className="flex overflow-x-auto space-x-4 pb-4 -mx-4 px-4 scrollbar-hide">
-          {loading
-            ? Array.from({ length: 6 }).map((_, index) => (
-                <div key={index} className="flex-shrink-0 w-48">
-                  <SkeletonCard />
-                </div>
-              ))
-            : products.map((product) => (
-                <div
-                  key={product.id}
-                  className="flex-shrink-0 w-48 h-full flex"
-                >
-                  <ProductCard product={product} />
-                </div>
-              ))}
-        </div>
-      </div>
-
-      <div className="hidden md:grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
         {loading
           ? Array.from({ length: 5 }).map((_, index) => (
               <SkeletonCard key={index} />
             ))
-          : products.map((product) => (
+          : products.slice(0, 5).map((product) => (
               <div key={product.id} className="h-full flex">
                 <ProductCard product={product} />
               </div>

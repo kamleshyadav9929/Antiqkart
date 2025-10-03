@@ -24,11 +24,13 @@ interface Collection {
   name: string;
   image: string;
 }
+
+// FIX: Corrected the State interface
 interface State {
   id: string;
   name: string;
-  state_id: string;
 }
+
 const sortOptions = [
   { value: "latest", label: "Latest Arrivals" },
   { value: "popularity", label: "Popularity" },
@@ -132,7 +134,8 @@ const ShopPage = () => {
       const [productRes, collectionRes, stateRes] = await Promise.all([
         supabase.from("products").select("*, collections(name)"),
         supabase.from("collections").select("id, name, image").order("name"),
-        supabase.from("states").select("id, name, state_id").order("name"),
+        // FIX: Corrected the query to fetch only necessary fields
+        supabase.from("states").select("id, name").order("name"),
       ]);
 
       if (productRes.data) setProducts(productRes.data as Product[]);
@@ -170,7 +173,6 @@ const ShopPage = () => {
         filtered.sort((a, b) => (b.popularity || 0) - (a.popularity || 0));
         break;
       default: // "latest"
-        // FIX: Provide a fallback value for optional 'created_at' property
         filtered.sort(
           (a, b) =>
             new Date(b.created_at || 0).getTime() -
@@ -245,12 +247,13 @@ const ShopPage = () => {
       </FilterSection>
       <FilterSection title="States">
         {(showAllStates ? states : states.slice(0, 10)).map((s) => (
+          // FIX: Corrected to use s.id for filtering logic
           <Checkbox
             key={s.id}
-            id={`state-${s.state_id}`}
+            id={`state-${s.id}`}
             label={s.name}
-            checked={selectedStates.includes(s.state_id)}
-            onChange={() => toggleSelection(s.state_id, setSelectedStates)}
+            checked={selectedStates.includes(s.id)}
+            onChange={() => toggleSelection(s.id, setSelectedStates)}
           />
         ))}
         {states.length > 10 && (
@@ -278,9 +281,29 @@ const ShopPage = () => {
         <Layout>
           <div className="py-8">
             <header className="py-8 text-center">
-              <h1 className="text-4xl md:text-5xl font-serif font-bold text-slate-900">
-                Discover Our Collection
-              </h1>
+              <div className="relative text-center mb-16 md:mb-20">
+                <div className="relative inline-block">
+                  <div className="absolute -inset-4 bg-gradient-to-r from-sky-500/10 to-cyan-500/10 rounded-3xl blur-xl"></div>
+                  <div className="relative bg-white/80 backdrop-blur-sm rounded-2xl px-8 py-6 border border-sky-200/50 shadow-xl">
+                    <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-serif font-bold text-slate-900 leading-tight">
+                      <span className="relative inline-block mr-2 sm:mr-3">
+                        Discover our
+                        <div className="absolute -bottom-1 left-0 w-full h-0.5 sm:h-1 bg-gradient-to-r from-sky-400 to-cyan-500 rounded-full animate-shimmer"></div>
+                      </span>
+                      <span className="text-sky-600 relative inline-block">
+                        treasures
+                        <div className="absolute -top-2 -right-3 text-cyan-500 text-lg sm:text-xl animate-bounce">
+                          ✨
+                        </div>
+                        <div className="absolute -bottom-1 left-0 w-full h-0.5 sm:h-1 bg-gradient-to-r from-cyan-400 to-sky-500 rounded-full animate-glow"></div>
+                      </span>
+                    </h2>
+                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 text-sky-500 text-2xl animate-pulse">
+                      📦
+                    </div>
+                  </div>
+                </div>
+              </div>
             </header>
             <section className="mb-12">
               <h2 className="text-2xl font-serif font-semibold text-slate-800 mb-6 flex items-center gap-x-2">
@@ -352,7 +375,7 @@ const ShopPage = () => {
 
                 <div>
                   {loading ? (
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
                       {Array.from({ length: 12 }).map((_, i) => (
                         <SkeletonCard key={i} />
                       ))}
@@ -360,7 +383,8 @@ const ShopPage = () => {
                   ) : filteredAndSortedProducts.length > 0 ? (
                     <motion.div
                       layout
-                      className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+                      // FIX: Reduced the gap for a tighter layout on small screens
+                      className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2"
                     >
                       <AnimatePresence>
                         {filteredAndSortedProducts.map((product) => (

@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { supabase } from "../lib/supabaseClient";
 import ProductCard from "./ProductCard";
 import SkeletonCard from "./SkeletonCard";
-import { ArrowRight } from "lucide-react";
-import { Product } from "../context/cart-context"; // Import Product type
+import { Product } from "../context/cart-context";
 
 const FeaturedProducts: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -15,7 +13,7 @@ const FeaturedProducts: React.FC = () => {
       setLoading(true);
       const { data, error } = await supabase
         .from("products")
-        .select("*, collections(name)") // Fetch collections as well
+        .select("*, collections(name)")
         .order("created_at", { ascending: false })
         .limit(16);
 
@@ -28,22 +26,6 @@ const FeaturedProducts: React.FC = () => {
     };
     fetchProducts();
   }, []);
-
-  const SeeAllCard = () => (
-    <div className="flex-shrink-0 w-48">
-      <Link
-        to="/shop"
-        className="flex h-full w-full flex-col items-center justify-center rounded-lg p-4 transition-transform hover:scale-105"
-      >
-        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-950 text-white">
-          <ArrowRight size={24} />
-        </div>
-        <span className="mt-4 text-sm font-semibold text-gray-800">
-          See All
-        </span>
-      </Link>
-    </div>
-  );
 
   return (
     <div className="relative z-10">
@@ -70,36 +52,12 @@ const FeaturedProducts: React.FC = () => {
           </div>
         </div>
         <p className="mt-6 text-slate-600 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed px-4">
-          🎨 Our handpicked selection of the finest Indian handicrafts, curated
+          Our handpicked selection of the finest Indian handicrafts, curated
           with love.
         </p>
       </div>
 
-      <div className="md:hidden relative">
-        <div className="flex overflow-x-auto space-x-4 pb-4 -mx-4 px-4 scrollbar-hide">
-          {loading ? (
-            Array.from({ length: 8 }).map((_, index) => (
-              <div key={index} className="flex-shrink-0 w-48">
-                <SkeletonCard />
-              </div>
-            ))
-          ) : (
-            <>
-              {products.slice(0, 11).map((product) => (
-                <div
-                  key={product.id}
-                  className="flex-shrink-0 w-48 h-full flex"
-                >
-                  <ProductCard product={product} />
-                </div>
-              ))}
-              <SeeAllCard />
-            </>
-          )}
-        </div>
-      </div>
-
-      <div className="hidden md:grid md:grid-cols-4 lg:grid-cols-6 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
         {loading
           ? Array.from({ length: 12 }).map((_, index) => (
               <SkeletonCard key={index} />

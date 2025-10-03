@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 import ProductCard from "./ProductCard";
 import SkeletonCard from "./SkeletonCard";
-
 import { Product } from "../context/cart-context";
 
 const TrendingProducts: React.FC = () => {
@@ -12,6 +11,7 @@ const TrendingProducts: React.FC = () => {
   useEffect(() => {
     const fetchTrendingProducts = async () => {
       setLoading(true);
+
       const { data, error } = await supabase
         .from("products")
         .select("id, name, image, price, affiliate_link, rating")
@@ -55,27 +55,11 @@ const TrendingProducts: React.FC = () => {
           </div>
         </div>
         <p className="mt-6 text-slate-600 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed px-4">
-          🔥 Discover what's trending among our curated collections right now!
+          Discover what's trending among our curated collections right now!
         </p>
       </div>
 
-      <div className="relative md:hidden">
-        <div className="flex overflow-x-auto space-x-4 pb-4 -mx-4 px-4 scrollbar-hide">
-          {loading
-            ? Array.from({ length: 6 }).map((_, index) => (
-                <div key={index} className="flex-shrink-0 w-48">
-                  <SkeletonCard />
-                </div>
-              ))
-            : products.map((product) => (
-                <div key={product.id} className="flex-shrink-0 w-48">
-                  <ProductCard product={product} tag="Trending" />
-                </div>
-              ))}
-        </div>
-      </div>
-
-      <div className="hidden md:grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
         {loading
           ? Array.from({ length: 5 }).map((_, index) => (
               <SkeletonCard key={index} />

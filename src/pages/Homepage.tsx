@@ -1,4 +1,3 @@
-// src/pages/Homepage.tsx
 import React from "react";
 import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
@@ -26,6 +25,11 @@ const Homepage = () => {
       className={`py-16 md:py-24 ${className} relative overflow-hidden`}
     >
       <Layout>{children}</Layout>
+      <div
+        className={`absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-${
+          className.includes("gray") ? "gray-50" : "white"
+        } to-transparent`}
+      ></div>
     </section>
   );
 
@@ -34,22 +38,22 @@ const Homepage = () => {
       <Navbar />
       <main>
         <Hero />
-        <Section className="bg-white-texture">
+        <Section className="bg-white">
           <NewArrivals />
         </Section>
-        <Section className="bg-gray-texture">
+        <Section className="bg-gray-50">
           <Collections />
         </Section>
-        <Section className="bg-subtle-dots">
+        <Section className="bg-white">
           <FeaturedProducts />
         </Section>
-        <Section id="festive-specials" className="bg-white-texture">
+        <Section id="festive-specials" className="bg-gray-50">
           <FestiveCollections />
         </Section>
-        <Section className="bg-subtle-lines">
+        <Section className="bg-white">
           <TrendingProducts />
         </Section>
-        <Section className="bg-subtle-cross">
+        <Section className="bg-gray-50">
           <StatesGrid />
         </Section>
       </main>
