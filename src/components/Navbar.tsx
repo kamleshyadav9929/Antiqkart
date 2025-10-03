@@ -19,6 +19,7 @@ import SearchOverlay from "./SearchOverlay";
 import { useCart } from "../hooks/useCart";
 import { useUser } from "../hooks/useUser";
 import { supabase } from "../lib/supabaseClient";
+import GooeyNav from "./GooeyNav";
 
 const Navbar = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -73,28 +74,7 @@ const Navbar = () => {
             </Link>
           </div>
           <div className="hidden md:flex flex-grow justify-center">
-            <ul className="flex space-x-4">
-              {navItems.slice(0, 5).map(
-                (
-                  item // Show first 5 items on desktop
-                ) => (
-                  <li key={item.href}>
-                    <NavLink
-                      to={item.href}
-                      className={({ isActive }) =>
-                        `px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                          isActive
-                            ? "text-amber-600"
-                            : "text-gray-600 hover:text-amber-600"
-                        }`
-                      }
-                    >
-                      {item.label}
-                    </NavLink>
-                  </li>
-                )
-              )}
-            </ul>
+            <GooeyNav items={navItems.slice(0, 5)} />
           </div>
           <div className="flex items-center gap-x-2 sm:gap-x-3 text-gray-600">
             <button
@@ -120,7 +100,6 @@ const Navbar = () => {
             <div className="hidden md:flex items-center">
               {user ? (
                 <div className="flex items-center gap-2">
-                  {/* Profile Picture */}
                   <div className="w-8 h-8 rounded-full bg-gradient-to-r from-amber-500 to-orange-600 flex items-center justify-center text-white font-semibold text-sm">
                     {user.email?.charAt(0).toUpperCase() || "U"}
                   </div>
@@ -180,7 +159,6 @@ const Navbar = () => {
                 <div className="px-3 py-2">
                   {user ? (
                     <div className="flex items-center gap-x-3">
-                      {/* Mobile Profile Picture */}
                       <div className="w-8 h-8 rounded-full bg-gradient-to-r from-amber-500 to-orange-600 flex items-center justify-center text-white font-semibold text-sm">
                         {user.email?.charAt(0).toUpperCase() || "U"}
                       </div>

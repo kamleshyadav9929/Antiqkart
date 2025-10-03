@@ -29,6 +29,7 @@ const FeaturedProducts: React.FC = () => {
 
   return (
     <div className="relative z-10">
+      {/* Heading */}
       <div className="relative text-center mb-16 md:mb-20">
         <div className="relative inline-block">
           <div className="absolute -inset-4 bg-gradient-to-r from-amber-500/10 to-orange-500/10 rounded-3xl blur-xl"></div>
@@ -57,16 +58,41 @@ const FeaturedProducts: React.FC = () => {
         </p>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
-        {loading
-          ? Array.from({ length: 12 }).map((_, index) => (
-              <SkeletonCard key={index} />
-            ))
-          : products.slice(0, 12).map((product) => (
-              <div key={product.id} className="h-full flex">
-                <ProductCard product={product} />
-              </div>
-            ))}
+      {/* Products Grid / Swiper */}
+      <div>
+        {/* Mobile: horizontal scroll */}
+        <div className="flex md:hidden gap-4 overflow-x-auto snap-x snap-mandatory px-2 scrollbar-hide">
+          {loading
+            ? Array.from({ length: 12 }).map((_, index) => (
+                <div
+                  key={index}
+                  className="snap-center flex-shrink-0 w-44 h-full"
+                >
+                  <SkeletonCard />
+                </div>
+              ))
+            : products.slice(0, 12).map((product) => (
+                <div
+                  key={product.id}
+                  className="snap-center flex-shrink-0 w-44 h-full"
+                >
+                  <ProductCard product={product} />
+                </div>
+              ))}
+        </div>
+
+        {/* Desktop: normal grid */}
+        <div className="hidden md:grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
+          {loading
+            ? Array.from({ length: 12 }).map((_, index) => (
+                <SkeletonCard key={index} />
+              ))
+            : products.slice(0, 12).map((product) => (
+                <div key={product.id} className="h-full flex">
+                  <ProductCard product={product} />
+                </div>
+              ))}
+        </div>
       </div>
     </div>
   );
