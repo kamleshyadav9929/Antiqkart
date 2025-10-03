@@ -8,9 +8,14 @@ import { useUser } from "../hooks/useUser";
 interface ProductCardProps {
   product: Product;
   tag?: string;
+  onQuickView?: (product: Product) => void;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product, tag }) => {
+const ProductCard: React.FC<ProductCardProps> = ({
+  product,
+  tag,
+  onQuickView,
+}) => {
   const { addToCart, isItemInCart, removeFromCart } = useCart();
   const { user } = useUser();
   const navigate = useNavigate();
@@ -98,6 +103,20 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, tag }) => {
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
           />
         </a>
+        {onQuickView && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onQuickView(product);
+            }}
+            className="absolute left-1/2 -translate-x-1/2 bottom-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-xs font-semibold bg-white/90 backdrop-blur px-3 py-1.5 rounded-full shadow hover:bg-white"
+            aria-label="Quick View"
+          >
+            Quick View
+          </button>
+        )}
         <button
           onClick={handleWishlistClick}
           className={`absolute top-3 right-3 p-2 rounded-full shadow-md transition-all duration-200 cursor-pointer ${

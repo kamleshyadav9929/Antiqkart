@@ -4,12 +4,13 @@ import ProductCard from "../components/ProductCard";
 import SkeletonCard from "../components/SkeletonCard";
 import Layout from "../components/Layout";
 import Navbar from "../components/Navbar";
-
+import { Link } from "react-router-dom";
 import {
   SlidersHorizontal,
   X,
   Search,
   ChevronDown,
+  Layers,
   Check,
   ShoppingBag,
 } from "lucide-react";
@@ -150,7 +151,6 @@ const ShopPage = () => {
         (p) =>
           (p.price || 0) >= priceRange[0] && (p.price || 0) <= priceRange[1]
       );
-
     if (selectedCollections.length > 0)
       filtered = filtered.filter(
         (p) => p.collection_id && selectedCollections.includes(p.collection_id)
@@ -170,7 +170,7 @@ const ShopPage = () => {
       case "popularity":
         filtered.sort((a, b) => (b.popularity || 0) - (a.popularity || 0));
         break;
-      default:
+      default: // "latest"
         filtered.sort(
           (a, b) =>
             new Date(b.created_at || 0).getTime() -
@@ -302,37 +302,64 @@ const ShopPage = () => {
                 </div>
               </div>
             </header>
+            <section className="mb-12">
+              <h2 className="text-2xl font-serif font-semibold text-slate-800 mb-6 flex items-center gap-x-2">
+                <Layers size={24} className="text-rose-500" /> Curated
+                Collections
+              </h2>
+              <div className="flex overflow-x-auto space-x-4 pb-4 -mx-4 px-4 scrollbar-hide">
+                {collections.slice(0, 8).map((c) => (
+                  <Link
+                    key={c.id}
+                    to={`/collections/${c.name
+                      .toLowerCase()
+                      .replace(/\s+/g, "-")}`}
+                    className="group flex-shrink-0 w-36 sm:w-48"
+                  >
+                    <div className="aspect-square bg-slate-100 rounded-xl overflow-hidden shadow-sm transition-all duration-300 group-hover:shadow-lg group-hover:-translate-y-1">
+                      <img
+                        src={c.image}
+                        alt={c.name}
+                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
+                    </div>
+                    <h3 className="mt-2 text-sm text-center font-semibold text-slate-700 group-hover:text-rose-600 transition-colors truncate">
+                      {c.name}
+                    </h3>
+                  </Link>
+                ))}
+              </div>
+            </section>
 
-            {/* Search + sort row */}
-            <div className="flex flex-row justify-between items-center bg-white rounded-lg shadow-md gap-2 p-2 sm:p-4 sm:gap-4 mb-6">
-              <div className="relative flex-grow">
-                <input
-                  type="text"
-                  placeholder="Search products..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-slate-800 text-sm"
-                />
-                <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                  <Search size={18} />
+            {/* --- START: MODIFIED LAYOUT --- */}
+            <div>
+              <div className="flex flex-row justify-between items-center bg-white rounded-lg shadow-md gap-2 p-2 sm:p-4 sm:gap-4 mb-4">
+                <div className="relative flex-grow">
+                  <input
+                    type="text"
+                    placeholder="Search products..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-slate-800 text-sm"
+                  />
+                  <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                    <Search size={18} />
+                  </div>
                 </div>
+                <div className="hidden sm:block">
+                  <CustomDropdown selected={sortBy} onSelect={setSortBy} />
+                </div>
+                <button
+                  className="md:hidden flex-shrink-0 p-2.5 border rounded-full bg-white shadow-sm"
+                  onClick={() => setIsFilterOpen(true)}
+                >
+                  <SlidersHorizontal size={16} />
+                </button>
               </div>
-              <div className="hidden sm:block">
-                <CustomDropdown selected={sortBy} onSelect={setSortBy} />
-              </div>
-              <button
-                className="md:hidden flex-shrink-0 p-2.5 border rounded-full bg-white shadow-sm"
-                onClick={() => setIsFilterOpen(true)}
-              >
-                <SlidersHorizontal size={16} />
-              </button>
-            </div>
 
-            {/* --- Amazon style layout --- */}
-            <div className="md:grid md:grid-cols-12 md:gap-8">
-              {/* Filters (left side, scrollable) */}
-              <aside className="hidden md:block md:col-span-3">
-                <div className="bg-white rounded-lg shadow-sm p-4">
+              {/* Filters are now here, above the products, for desktop view */}
+              <aside className="hidden md:block mb-8">
+                <div>
                   <h2 className="text-lg font-bold mb-4">Filters</h2>
                   <FilterContent />
                   <button
@@ -344,8 +371,7 @@ const ShopPage = () => {
                 </div>
               </aside>
 
-              {/* Products (right side) */}
-              <div className="md:col-span-9">
+              <div>
                 {loading ? (
                   <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
                     {Array.from({ length: 12 }).map((_, i) => (
@@ -355,7 +381,7 @@ const ShopPage = () => {
                 ) : filteredAndSortedProducts.length > 0 ? (
                   <motion.div
                     layout
-                    className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2"
+                    className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2"
                   >
                     <AnimatePresence>
                       {filteredAndSortedProducts.map((product) => (
@@ -389,11 +415,11 @@ const ShopPage = () => {
                 )}
               </div>
             </div>
+            {/* --- END: MODIFIED LAYOUT --- */}
           </div>
         </Layout>
       </div>
 
-      {/* Mobile filter drawer */}
       <AnimatePresence>
         {isFilterOpen && (
           <motion.div
@@ -465,7 +491,6 @@ const FilterSection = ({
     <div className="mt-2 space-y-2">{children}</div>
   </div>
 );
-
 const Checkbox = ({
   id,
   label,

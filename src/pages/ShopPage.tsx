@@ -4,13 +4,12 @@ import ProductCard from "../components/ProductCard";
 import SkeletonCard from "../components/SkeletonCard";
 import Layout from "../components/Layout";
 import Navbar from "../components/Navbar";
-import { Link } from "react-router-dom";
+
 import {
   SlidersHorizontal,
   X,
   Search,
   ChevronDown,
-  Layers,
   Check,
   ShoppingBag,
 } from "lucide-react";
@@ -25,7 +24,6 @@ interface Collection {
   image: string;
 }
 
-// FIX: Corrected the State interface
 interface State {
   id: string;
   name: string;
@@ -134,7 +132,6 @@ const ShopPage = () => {
       const [productRes, collectionRes, stateRes] = await Promise.all([
         supabase.from("products").select("*, collections(name)"),
         supabase.from("collections").select("id, name, image").order("name"),
-        // FIX: Corrected the query to fetch only necessary fields
         supabase.from("states").select("id, name").order("name"),
       ]);
 
@@ -153,6 +150,7 @@ const ShopPage = () => {
         (p) =>
           (p.price || 0) >= priceRange[0] && (p.price || 0) <= priceRange[1]
       );
+
     if (selectedCollections.length > 0)
       filtered = filtered.filter(
         (p) => p.collection_id && selectedCollections.includes(p.collection_id)
@@ -172,7 +170,7 @@ const ShopPage = () => {
       case "popularity":
         filtered.sort((a, b) => (b.popularity || 0) - (a.popularity || 0));
         break;
-      default: // "latest"
+      default:
         filtered.sort(
           (a, b) =>
             new Date(b.created_at || 0).getTime() -
@@ -247,7 +245,6 @@ const ShopPage = () => {
       </FilterSection>
       <FilterSection title="States">
         {(showAllStates ? states : states.slice(0, 10)).map((s) => (
-          // FIX: Corrected to use s.id for filtering logic
           <Checkbox
             key={s.id}
             id={`state-${s.id}`}
@@ -305,38 +302,37 @@ const ShopPage = () => {
                 </div>
               </div>
             </header>
-            <section className="mb-12">
-              <h2 className="text-2xl font-serif font-semibold text-slate-800 mb-6 flex items-center gap-x-2">
-                <Layers size={24} className="text-rose-500" /> Curated
-                Collections
-              </h2>
-              <div className="flex overflow-x-auto space-x-4 pb-4 -mx-4 px-4 scrollbar-hide">
-                {collections.slice(0, 8).map((c) => (
-                  <Link
-                    key={c.id}
-                    to={`/collections/${c.name
-                      .toLowerCase()
-                      .replace(/\s+/g, "-")}`}
-                    className="group flex-shrink-0 w-36 sm:w-48"
-                  >
-                    <div className="aspect-square bg-slate-100 rounded-xl overflow-hidden shadow-sm transition-all duration-300 group-hover:shadow-lg group-hover:-translate-y-1">
-                      <img
-                        src={c.image}
-                        alt={c.name}
-                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                      />
-                    </div>
-                    <h3 className="mt-2 text-sm text-center font-semibold text-slate-700 group-hover:text-rose-600 transition-colors truncate">
-                      {c.name}
-                    </h3>
-                  </Link>
-                ))}
-              </div>
-            </section>
 
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
-              <aside className="hidden md:block md:col-span-1">
-                <div className="sticky top-24">
+            {/* Search + sort row */}
+            <div className="flex flex-row justify-between items-center bg-white rounded-lg shadow-md gap-2 p-2 sm:p-4 sm:gap-4 mb-6">
+              <div className="relative flex-grow">
+                <input
+                  type="text"
+                  placeholder="Search products..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-slate-800 text-sm"
+                />
+                <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                  <Search size={18} />
+                </div>
+              </div>
+              <div className="hidden sm:block">
+                <CustomDropdown selected={sortBy} onSelect={setSortBy} />
+              </div>
+              <button
+                className="md:hidden flex-shrink-0 p-2.5 border rounded-full bg-white shadow-sm"
+                onClick={() => setIsFilterOpen(true)}
+              >
+                <SlidersHorizontal size={16} />
+              </button>
+            </div>
+
+            {/* --- Amazon style layout --- */}
+            <div className="md:grid md:grid-cols-12 md:gap-8">
+              {/* Filters (left side, scrollable) */}
+              <aside className="hidden md:block md:col-span-3">
+                <div className="bg-white rounded-lg shadow-sm p-4">
                   <h2 className="text-lg font-bold mb-4">Filters</h2>
                   <FilterContent />
                   <button
@@ -348,81 +344,56 @@ const ShopPage = () => {
                 </div>
               </aside>
 
-              <main className="md:col-span-4">
-                <div className="flex flex-row justify-between items-center bg-white rounded-lg shadow-md gap-2 p-2 sm:p-4 sm:gap-4 mb-4">
-                  <div className="relative flex-grow">
-                    <input
-                      type="text"
-                      placeholder="Search products..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-slate-800 text-sm"
-                    />
-                    <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                      <Search size={18} />
-                    </div>
+              {/* Products (right side) */}
+              <div className="md:col-span-9">
+                {loading ? (
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+                    {Array.from({ length: 12 }).map((_, i) => (
+                      <SkeletonCard key={i} />
+                    ))}
                   </div>
-                  <div className="hidden sm:block">
-                    <CustomDropdown selected={sortBy} onSelect={setSortBy} />
-                  </div>
-                  <button
-                    className="md:hidden flex-shrink-0 p-2.5 border rounded-full bg-white shadow-sm"
-                    onClick={() => setIsFilterOpen(true)}
+                ) : filteredAndSortedProducts.length > 0 ? (
+                  <motion.div
+                    layout
+                    className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2"
                   >
-                    <SlidersHorizontal size={16} />
-                  </button>
-                </div>
-
-                <div>
-                  {loading ? (
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-                      {Array.from({ length: 12 }).map((_, i) => (
-                        <SkeletonCard key={i} />
+                    <AnimatePresence>
+                      {filteredAndSortedProducts.map((product) => (
+                        <motion.div
+                          key={product.id}
+                          className="h-full"
+                          layout
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          <ProductCard product={product} />
+                        </motion.div>
                       ))}
-                    </div>
-                  ) : filteredAndSortedProducts.length > 0 ? (
-                    <motion.div
-                      layout
-                      // FIX: Reduced the gap for a tighter layout on small screens
-                      className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2"
-                    >
-                      <AnimatePresence>
-                        {filteredAndSortedProducts.map((product) => (
-                          <motion.div
-                            key={product.id}
-                            className="h-full"
-                            layout
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.3 }}
-                          >
-                            <ProductCard product={product} />
-                          </motion.div>
-                        ))}
-                      </AnimatePresence>
-                    </motion.div>
-                  ) : (
-                    <div className="text-center py-20 px-4">
-                      <ShoppingBag
-                        size={48}
-                        className="mx-auto text-amber-400 mb-4"
-                      />
-                      <p className="text-lg font-semibold text-slate-700">
-                        No matching treasures found...
-                      </p>
-                      <p className="text-slate-500 mt-2">
-                        but awesome products are on their way! Please wait.
-                      </p>
-                    </div>
-                  )}
-                </div>
-              </main>
+                    </AnimatePresence>
+                  </motion.div>
+                ) : (
+                  <div className="text-center py-20 px-4">
+                    <ShoppingBag
+                      size={48}
+                      className="mx-auto text-amber-400 mb-4"
+                    />
+                    <p className="text-lg font-semibold text-slate-700">
+                      No matching treasures found...
+                    </p>
+                    <p className="text-slate-500 mt-2">
+                      but awesome products are on their way! Please wait.
+                    </p>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </Layout>
       </div>
 
+      {/* Mobile filter drawer */}
       <AnimatePresence>
         {isFilterOpen && (
           <motion.div
@@ -494,6 +465,7 @@ const FilterSection = ({
     <div className="mt-2 space-y-2">{children}</div>
   </div>
 );
+
 const Checkbox = ({
   id,
   label,
