@@ -1,9 +1,10 @@
-import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { supabase } from "../lib/supabaseClient";
 import ProductCard from "./ProductCard";
 import SkeletonCard from "./SkeletonCard";
 import { Product } from "../context/cart-context";
+import { ArrowRight } from "lucide-react";
 
 const FeaturedProducts: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -27,6 +28,19 @@ const FeaturedProducts: React.FC = () => {
     };
     fetchProducts();
   }, []);
+
+  // SeeAllCard styled as a card, same height as ProductCard
+  const SeeAllCard = () => (
+    <div className="snap-center flex-shrink-0 w-48 h-full flex items-center justify-center">
+      <Link
+        to="/shop"
+        className="w-full h-56 flex flex-col items-center justify-center rounded-2xl border-2 border-amber-400 bg-white text-amber-600 font-semibold text-base hover:bg-amber-50 transition shadow"
+      >
+        <span className="mb-1">See All</span>
+        <ArrowRight size={20} />
+      </Link>
+    </div>
+  );
 
   return (
     <div className="relative z-10">
@@ -59,29 +73,33 @@ const FeaturedProducts: React.FC = () => {
         </p>
       </div>
 
-      {/* Products Grid / Swiper */}
+      {/* Products */}
       <div>
         {/* Mobile: horizontal scroll */}
-        <div className="flex md:hidden gap-4 overflow-x-auto snap-x snap-mandatory px-2 scrollbar-hide">
-          {loading
-            ? Array.from({ length: 12 }).map((_, index) => (
-                <div
-                  key={index}
-                  className="snap-center flex-shrink-0 w-44 h-full"
-                >
-                  <SkeletonCard />
-                </div>
-              ))
-            : products.slice(0, 12).map((product) => (
+        <div className="flex md:hidden gap-4 overflow-x-auto snap-x snap-mandatory -mx-4 px-4 scrollbar-hide">
+          {loading ? (
+            Array.from({ length: 8 }).map((_, index) => (
+              <div
+                key={index}
+                className="snap-center flex-shrink-0 w-48 h-full"
+              >
+                <SkeletonCard />
+              </div>
+            ))
+          ) : (
+            <>
+              {products.slice(0, 8).map((product) => (
                 <div
                   key={product.id}
-                  className="flex-shrink-0 w-48 md:w-56 h-full flex"
+                  className="snap-center flex-shrink-0 w-48 h-full flex"
                 >
                   <ProductCard product={product} />
                 </div>
               ))}
+              {products.length > 8 && <SeeAllCard />}
+            </>
+          )}
         </div>
-
         {/* Desktop: normal grid */}
         <div className="hidden md:grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 md:gap-6">
           {loading
@@ -95,61 +113,6 @@ const FeaturedProducts: React.FC = () => {
               ))}
         </div>
       </div>
-
-      <section className="mt-12">
-        <div className="flex items-center justify-between mb-6 px-2 sm:px-0">
-          <h2 className="text-lg sm:text-xl md:text-2xl font-bold font-serif text-slate-900">
-            Featured
-          </h2>
-          <Link
-            to="/featured"
-            className="hidden sm:inline-block text-sm text-amber-600 hover:underline font-medium"
-          >
-            See All
-          </Link>
-        </div>
-        {/* Mobile: horizontal scroll */}
-        <div className="flex md:hidden overflow-x-auto gap-4 pb-2 snap-x snap-mandatory px-2">
-          {(loading ? Array.from({ length: 5 }) : products).map(
-            (product, idx) => (
-              <div
-                key={loading ? idx : (product as Product).id}
-                className="min-w-[60vw] sm:min-w-[250px] max-w-[250px] flex-shrink-0 snap-center"
-              >
-                {loading ? (
-                  <SkeletonCard />
-                ) : (
-                  <ProductCard product={product as Product} tag="Featured" />
-                )}
-              </div>
-            )
-          )}
-          {/* See All button at end */}
-          <div className="min-w-[60vw] sm:min-w-[250px] max-w-[250px] flex-shrink-0 snap-center flex items-center justify-center">
-            <Link
-              to="/featured"
-              className="w-full h-full flex items-center justify-center rounded-2xl border border-amber-400 bg-white text-amber-600 font-semibold text-base hover:bg-amber-50 transition"
-              style={{ minHeight: 180 }}
-            >
-              See All
-            </Link>
-          </div>
-        </div>
-        {/* Desktop: grid */}
-        <div className="hidden md:grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
-          {loading
-            ? Array.from({ length: 5 }).map((_, index) => (
-                <SkeletonCard key={index} />
-              ))
-            : products.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  tag="Featured"
-                />
-              ))}
-        </div>
-      </section>
     </div>
   );
 };
