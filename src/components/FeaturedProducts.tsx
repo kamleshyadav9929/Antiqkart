@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 import ProductCard from "./ProductCard";
@@ -94,6 +95,61 @@ const FeaturedProducts: React.FC = () => {
               ))}
         </div>
       </div>
+
+      <section className="mt-12">
+        <div className="flex items-center justify-between mb-6 px-2 sm:px-0">
+          <h2 className="text-lg sm:text-xl md:text-2xl font-bold font-serif text-slate-900">
+            Featured
+          </h2>
+          <Link
+            to="/featured"
+            className="hidden sm:inline-block text-sm text-amber-600 hover:underline font-medium"
+          >
+            See All
+          </Link>
+        </div>
+        {/* Mobile: horizontal scroll */}
+        <div className="flex md:hidden overflow-x-auto gap-4 pb-2 snap-x snap-mandatory px-2">
+          {(loading ? Array.from({ length: 5 }) : products).map(
+            (product, idx) => (
+              <div
+                key={loading ? idx : (product as Product).id}
+                className="min-w-[60vw] sm:min-w-[250px] max-w-[250px] flex-shrink-0 snap-center"
+              >
+                {loading ? (
+                  <SkeletonCard />
+                ) : (
+                  <ProductCard product={product as Product} tag="Featured" />
+                )}
+              </div>
+            )
+          )}
+          {/* See All button at end */}
+          <div className="min-w-[60vw] sm:min-w-[250px] max-w-[250px] flex-shrink-0 snap-center flex items-center justify-center">
+            <Link
+              to="/featured"
+              className="w-full h-full flex items-center justify-center rounded-2xl border border-amber-400 bg-white text-amber-600 font-semibold text-base hover:bg-amber-50 transition"
+              style={{ minHeight: 180 }}
+            >
+              See All
+            </Link>
+          </div>
+        </div>
+        {/* Desktop: grid */}
+        <div className="hidden md:grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
+          {loading
+            ? Array.from({ length: 5 }).map((_, index) => (
+                <SkeletonCard key={index} />
+              ))
+            : products.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  tag="Featured"
+                />
+              ))}
+        </div>
+      </section>
     </div>
   );
 };
