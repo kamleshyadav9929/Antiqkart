@@ -74,7 +74,7 @@ const FeaturedProducts: React.FC = () => {
             : products.slice(0, 12).map((product) => (
                 <div
                   key={product.id}
-                  className="snap-center flex-shrink-0 w-44 h-full"
+                  className="flex-shrink-0 w-48 md:w-56 h-full flex"
                 >
                   <ProductCard product={product} />
                 </div>
@@ -82,7 +82,7 @@ const FeaturedProducts: React.FC = () => {
         </div>
 
         {/* Desktop: normal grid */}
-        <div className="hidden md:grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
+        <div className="hidden md:grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 md:gap-6">
           {loading
             ? Array.from({ length: 12 }).map((_, index) => (
                 <SkeletonCard key={index} />

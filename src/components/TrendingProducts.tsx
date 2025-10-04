@@ -59,16 +59,37 @@ const TrendingProducts: React.FC = () => {
         </p>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
-        {loading
-          ? Array.from({ length: 5 }).map((_, index) => (
-              <SkeletonCard key={index} />
-            ))
-          : products.map((product) => (
-              <div key={product.id} className="h-full flex">
-                <ProductCard product={product} tag="Trending" />
+      {/* Swipable on small screens, grid on md+ */}
+      <div>
+        {/* Mobile: horizontal scroll */}
+        <div className="flex md:hidden overflow-x-auto gap-4 pb-2 snap-x snap-mandatory">
+          {(loading ? Array.from({ length: 5 }) : products).map(
+            (product, idx) => (
+              <div
+                key={loading ? idx : (product as Product).id}
+                className="flex-shrink-0 w-48 md:w-56 h-full flex"
+              >
+                {loading ? (
+                  <SkeletonCard />
+                ) : (
+                  <ProductCard product={product as Product} tag="Trending" />
+                )}
               </div>
-            ))}
+            )
+          )}
+        </div>
+        {/* Desktop: grid */}
+        <div className="hidden md:grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
+          {loading
+            ? Array.from({ length: 5 }).map((_, index) => (
+                <SkeletonCard key={index} />
+              ))
+            : products.map((product) => (
+                <div key={product.id} className="h-full flex">
+                  <ProductCard product={product} tag="Trending" />
+                </div>
+              ))}
+        </div>
       </div>
     </div>
   );

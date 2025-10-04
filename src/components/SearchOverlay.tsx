@@ -68,7 +68,7 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({ isOpen, onClose }) => {
       const [productsRes, statesRes, collectionsRes] = await Promise.all([
         supabase
           .from("products")
-          .select("id, name, image, price, affiliate_link"),
+          .select("id, name, image, price, affiliate_link, rating"), // <-- add rating here
         supabase.from("states").select("id, name, image"),
         supabase.from("collections").select("id, name, image"),
       ]);

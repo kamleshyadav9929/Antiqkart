@@ -124,7 +124,6 @@ const ShopPage = () => {
   const [sortBy, setSortBy] = React.useState("latest");
   const [searchTerm, setSearchTerm] = React.useState("");
   const [isFilterOpen, setIsFilterOpen] = React.useState(false);
-  const [showAllStates, setShowAllStates] = React.useState(false);
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -244,7 +243,7 @@ const ShopPage = () => {
         ))}
       </FilterSection>
       <FilterSection title="States">
-        {(showAllStates ? states : states.slice(0, 10)).map((s) => (
+        {states.map((s) => (
           <Checkbox
             key={s.id}
             id={`state-${s.id}`}
@@ -253,20 +252,6 @@ const ShopPage = () => {
             onChange={() => toggleSelection(s.id, setSelectedStates)}
           />
         ))}
-        {states.length > 10 && (
-          <button
-            onClick={() => setShowAllStates(!showAllStates)}
-            className="text-sm text-blue-600 hover:underline mt-2 flex items-center gap-x-1"
-          >
-            {showAllStates ? "Show Less" : `See All ${states.length} States`}{" "}
-            <ChevronDown
-              size={14}
-              className={`transition-transform ${
-                showAllStates ? "rotate-180" : ""
-              }`}
-            />
-          </button>
-        )}
       </FilterSection>
     </>
   );

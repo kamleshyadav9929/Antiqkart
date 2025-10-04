@@ -31,7 +31,7 @@ export default function StatesSection() {
     <section className="py-12 bg-background">
       <div className="max-w-7xl mx-auto px-6">
         <h2 className="text-2xl font-serif mb-6">Shop by State</h2>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+        <div className="grid grid-cols-3s sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3">
           {states.map((s) => (
             <button
               key={s.id}
