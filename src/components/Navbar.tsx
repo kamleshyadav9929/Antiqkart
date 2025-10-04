@@ -61,8 +61,7 @@ const Navbar = () => {
     <>
       <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-gray-200">
         <nav className="flex items-center justify-between px-4 sm:px-6 py-2">
-          {/* Logo for desktop, hidden on mobile */}
-          <div className="hidden sm:flex items-center">
+          <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-2">
               <img
                 src="/logo-round.png"
@@ -74,12 +73,10 @@ const Navbar = () => {
               </span>
             </Link>
           </div>
-          {/* GooeyNav for desktop */}
           <div className="hidden md:flex flex-grow justify-center">
             <GooeyNav items={navItems.slice(0, 5)} />
           </div>
-          {/* Desktop right section */}
-          <div className="hidden md:flex items-center gap-x-2 sm:gap-x-3 text-gray-600">
+          <div className="flex items-center gap-x-2 sm:gap-x-3 text-gray-600">
             <button
               className="p-2 rounded-full hover:bg-gray-100 hover:text-slate-900 transition-colors"
               onClick={() => setIsSearchOpen(true)}
@@ -126,50 +123,15 @@ const Navbar = () => {
                 </Link>
               )}
             </div>
-          </div>
-          {/* Mobile: Logo + search bar + cart + menu */}
-          <div className="flex w-full items-center gap-2 md:hidden">
-            {/* Logo always visible on mobile */}
-            <Link to="/" className="flex-shrink-0">
-              <img
-                src="/logo-round.png"
-                alt="AntiqKart Logo"
-                className="h-8 w-8 rounded-full object-cover"
-              />
-            </Link>
-            {/* Hero-style search bar */}
-            <button
-              className="flex-1 flex items-center bg-white rounded-full px-4 py-2 shadow border border-gray-200 focus:outline-none"
-              onClick={() => setIsSearchOpen(true)}
-              aria-label="Open Search"
-              style={{ minWidth: 0 }}
-            >
-              <Search size={20} className="text-amber-500 mr-2" />
-              <span className="text-gray-500 text-base font-normal truncate text-left">
-                Search for antiques, states, collections...
-              </span>
-            </button>
-            {/* Cart icon */}
-            <Link
-              to="/cart"
-              className="relative p-2 rounded-full hover:bg-gray-100 transition-colors flex-shrink-0"
-              aria-label="View Cart"
-            >
-              <ShoppingCart size={22} className="text-gray-600" />
-              {cartProductDetails && cartProductDetails.length > 0 && (
-                <span className="absolute -top-1 -right-1 text-xs bg-amber-500 text-white font-bold rounded-full h-5 w-5 flex items-center justify-center">
-                  {cartProductDetails.length}
-                </span>
-              )}
-            </Link>
-            {/* Hamburger menu */}
-            <button
-              onClick={handleMobileMenuToggle}
-              className="p-2 rounded-full hover:bg-gray-100 transition-colors flex-shrink-0"
-              aria-label="Toggle Menu"
-            >
-              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
+            <div className="md:hidden">
+              <button
+                onClick={handleMobileMenuToggle}
+                className="p-2 rounded-full hover:bg-gray-100 hover:text-slate-900 transition-colors"
+                aria-label="Toggle Menu"
+              >
+                {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+              </button>
+            </div>
           </div>
         </nav>
         {isMobileMenuOpen && (
@@ -231,49 +193,6 @@ const Navbar = () => {
         isOpen={isSearchOpen}
         onClose={() => setIsSearchOpen(false)}
       />
-      {/* Bottom Navigation for Small Screens */}
-      <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 shadow-lg flex md:hidden">
-        {navItems.slice(0, 5).map((item) => (
-          <NavLink
-            key={item.href}
-            to={item.href}
-            className={({ isActive }) =>
-              `flex flex-col items-center justify-center flex-1 py-2 transition-colors ${
-                isActive
-                  ? "text-amber-600 bg-amber-50"
-                  : "text-gray-500 hover:text-amber-600"
-              }`
-            }
-            aria-label={item.label}
-          >
-            <span>{item.icon}</span>
-            <span className="text-[11px] font-medium mt-0.5">{item.label}</span>
-          </NavLink>
-        ))}
-        <NavLink
-          to={user ? "/cart" : "/auth"}
-          className={({ isActive }) =>
-            `flex flex-col items-center justify-center flex-1 py-2 transition-colors ${
-              isActive
-                ? "text-amber-600 bg-amber-50"
-                : "text-gray-500 hover:text-amber-600"
-            }`
-          }
-          aria-label={user ? "Cart" : "Sign In"}
-        >
-          <span>
-            <ShoppingCart size={20} />
-            {cartProductDetails && cartProductDetails.length > 0 && (
-              <span className="absolute bottom-6 right-4 text-[10px] bg-amber-500 text-white font-bold rounded-full h-4 w-4 flex items-center justify-center">
-                {cartProductDetails.length}
-              </span>
-            )}
-          </span>
-          <span className="text-[11px] font-medium mt-0.5">
-            {user ? "Cart" : "Sign In"}
-          </span>
-        </NavLink>
-      </nav>
     </>
   );
 };
