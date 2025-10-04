@@ -10,20 +10,16 @@ const Hero = () => {
 
   return (
     <section className="relative bg-gray-50 overflow-hidden">
+      {/* Background Pattern */}
       <div
         className="absolute inset-0 opacity-20"
         style={{
           backgroundImage:
-            'url(\'data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23a0aec0" fill-opacity="0.6"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\')',
+            'url(\'data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23a0aec0" fill-opacity="0.4"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\')',
         }}
       ></div>
 
-      <motion.div
-        className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32 text-center z-10"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.8 }}
-      >
+      <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28 text-center z-10">
         <motion.h1
           className="text-4xl lg:text-6xl font-serif font-extrabold leading-tight"
           initial={{ y: 20, opacity: 0 }}
@@ -47,7 +43,7 @@ const Hero = () => {
         </motion.p>
 
         <motion.div
-          className="mt-8 max-w-xl mx-auto"
+          className="mt-8 max-w-xl mx-auto w-full"
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.7, delay: 0.6, ease: "easeOut" }}
@@ -56,8 +52,7 @@ const Hero = () => {
             onClick={handleSearchClick}
             className="group w-full flex items-center text-left bg-white border border-gray-200 rounded-full px-2 py-2 shadow-sm hover:ring-2 hover:ring-slate-800 transition-all"
           >
-            {/* --- THIS IS THE FIX --- */}
-            <span className="flex-grow text-gray-500 pl-4 pr-2 truncate">
+            <span className="flex-grow text-gray-500 pl-4 pr-2">
               Search for 'Madhubani Painting' or 'Pashmina'...
             </span>
             <span className="flex-shrink-0 bg-slate-800 text-white rounded-full p-3">
@@ -85,6 +80,49 @@ const Hero = () => {
             Visit Your State
           </Link>
         </motion.div>
+      </div>
+
+      {/* --- NEW STATISTICS SECTION --- */}
+      <motion.div
+        className="relative max-w-5xl mx-auto px-4 pb-16"
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.7, delay: 1.0, ease: "easeOut" }}
+      >
+        <div className="w-full bg-white/60 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-white/50">
+          <div className="grid grid-cols-3 gap-4 md:gap-8">
+            {/* Stat 1 */}
+            <div className="text-center">
+              <p className="text-3xl md:text-5xl font-extrabold text-indigo-600 relative inline-block">
+                500+
+                <span className="absolute -bottom-1 left-0 w-full h-0.5 sm:h-1 bg-gradient-to-r from-indigo-400 to-purple-500 rounded-full animate-glow"></span>
+              </p>
+              <p className="text-xs md:text-sm font-semibold text-slate-700 mt-2 uppercase">
+                Unique Artisans
+              </p>
+            </div>
+            {/* Stat 2 */}
+            <div className="text-center">
+              <p className="text-3xl md:text-5xl font-extrabold text-emerald-600 relative inline-block">
+                20+
+                <span className="absolute -bottom-1 left-0 w-full h-0.5 sm:h-1 bg-gradient-to-r from-emerald-400 to-cyan-500 rounded-full animate-glow"></span>
+              </p>
+              <p className="text-xs md:text-sm font-semibold text-slate-700 mt-2 uppercase">
+                States Explored
+              </p>
+            </div>
+            {/* Stat 3 */}
+            <div className="text-center">
+              <p className="text-3xl md:text-5xl font-extrabold text-purple-600 relative inline-block">
+                1K+
+                <span className="absolute -bottom-1 left-0 w-full h-0.5 sm:h-1 bg-gradient-to-r from-purple-400 to-pink-500 rounded-full animate-glow"></span>
+              </p>
+              <p className="text-xs md:text-sm font-semibold text-slate-700 mt-2 uppercase">
+                Products Curated
+              </p>
+            </div>
+          </div>
+        </div>
       </motion.div>
     </section>
   );

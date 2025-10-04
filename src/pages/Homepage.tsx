@@ -9,6 +9,7 @@ import Collections from "../components/Collections";
 import Layout from "../components/Layout";
 import Footer from "../components/Footer";
 import NewArrivals from "../components/NewArrivals";
+import ArtisanSpotlight from "../components/ArtisanSpotlight";
 
 const Homepage = () => {
   const Section = ({
@@ -25,11 +26,6 @@ const Homepage = () => {
       className={`py-16 md:py-24 ${className} relative overflow-hidden`}
     >
       <Layout>{children}</Layout>
-      <div
-        className={`absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-${
-          className.includes("gray") ? "gray-50" : "white"
-        } to-transparent`}
-      ></div>
     </section>
   );
 
@@ -47,6 +43,12 @@ const Homepage = () => {
         <Section className="bg-white">
           <FeaturedProducts />
         </Section>
+
+        {/* --- Moved Up and Placed Here --- */}
+        <Layout>
+          <ArtisanSpotlight />
+        </Layout>
+
         <Section id="festive-specials" className="bg-gray-50">
           <FestiveCollections />
         </Section>
