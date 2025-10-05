@@ -149,6 +149,15 @@
   --sidebar-ring: oklch(0.704 0.04 256.788);
 }
 
+/* --- NEW: Hide main browser scrollbar --- */
+html {
+  scrollbar-width: none; /* For Firefox */
+  -ms-overflow-style: none; /* For Internet Explorer and Edge */
+}
+html::-webkit-scrollbar {
+  width: 0px; /* For Chrome, Safari, and Opera */
+}
+
 * {
   box-sizing: border-box;
 }

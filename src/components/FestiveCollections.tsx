@@ -43,12 +43,9 @@ const FestiveCollections = () => {
             </p>
           </div>
         </div>
-        <p className="mt-6 text-slate-600 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed px-4">
-          Explore curated products for every celebration and festival!
-        </p>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 md:gap-6">
         {loading
           ? Array.from({ length: 5 }).map((_, index) => (
               <SkeletonCard key={index} />

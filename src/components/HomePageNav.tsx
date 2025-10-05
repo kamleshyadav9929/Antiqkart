@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
 const sections = [
   { id: "new-arrivals", title: "New Arrivals" },
@@ -8,28 +8,45 @@ const sections = [
   { id: "trending-products", title: "Trending" },
 ];
 
-const HomePageNav = () => {
+const HomePageNav = ({
+  sentinelRef,
+}: {
+  sentinelRef: React.RefObject<HTMLDivElement>;
+}) => {
   const [isSticky, setIsSticky] = useState(false);
   const [activeSection, setActiveSection] = useState("new-arrivals");
-  const navRef = useRef<HTMLDivElement>(null);
 
-  // Effect for handling the sticky state
+  // State to track if the screen is large (lg breakpoint: 1024px)
+  const [isLargeScreen, setIsLargeScreen] = useState(
+    window.matchMedia("(min-width: 1024px)").matches
+  );
+
+  // Effect to update screen size state on resize
   useEffect(() => {
-    const navElement = navRef.current;
-    if (!navElement) return;
+    const mediaQuery = window.matchMedia("(min-width: 1024px)");
+    const handleScreenChange = () => setIsLargeScreen(mediaQuery.matches);
+
+    mediaQuery.addEventListener("change", handleScreenChange);
+    return () => mediaQuery.removeEventListener("change", handleScreenChange);
+  }, []);
+
+  // Sticky state logic
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        setIsSticky(entry.intersectionRatio < 1);
+        setIsSticky(!entry.isIntersecting);
       },
-      { threshold: [1], rootMargin: "-69px 0px 0px 0px" }
+      { rootMargin: "-56px 0px 0px 0px" }
     );
 
-    observer.observe(navElement);
+    observer.observe(sentinel);
     return () => observer.disconnect();
-  }, []);
+  }, [sentinelRef]);
 
-  // Effect for tracking the active section
+  // Active section tracking logic
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -64,18 +81,19 @@ const HomePageNav = () => {
     }
   };
 
+  // --- CHANGES ARE HERE ---
+  // The className logic is updated for responsive stickiness and opaque background
   return (
     <div
-      ref={navRef}
-      className={`top-0 z-30 transition-shadow ${
-        isSticky ? "sticky bg-white/80 backdrop-blur-md shadow-md" : "bg-white"
+      className={`z-30 ${
+        isSticky && !isLargeScreen
+          ? "sticky top-13 bg-white shadow-sm"
+          : "relative bg-white"
       }`}
     >
       <nav className="border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-1 sm:px-1 lg:px-8">
-          {/* --- CHANGE IS HERE --- */}
-          {/* Ab yeh small screens par 'justify-start' aur medium screens (md) se upar 'justify-center' hoga */}
-          <div className="flex justify-start md:justify-center items-center space-x-2 sm:space-x-3 py-3 overflow-x-auto scrollbar-hide">
+        <div className="max-w-7xl mx-auto px-1 sm:px-1">
+          <div className="flex justify-start md:justify-center items-center space-x-3 md:space-x-6 lg:space-x-8 py-3 overflow-x-auto scrollbar-hide">
             {sections.map(({ id, title }) => (
               <a
                 key={id}
@@ -83,7 +101,7 @@ const HomePageNav = () => {
                 onClick={(e) => handleLinkClick(e, id)}
                 className={`flex-shrink-0 text-sm font-medium py-1.5 px-4 rounded-full transition-colors duration-300 ${
                   activeSection === id
-                    ? "bg-slate-900 text-white"
+                    ? "bg-orange-600 text-white"
                     : "bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800"
                 }`}
               >

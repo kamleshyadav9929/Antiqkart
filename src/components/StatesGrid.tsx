@@ -92,14 +92,11 @@ const StatesGrid = () => {
             <h2 className="text-3xl md:text-4xl font-serif font-bold text-slate-900">
               From Every Corner of India
             </h2>
-            <p className="mt-2 text-slate-600">
+            <p className="mt-6 text-slate-600 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed px-4">
               Explore the unique artistic heritage, one state at a time.
             </p>
           </div>
         </div>
-        <p className="mt-6 text-slate-600 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed px-4">
-          Explore the unique artistic heritage, one state at a time.
-        </p>
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6 md:gap-8">

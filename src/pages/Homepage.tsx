@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
 import FeaturedProducts from "../components/FeaturedProducts";
@@ -13,6 +13,8 @@ import ArtisanSpotlight from "../components/ArtisanSpotlight";
 import HomePageNav from "../components/HomePageNav";
 
 const Homepage = () => {
+  const homePageNavSentinelRef = useRef<HTMLDivElement>(null);
+
   const Section = ({
     children,
     className = "bg-white",
@@ -24,7 +26,7 @@ const Homepage = () => {
   }) => (
     <section
       id={id}
-      // FIX: 'overflow-hidden' yahan se hata diya gaya hai
+      // FIX: 'overflow-hidden' yahan se hata diya gaya hai taaki layout sahi ho jaye
       className={`py-16 md:py-24 ${className} relative`}
     >
       <Layout>{children}</Layout>
@@ -37,7 +39,8 @@ const Homepage = () => {
       <main>
         <Hero />
 
-        <HomePageNav />
+        <div ref={homePageNavSentinelRef}></div>
+        <HomePageNav sentinelRef={homePageNavSentinelRef} />
 
         <Section id="new-arrivals" className="bg-white">
           <NewArrivals />

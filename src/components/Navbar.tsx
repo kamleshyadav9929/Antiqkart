@@ -60,7 +60,7 @@ const Navbar = () => {
   return (
     <>
       <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-gray-200">
-        <nav className="flex items-center justify-between px-4 sm:px-6 py-2">
+        <nav className="flex items-center justify-between px-0 sm:px-0 py-2">
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-2">
               <img
