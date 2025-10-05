@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+
 import Layout from "../components/Layout";
 import { supabase } from "../lib/supabaseClient";
 import ProductCard from "../components/ProductCard";
 import SkeletonCard from "../components/SkeletonCard";
 import { Product } from "../context/cart-context";
+import { Gift } from "lucide-react";
 
 interface Festival {
-  id: number; // <-- Added ID to use in the product query
+  id: number;
   name: string;
   banner_image: string;
 }
@@ -25,7 +26,6 @@ const FestivalPage = () => {
       if (!slug) return;
       setLoading(true);
 
-      // Step 1: Fetch the festival details first
       const { data: festivalData, error: festivalError } = await supabase
         .from("festivals")
         .select("id, name, banner_image")
@@ -39,12 +39,10 @@ const FestivalPage = () => {
       }
       setFestival(festivalData);
 
-      // Step 2: Use the festival's ID to fetch all products linked to it
-      // This query is simpler and more direct than the old one.
       const { data: productsData, error: productsError } = await supabase
         .from("products")
         .select("id, name, image, price, affiliate_link, rating")
-        .eq("festival_id", festivalData.id); // <-- The key change is here
+        .eq("festival_id", festivalData.id);
 
       if (productsError) {
         console.error(
@@ -67,16 +65,18 @@ const FestivalPage = () => {
       {loading && !festival ? (
         <div className="h-[50vh] bg-gray-200 animate-pulse"></div>
       ) : festival ? (
-        <section className="relative h-[50vh] bg-gray-700 flex items-center justify-center text-white text-center">
+        <section className="relative h-[50vh] bg-gray-100">
           <img
             src={festival.banner_image}
             alt={festival.name}
             className="absolute inset-0 w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-black/50"></div>
-          <h1 className="relative z-10 text-5xl md:text-7xl font-serif font-bold">
-            {festival.name}
-          </h1>
+          <div className="relative z-10 h-full flex flex-col justify-center items-center text-center text-white p-4">
+            <h1 className="text-5xl md:text-7xl font-serif font-bold">
+              {festival.name}
+            </h1>
+          </div>
         </section>
       ) : null}
 
@@ -90,7 +90,7 @@ const FestivalPage = () => {
                 ))}
               </div>
             ) : products.length > 0 ? (
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6">
                 {products.map((product) => (
                   <ProductCard
                     key={product.id}
@@ -99,11 +99,12 @@ const FestivalPage = () => {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-16">
+              <div className="text-center py-20">
+                <Gift size={48} className="mx-auto text-gray-400 mb-4" />
                 <h2 className="text-2xl font-semibold text-gray-800">
                   No Products Found
                 </h2>
-                <p className="mt-2 text-gray-500">
+                <p className="mt-2 text-gray-500 max-w-md mx-auto">
                   We are still curating products for this collection. Please
                   check back soon!
                 </p>
@@ -112,7 +113,6 @@ const FestivalPage = () => {
           </div>
         </Layout>
       </main>
-      <Footer />
     </div>
   );
 };

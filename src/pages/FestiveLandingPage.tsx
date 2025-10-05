@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Layout from "../components/Layout";
 import { supabase } from "../lib/supabaseClient";
+import { ArrowRight } from "lucide-react";
 
 interface Festival {
   id: number;
@@ -21,7 +22,7 @@ const FestiveLandingPage = () => {
       const { data, error } = await supabase
         .from("festivals")
         .select("id, name, slug, banner_image")
-        .order("start_date", { ascending: false }); // Show newest festivals first
+        .order("start_date", { ascending: false });
 
       if (error) {
         console.error("Error fetching festivals:", error.message);
@@ -33,45 +34,54 @@ const FestiveLandingPage = () => {
     fetchFestivals();
   }, []);
 
+  // --- NEW MINIMAL FESTIVAL CARD ---
   const FestivalCard = ({ festival }: { festival: Festival }) => (
     <Link
       to={`/festive-specials/${festival.slug}`}
-      className="group block rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300"
+      className="group block rounded-xl overflow-hidden bg-white shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1.5 border border-gray-200/80"
     >
-      <div className="relative">
+      <div className="aspect-[4/3] overflow-hidden">
         <img
           src={festival.banner_image}
           alt={festival.name}
-          className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105 rounded-xl"
+          className="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-105"
         />
-        <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-          <h2 className="text-3xl font-serif font-bold text-white text-center">
+      </div>
+      <div className="p-5">
+        <div className="flex justify-between items-center">
+          <h2 className="text-xl font-serif font-semibold text-slate-800">
             {festival.name}
           </h2>
+          <div className="bg-gray-100 group-hover:bg-slate-800 p-2 rounded-full transition-colors duration-300">
+            <ArrowRight
+              size={18}
+              className="text-gray-500 group-hover:text-white transition-colors duration-300"
+            />
+          </div>
         </div>
       </div>
     </Link>
   );
 
   return (
-    <div className="bg-slate-50 min-h-screen">
+    <div className="bg-gray-50 min-h-screen">
       <Navbar />
       <Layout>
-        <div className="py-16 text-center">
-          <h1 className="text-4xl md:text-5xl font-serif font-bold text-gray-900">
-            Festive Specials
+        <div className="py-20 text-center">
+          <h1 className="text-5xl md:text-6xl font-serif font-bold text-slate-900">
+            Festive Collections
           </h1>
-          <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="mt-4 text-lg text-slate-600 max-w-2xl mx-auto">
             Explore our curated collections for every celebration.
           </p>
         </div>
-        <div className="pb-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="pb-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {loading
             ? Array.from({ length: 3 }).map((_, i) => (
-                <div
-                  key={i}
-                  className="h-64 bg-gray-200 rounded-xl animate-pulse"
-                ></div>
+                <div key={i} className="animate-pulse">
+                  <div className="aspect-[4/3] bg-gray-200 rounded-xl"></div>
+                  <div className="h-6 mt-4 bg-gray-200 rounded w-3/4"></div>
+                </div>
               ))
             : festivals.map((festival) => (
                 <FestivalCard key={festival.id} festival={festival} />

@@ -20,6 +20,7 @@ import { useCart } from "../hooks/useCart";
 import { useUser } from "../hooks/useUser";
 import { supabase } from "../lib/supabaseClient";
 import GooeyNav from "./GooeyNav";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Navbar = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -35,6 +36,17 @@ const Navbar = () => {
       window.removeEventListener("open-search-overlay", handleOpenSearch);
   }, []);
 
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isMobileMenuOpen]);
+
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     navigate("/");
@@ -44,23 +56,114 @@ const Navbar = () => {
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
   const navItems = [
-    { label: "Home", href: "/", icon: <Home size={20} /> },
-    { label: "Shop", href: "/shop", icon: <Store size={20} /> },
-    { label: "States", href: "/states", icon: <MapPin size={20} /> },
-    { label: "Collections", href: "/collections", icon: <Layers size={20} /> },
+    { label: "Home", href: "/", icon: <Home size={22} /> },
+    { label: "Shop", href: "/shop", icon: <Store size={22} /> },
+    { label: "States", href: "/states", icon: <MapPin size={22} /> },
+    { label: "Collections", href: "/collections", icon: <Layers size={22} /> },
     {
       label: "Festive Specials",
       href: "/festive-specials",
-      icon: <Sparkles size={20} />,
+      icon: <Sparkles size={22} />,
     },
-    { label: "About Us", href: "/about", icon: <Info size={20} /> },
-    { label: "Contact Us", href: "/contact", icon: <Mail size={20} /> },
+    { label: "About Us", href: "/about", icon: <Info size={22} /> },
+    { label: "Contact Us", href: "/contact", icon: <Mail size={22} /> },
   ];
+
+  const MobileMenu = () => (
+    <AnimatePresence>
+      {isMobileMenuOpen && (
+        <>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 bg-black/50 z-40"
+            onClick={closeMobileMenu}
+          />
+          <motion.div
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className="fixed top-0 right-0 bottom-0 w-4/5 max-w-sm bg-white z-50 flex flex-col"
+          >
+            <div className="flex items-center justify-between p-4 border-b border-gray-200">
+              <span className="font-serif font-semibold text-lg">Menu</span>
+              <button
+                onClick={closeMobileMenu}
+                className="p-2 rounded-full hover:bg-gray-100"
+              >
+                <X size={22} />
+              </button>
+            </div>
+            <div className="flex-grow p-4 overflow-y-auto">
+              <ul className="flex flex-col gap-y-2">
+                {navItems.map((item) => (
+                  <li key={item.href}>
+                    <NavLink
+                      to={item.href}
+                      onClick={closeMobileMenu}
+                      className={({ isActive }) =>
+                        `flex items-center gap-x-4 px-4 py-3 rounded-lg text-base font-medium transition-colors ${
+                          isActive
+                            ? "bg-amber-50 text-amber-600"
+                            : "text-gray-600 hover:bg-gray-100 hover:text-slate-900"
+                        }`
+                      }
+                    >
+                      {item.icon}
+                      {item.label}
+                    </NavLink>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="p-4 border-t border-gray-200">
+              {user ? (
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-x-3">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-r from-amber-500 to-orange-600 flex items-center justify-center text-white font-semibold">
+                      {user.email?.charAt(0).toUpperCase() || "U"}
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-slate-800 truncate">
+                        {user.email}
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => {
+                      handleSignOut();
+                      closeMobileMenu();
+                    }}
+                    className="p-2 rounded-full text-gray-500 hover:bg-gray-100 hover:text-slate-800"
+                    title="Sign Out"
+                  >
+                    <LogOut size={20} />
+                  </button>
+                </div>
+              ) : (
+                <Link
+                  to="/auth"
+                  onClick={closeMobileMenu}
+                  className="w-full flex items-center justify-center gap-x-2 px-4 py-3 rounded-lg text-base font-semibold transition-colors bg-slate-900 text-white hover:bg-slate-800"
+                >
+                  <User size={20} />
+                  Sign In
+                </Link>
+              )}
+            </div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+  );
 
   return (
     <>
-      <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-gray-200">
-        <nav className="flex items-center justify-between px-0 sm:px-0 py-2">
+      <header className="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-gray-200">
+        <nav className="flex items-center justify-between px-4 sm:px-6 py-2">
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-2">
               <img
@@ -129,66 +232,13 @@ const Navbar = () => {
                 className="p-2 rounded-full hover:bg-gray-100 hover:text-slate-900 transition-colors"
                 aria-label="Toggle Menu"
               >
-                {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+                <Menu size={22} />
               </button>
             </div>
           </div>
         </nav>
-        {isMobileMenuOpen && (
-          <div className="md:hidden absolute top-full right-4 mt-2 w-64 bg-white/95 backdrop-blur-sm rounded-lg shadow-lg border border-gray-200">
-            <ul className="p-2">
-              {navItems.map((item) => (
-                <li key={item.href}>
-                  <NavLink
-                    to={item.href}
-                    onClick={closeMobileMenu}
-                    className={({ isActive }) =>
-                      `flex items-center gap-x-3 px-3 py-2 rounded-md text-base font-medium transition-colors ${
-                        isActive
-                          ? "bg-amber-50 text-amber-600"
-                          : "text-gray-600 hover:bg-gray-100 hover:text-slate-900"
-                      }`
-                    }
-                  >
-                    {item.icon}
-                    {item.label}
-                  </NavLink>
-                </li>
-              ))}
-              <li className="border-t border-gray-200 mt-2 pt-2">
-                <div className="px-3 py-2">
-                  {user ? (
-                    <div className="flex items-center gap-x-3">
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-r from-amber-500 to-orange-600 flex items-center justify-center text-white font-semibold text-sm">
-                        {user.email?.charAt(0).toUpperCase() || "U"}
-                      </div>
-                      <button
-                        onClick={() => {
-                          handleSignOut();
-                          closeMobileMenu();
-                        }}
-                        className="flex items-center gap-x-3 text-gray-600 hover:text-slate-900 w-full text-left"
-                      >
-                        <LogOut size={20} />
-                        Sign Out
-                      </button>
-                    </div>
-                  ) : (
-                    <Link
-                      to="/auth"
-                      onClick={closeMobileMenu}
-                      className="flex items-center gap-x-3 text-gray-600 hover:text-slate-900"
-                    >
-                      <User size={20} />
-                      Sign In
-                    </Link>
-                  )}
-                </div>
-              </li>
-            </ul>
-          </div>
-        )}
       </header>
+      <MobileMenu />
       <SearchOverlay
         isOpen={isSearchOpen}
         onClose={() => setIsSearchOpen(false)}

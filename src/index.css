@@ -20,23 +20,6 @@
   }
 }
 
-/* --- NEW ANIMATED TEXT GLOW --- */
-@keyframes text-glow {
-  0%,
-  100% {
-    text-shadow: 0 0 10px rgba(251, 191, 36, 0.4),
-      0 0 20px rgba(251, 191, 36, 0.4), 0 0 30px rgba(249, 115, 22, 0.4);
-  }
-  50% {
-    text-shadow: 0 0 20px rgba(251, 191, 36, 0.7),
-      0 0 30px rgba(251, 191, 36, 0.7), 0 0 40px rgba(249, 115, 22, 0.7);
-  }
-}
-
-.animate-text-glow {
-  animation: text-glow 2.5s ease-in-out infinite;
-}
-
 @keyframes shimmer {
   0% {
     background-position: -200px 0;

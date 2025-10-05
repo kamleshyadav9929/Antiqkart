@@ -260,36 +260,10 @@ const ShopPage = () => {
     <>
       <Navbar />
       <div className="bg-gray-50">
-        <Layout>
-          <div className="py-8">
-            <header className="py-8 text-center">
-              <div className="relative text-center mb-16 md:mb-20">
-                <div className="relative inline-block">
-                  <div className="absolute -inset-4 bg-gradient-to-r from-sky-500/10 to-cyan-500/10 rounded-3xl blur-xl"></div>
-                  <div className="relative bg-white/80 backdrop-blur-sm rounded-2xl px-8 py-6 border border-sky-200/50 shadow-xl">
-                    <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-serif font-bold text-slate-900 leading-tight">
-                      <span className="relative inline-block mr-2 sm:mr-3">
-                        Discover our
-                        <div className="absolute -bottom-1 left-0 w-full h-0.5 sm:h-1 bg-gradient-to-r from-sky-400 to-cyan-500 rounded-full animate-shimmer"></div>
-                      </span>
-                      <span className="text-sky-600 relative inline-block">
-                        treasures
-                        <div className="absolute -top-2 -right-3 text-cyan-500 text-lg sm:text-xl animate-bounce">
-                          ✨
-                        </div>
-                        <div className="absolute -bottom-1 left-0 w-full h-0.5 sm:h-1 bg-gradient-to-r from-cyan-400 to-sky-500 rounded-full animate-glow"></div>
-                      </span>
-                    </h2>
-                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 text-sky-500 text-2xl animate-pulse">
-                      📦
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </header>
-
-            {/* Search + sort row */}
-            <div className="flex flex-row justify-between items-center bg-white rounded-lg shadow-md gap-2 p-2 sm:p-4 sm:gap-4 mb-6">
+        {/* --- NEW STICKY SEARCH/FILTER BAR --- */}
+        <div className="sticky top-14 z-20 bg-white/95 backdrop-blur-sm shadow-sm">
+          <Layout>
+            <div className="flex flex-row justify-between items-center gap-2 p-2 sm:p-4 sm:gap-4">
               <div className="relative flex-grow">
                 <input
                   type="text"
@@ -312,7 +286,11 @@ const ShopPage = () => {
                 <SlidersHorizontal size={16} />
               </button>
             </div>
+          </Layout>
+        </div>
 
+        <Layout>
+          <div className="py-8">
             {/* --- Amazon style layout --- */}
             <div className="md:grid md:grid-cols-12 md:gap-8">
               {/* Filters (left side, scrollable) */}

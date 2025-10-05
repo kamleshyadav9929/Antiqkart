@@ -154,7 +154,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
             </p>
           )}
           <h3
-            className="text-sm lg:text-base font-medium text-slate-800 mt-1 overflow-hidden h-12 line-clamp-2"
+            className="text-sm font-semibold text-slate-800 mt-1 min-h-[2.5rem] line-clamp-2"
             title={product.name}
           >
             {product.name}
