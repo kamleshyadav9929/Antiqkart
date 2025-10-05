@@ -11,7 +11,7 @@ const sections = [
 const HomePageNav = ({
   sentinelRef,
 }: {
-  sentinelRef: React.RefObject<HTMLDivElement>;
+  sentinelRef: React.RefObject<HTMLDivElement | null>;
 }) => {
   const [isSticky, setIsSticky] = useState(false);
   const [activeSection, setActiveSection] = useState("new-arrivals");
