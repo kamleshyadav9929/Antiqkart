@@ -87,7 +87,7 @@ const HomePageNav = ({
     <div
       className={`z-30 ${
         isSticky && !isLargeScreen
-          ? "sticky top-13 bg-white shadow-sm"
+          ? "sticky top-14 bg-white shadow-sm"
           : "relative bg-white"
       }`}
     >
@@ -101,7 +101,7 @@ const HomePageNav = ({
                 onClick={(e) => handleLinkClick(e, id)}
                 className={`flex-shrink-0 text-sm font-medium py-1.5 px-4 rounded-full transition-colors duration-300 ${
                   activeSection === id
-                    ? "bg-orange-600 text-white"
+                    ? "bg-slate-900 text-white"
                     : "bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800"
                 }`}
               >
