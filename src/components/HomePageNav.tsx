@@ -20,10 +20,9 @@ const HomePageNav = () => {
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // When the top of the nav is no longer visible, make it sticky
         setIsSticky(entry.intersectionRatio < 1);
       },
-      { threshold: [1], rootMargin: "-69px 0px 0px 0px" } // trigger when the top 69px (navbar height) is scrolled past
+      { threshold: [1], rootMargin: "-69px 0px 0px 0px" }
     );
 
     observer.observe(navElement);
@@ -40,7 +39,7 @@ const HomePageNav = () => {
           }
         });
       },
-      { rootMargin: "-40% 0px -60% 0px" } // Highlights when the section is in the middle of the screen
+      { rootMargin: "-40% 0px -60% 0px" }
     );
 
     sections.forEach(({ id }) => {
@@ -59,7 +58,7 @@ const HomePageNav = () => {
     const element = document.getElementById(id);
     if (element) {
       window.scrollTo({
-        top: element.offsetTop - 80, // Adjust offset for sticky nav height
+        top: element.offsetTop - 80,
         behavior: "smooth",
       });
     }
@@ -73,9 +72,10 @@ const HomePageNav = () => {
       }`}
     >
       <nav className="border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-1 sm:px-1 lg:px-8">
           {/* --- CHANGE IS HERE --- */}
-          <div className="flex justify-center items-center space-x-2 sm:space-x-3 py-3 overflow-x-auto scrollbar-hide">
+          {/* Ab yeh small screens par 'justify-start' aur medium screens (md) se upar 'justify-center' hoga */}
+          <div className="flex justify-start md:justify-center items-center space-x-2 sm:space-x-3 py-3 overflow-x-auto scrollbar-hide">
             {sections.map(({ id, title }) => (
               <a
                 key={id}
