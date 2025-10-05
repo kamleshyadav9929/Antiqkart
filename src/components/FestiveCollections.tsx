@@ -34,23 +34,13 @@ const FestiveCollections = () => {
       <div className="relative text-center mb-16 md:mb-20">
         <div className="relative inline-block">
           <div className="absolute -inset-4 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-3xl blur-xl"></div>
-          <div className="relative bg-white/80 backdrop-blur-sm rounded-2xl px-8 py-6 border border-purple-200/50 shadow-xl">
-            <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-serif font-bold text-slate-900 leading-tight">
-              <span className="relative inline-block mr-2 sm:mr-3">
-                Festive
-                <div className="absolute -bottom-1 left-0 w-full h-0.5 sm:h-1 bg-gradient-to-r from-purple-400 to-pink-500 rounded-full animate-shimmer"></div>
-              </span>
-              <span className="text-pink-600 relative inline-block">
-                Specials
-                <div className="absolute -top-2 -right-3 text-yellow-400 text-lg sm:text-xl animate-bounce">
-                  ✨
-                </div>
-                <div className="absolute -bottom-1 left-0 w-full h-0.5 sm:h-1 bg-gradient-to-r from-pink-400 to-purple-500 rounded-full animate-glow"></div>
-              </span>
+          <div className="mb-12">
+            <h2 className="text-3xl md:text-4xl font-serif font-bold text-slate-900">
+              Festive Specials
             </h2>
-            <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 text-purple-500 text-2xl animate-pulse">
-              🎉
-            </div>
+            <p className="mt-2 text-slate-600">
+              Explore curated products for every celebration and festival!
+            </p>
           </div>
         </div>
         <p className="mt-6 text-slate-600 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed px-4">

@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Heart, Star, Zap } from "lucide-react";
+import { Heart, Star, Zap, Eye } from "lucide-react";
 import { useCart } from "../hooks/useCart";
 import { Product } from "../context/cart-context";
 import { useUser } from "../hooks/useUser";
@@ -11,7 +11,11 @@ interface ProductCardProps {
   onQuickView?: (product: Product) => void;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product, tag }) => {
+const ProductCard: React.FC<ProductCardProps> = ({
+  product,
+  tag,
+  onQuickView,
+}) => {
   const { addToCart, isItemInCart, removeFromCart } = useCart();
   const { user } = useUser();
   const navigate = useNavigate();
@@ -38,10 +42,17 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, tag }) => {
       try {
         await addToCart(product);
       } catch (error) {
-        // If addToCart throws the error, we catch it and navigate to the auth page.
         console.error("Redirecting to login:", error);
         navigate("/auth");
       }
+    }
+  };
+
+  const handleQuickViewClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (onQuickView) {
+      onQuickView(product);
     }
   };
 
@@ -58,7 +69,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, tag }) => {
         <Star
           key={`full-${i}`}
           size={starSize}
-          className="text-yellow-400 fill-yellow-400"
+          className="text-amber-400 fill-amber-400"
         />
       );
     }
@@ -70,7 +81,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, tag }) => {
             className="absolute top-0 left-0 h-full overflow-hidden"
             style={{ width: `${partialStarFill}%` }}
           >
-            <Star size={starSize} className="text-yellow-400 fill-yellow-400" />
+            <Star size={starSize} className="text-amber-400 fill-amber-400" />
           </div>
         </div>
       );
@@ -86,7 +97,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, tag }) => {
 
   return (
     <div className="flex flex-col h-full w-full bg-white rounded-2xl overflow-hidden shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-      <div className="relative flex-shrink-0 h-48 sm:h-64 w-full group overflow-hidden rounded-t-2xl">
+      <div className="relative flex-shrink-0 w-full group overflow-hidden rounded-t-2xl aspect-square">
         <a
           href={product.affiliate_link}
           target="_blank"
@@ -100,21 +111,32 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, tag }) => {
           />
         </a>
 
-        <button
-          onClick={handleWishlistClick}
-          className={`absolute top-3 right-3 p-2 rounded-full shadow-md transition-all duration-200 cursor-pointer ${
-            inWishlist && user
-              ? "bg-red-500 text-white hover:bg-red-600"
-              : "bg-white text-gray-600 hover:bg-gray-100"
-          }`}
-          aria-label={inWishlist ? "Remove from Wishlist" : "Add to Wishlist"}
-        >
-          <Heart
-            size={18}
-            className={inWishlist && user ? "fill-current" : ""}
-            fill={inWishlist && user ? "currentColor" : "none"}
-          />
-        </button>
+        <div className="absolute top-3 right-3 flex flex-col gap-2">
+          <button
+            onClick={handleWishlistClick}
+            className={`p-2 rounded-full shadow-md transition-all duration-200 cursor-pointer ${
+              inWishlist && user
+                ? "bg-red-500 text-white hover:bg-red-600"
+                : "bg-white text-gray-600 hover:bg-gray-100"
+            }`}
+            aria-label={inWishlist ? "Remove from Wishlist" : "Add to Wishlist"}
+          >
+            <Heart
+              size={18}
+              className={inWishlist && user ? "fill-current" : ""}
+              fill={inWishlist && user ? "currentColor" : "none"}
+            />
+          </button>
+          {onQuickView && (
+            <button
+              onClick={handleQuickViewClick}
+              className="p-2 rounded-full bg-white text-gray-600 hover:bg-gray-100 shadow-md transition-all duration-200 opacity-0 group-hover:opacity-100"
+              aria-label="Quick View"
+            >
+              <Eye size={18} />
+            </button>
+          )}
+        </div>
 
         {tag && (
           <div className="absolute top-3 left-3 bg-amber-400/90 text-slate-900 text-xs font-bold px-2.5 py-1 rounded-full flex items-center gap-x-1 shadow-sm">
@@ -132,7 +154,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, tag }) => {
             </p>
           )}
           <h3
-            className="text-sm lg:font-semibold sm:font-medium text-slate-800 mt-1 overflow-hidden h-10 line-clamp-2"
+            className="text-sm lg:text-base font-medium text-slate-800 mt-1 overflow-hidden h-12 line-clamp-2"
             title={product.name}
           >
             {product.name}
@@ -152,7 +174,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, tag }) => {
           </div>
           <div className="mt-2">
             {product.price && (
-              <p className="text-base sm:text-lg font-semibold text-slate-900 flex items-baseline">
+              <p className="text-lg sm:text-xl font-semibold text-slate-700 flex items-baseline">
                 ₹{product.price}
                 <span className="ml-1 text-[9px] text-gray-400 font-normal whitespace-nowrap">
                   (price may vary)
