@@ -84,7 +84,7 @@ const Collections: React.FC<CollectionsProps> = ({ showAll = false }) => {
       </div>
 
       <div className="relative">
-        <div className="flex overflow-x-auto space-x-4 pb-4 -mx-4 px-4 scrollbar-hide">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2 px-2 pr-0 sm:px-0">
           {loading
             ? Array.from({ length: 6 }).map((_, index) => (
                 <SkeletonCard key={index} />

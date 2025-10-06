@@ -48,7 +48,7 @@ const FeaturedProducts: React.FC = () => {
 
       {/* Products */}
       <div className="relative">
-        <div className="flex overflow-x-auto space-x-4 pb-4 -mx-4 px-4 scrollbar-hide">
+        <div className="flex overflow-x-auto space-x-3 pb-4 -mx-4 px-4 scrollbar-hide">
           {loading
             ? Array.from({ length: 6 }).map((_, index) => (
                 <div key={index} className="flex-shrink-0 w-48 md:w-56">

@@ -2,9 +2,7 @@ import { ReactNode } from "react";
 
 const Layout = ({ children }: { children: ReactNode }) => {
   return (
-    <div className="w-full max-w-[1600px] mx-auto px-1 sm:px-1 lg:px-6">
-      {children}
-    </div>
+    <div className="w-full max-w-[1600px] px-4 sm:px-6 lg:px-8">{children}</div>
   );
 };
 

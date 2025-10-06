@@ -75,7 +75,7 @@ const FestiveLandingPage = () => {
             Explore our curated collections for every celebration.
           </p>
         </div>
-        <div className="pb-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="pb-20 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
           {loading
             ? Array.from({ length: 3 }).map((_, i) => (
                 <div key={i} className="animate-pulse">

@@ -4,7 +4,6 @@ import ProductCard from "../components/ProductCard";
 import SkeletonCard from "../components/SkeletonCard";
 import Layout from "../components/Layout";
 import Navbar from "../components/Navbar";
-
 import {
   SlidersHorizontal,
   X,
@@ -111,16 +110,20 @@ const ShopPage = () => {
   const [states, setStates] = React.useState<State[]>([]);
   const [loading, setLoading] = React.useState(true);
 
+  // --- PRICE SLIDER STATE ---
+  // Default to a higher range initially
+  const [priceRange, setPriceRange] = React.useState<[number, number]>([
+    0, 50000,
+  ]);
+  // tempPriceRange updates on slide, priceRange updates on release
+  const [tempPriceRange, setTempPriceRange] = React.useState<[number, number]>([
+    0, 50000,
+  ]);
+
   const [selectedCollections, setSelectedCollections] = React.useState<
     string[]
   >([]);
   const [selectedStates, setSelectedStates] = React.useState<string[]>([]);
-  const [priceRange, setPriceRange] = React.useState<[number, number]>([
-    0, 10000,
-  ]);
-  const [tempPriceRange, setTempPriceRange] = React.useState<[number, number]>([
-    0, 10000,
-  ]);
   const [sortBy, setSortBy] = React.useState("latest");
   const [searchTerm, setSearchTerm] = React.useState("");
   const [isFilterOpen, setIsFilterOpen] = React.useState(false);
@@ -141,6 +144,21 @@ const ShopPage = () => {
     };
     fetchData();
   }, []);
+
+  // --- DYNAMIC MAX PRICE CALCULATION ---
+  const maxPrice = React.useMemo(() => {
+    if (products.length === 0) return 50000; // Default max price
+    // Find the highest price and round up to the nearest 1000 for a clean slider
+    const max = Math.max(...products.map((p) => p.price || 0));
+    return Math.ceil(max / 1000) * 1000;
+  }, [products]);
+
+  // --- EFFECT TO UPDATE SLIDER RANGE WHEN PRODUCTS LOAD ---
+  React.useEffect(() => {
+    // Set the slider's range to match the calculated max price
+    setPriceRange([0, maxPrice]);
+    setTempPriceRange([0, maxPrice]);
+  }, [maxPrice]);
 
   const filteredAndSortedProducts = React.useMemo(() => {
     let filtered = [...products]
@@ -190,8 +208,8 @@ const ShopPage = () => {
   const clearFilters = () => {
     setSelectedCollections([]);
     setSelectedStates([]);
-    setPriceRange([0, 10000]);
-    setTempPriceRange([0, 10000]);
+    setPriceRange([0, maxPrice]);
+    setTempPriceRange([0, maxPrice]);
     setSearchTerm("");
     setSortBy("latest");
   };
@@ -216,11 +234,11 @@ const ShopPage = () => {
         <Slider
           range
           min={0}
-          max={10000}
+          max={maxPrice}
           step={100}
           value={tempPriceRange}
           onChange={(val) => setTempPriceRange(val as [number, number])}
-          onAfterChange={() => setPriceRange(tempPriceRange)}
+          onAfterChange={(val) => setPriceRange(val as [number, number])}
           className="mt-4"
           trackStyle={[{ backgroundColor: "#fbbf24" }]}
           handleStyle={[{ borderColor: "#fbbf24" }, { borderColor: "#fbbf24" }]}
@@ -228,7 +246,11 @@ const ShopPage = () => {
         />
         <div className="flex justify-between text-sm mt-2 font-medium">
           <span>₹{tempPriceRange[0]}</span>
-          <span>₹{tempPriceRange[1]}</span>
+          <span>
+            {tempPriceRange[1] >= maxPrice
+              ? `₹${maxPrice}+`
+              : `₹${tempPriceRange[1]}`}
+          </span>
         </div>
       </FilterSection>
       <FilterSection title="Collections">
@@ -346,7 +368,7 @@ const ShopPage = () => {
                       No matching treasures found...
                     </p>
                     <p className="text-slate-500 mt-2">
-                      but awesome products are on their way! Please wait.
+                      Try adjusting your filters or search term.
                     </p>
                   </div>
                 )}

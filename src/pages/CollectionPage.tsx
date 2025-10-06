@@ -194,13 +194,13 @@ const CollectionPage = () => {
           </div>
           <div className="py-8">
             {loading ? (
-              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2 md:gap-4">
                 {Array.from({ length: 10 }).map((_, index) => (
                   <SkeletonCard key={index} />
                 ))}
               </div>
             ) : filteredAndSortedProducts.length > 0 ? (
-              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2 md:gap-4">
                 {filteredAndSortedProducts.map((product) => (
                   <div key={product.id} className="h-full">
                     <ProductCard product={product} />

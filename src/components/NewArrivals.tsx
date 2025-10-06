@@ -50,7 +50,7 @@ const NewArrivals: React.FC = () => {
       {/* Outer div uses negative margins to break out of the container's padding */}
       <div className="-mx-4 sm:-mx-6 lg:-mx-8">
         {/* Inner div handles scrolling and adds back padding for the content */}
-        <div className="flex overflow-x-auto space-x-4 pb-4 px-4 sm:px-6 lg:px-8 scrollbar-hide">
+        <div className="flex overflow-x-auto space-x-3 pb-4 px-4 sm:px-2 lg:px-8 scrollbar-hide">
           {loading
             ? Array.from({ length: 6 }).map((_, index) => (
                 <div key={index} className="flex-shrink-0 w-48 md:w-56">
@@ -60,7 +60,7 @@ const NewArrivals: React.FC = () => {
             : products.map((product) => (
                 <div
                   key={product.id}
-                  className="flex-shrink-0 w-48 md:w-56 h-full flex"
+                  className="flex-shrink-0 w-48 md:w-56 h-full flex "
                 >
                   <ProductCard product={product} />
                 </div>

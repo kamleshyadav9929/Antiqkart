@@ -36,8 +36,9 @@ const AuthPage = () => {
               root directory with:
             </p>
             <pre className="bg-gray-100 p-3 rounded text-xs overflow-x-auto">
-              {`VITE_SUPABASE_URL=https://your-project-ref.supabase.co
-VITE_SUPABASE_ANON_KEY=your_anon_key_here`}
+              VITE_SUPABASE_URL=your-supabase-url
+              <br />
+              VITE_SUPABASE_ANON_KEY=your-supabase-anon-key
             </pre>
             <p>
               You can find these credentials in your Supabase project dashboard.
@@ -102,6 +103,7 @@ VITE_SUPABASE_ANON_KEY=your_anon_key_here`}
       if (error) throw error;
     } catch (error: any) {
       setError(error.message);
+    } finally {
       setGoogleLoading(false);
     }
   };
