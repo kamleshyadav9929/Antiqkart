@@ -73,7 +73,7 @@ const FestivalPage = () => {
           />
           <div className="absolute inset-0 bg-black/50"></div>
           <div className="relative z-10 h-full flex flex-col justify-center items-center text-center text-white p-4">
-            <h1 className="text-5xl md:text-7xl font-serif font-bold">
+            <h1 className="text-5xl md:text-7xl font-serif font-bold text-white">
               {festival.name}
             </h1>
           </div>

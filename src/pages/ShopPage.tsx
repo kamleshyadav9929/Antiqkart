@@ -283,7 +283,7 @@ const ShopPage = () => {
       <Navbar />
       <div className="bg-gray-50">
         {/* --- NEW STICKY SEARCH/FILTER BAR --- */}
-        <div className="sticky top-14 z-20 bg-white/95 backdrop-blur-sm shadow-sm">
+        <div className="sticky top-12 z-20 bg-white/95 backdrop-blur-sm shadow-sm">
           <Layout>
             <div className="flex flex-row justify-between items-center gap-2 p-2 sm:p-4 sm:gap-4">
               <div className="relative flex-grow">

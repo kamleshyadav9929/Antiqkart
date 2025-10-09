@@ -1,49 +1,51 @@
 @import "tailwindcss";
 
+/* --- CUSTOM THEME VARIABLES --- */
 :root {
-  /* --- NEW RUSTIC COLOR PALETTE --- */
-  --bg-primary: #f8f5f2; /* Textured Off-white */
-  --text-primary: #433a34; /* Deep Brown */
-  --text-secondary: #6b5e57; /* Muted Brown */
-  --accent-primary: #d97706; /* Terracotta/Amber */
-  --accent-secondary: #bf4c3a; /* Burnt Sienna */
-  --border-color: #d6cfcb; /* Warm Gray */
+  --bg-primary: #f8f5f2;
+  --text-primary: #433a34;
+  --text-secondary: #6b5e57;
+  --accent-primary: #d97706;
+  --accent-secondary: #bf4c3a;
+  --border-color: #d6cfcb;
 }
 
-/* --- GLOBAL STYLES --- */
+/* --- GLOBAL RESET / LAYOUT FIXES --- */
+/* Prevent unwanted horizontal scrolling and right white bars */
+html,
 body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
   background-color: var(--bg-primary);
-  /* Adding a subtle texture overlay */
-  background-image: url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%239C92AC" fill-opacity="0.04"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');
   color: var(--text-secondary);
-  font-family: "Roboto", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* --- NEW FONT DEFINITIONS --- */
-.font-serif {
-  font-family: "Arvo", serif; /* Bolder, "tuff" font for headings */
-}
-.font-sans {
-  font-family: "Roboto", sans-serif;
+/* --- FONT FALLBACKS (use Tailwind fontFamily in tailwind.config.js instead) */
+body {
+  font-family: "Roboto", system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+/* Prefer utility classes for headings instead of overriding element styles.
+   If you need a default heading style, use a scoped helper to avoid surprising overrides. */
+.site-heading {
   font-family: "Arvo", serif;
   color: var(--text-primary);
 }
 
-/* --- SCROLLBAR HIDING UTILITY --- */
+/* --- SCROLLBAR HIDING UTILITY (keeps Tailwind utilities intact) --- */
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
 .scrollbar-hide {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.text-muted {
+  color: var(--text-secondary);
 }
