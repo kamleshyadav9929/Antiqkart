@@ -1,7 +1,6 @@
 import React from "react";
 import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
-import FeaturedProducts from "../components/FeaturedProducts";
 import TrendingProducts from "../components/TrendingProducts";
 import FestiveCollections from "../components/FestiveCollections";
 import StatesGrid from "../components/StatesGrid";
@@ -38,24 +37,25 @@ const Homepage = () => {
         <Section id="new-arrivals" className="bg-white">
           <NewArrivals />
         </Section>
-        <Section id="collections" className="bg-gray-50">
-          <Collections />
-        </Section>
-        <Section id="featured-products" className="bg-white">
-          <FeaturedProducts />
+
+        {/* "Festive Specials" is now here */}
+        <Section id="festive-specials" className="bg-gray-50">
+          <FestiveCollections />
         </Section>
 
         <Layout>
           <ArtisanSpotlight />
         </Layout>
 
-        <Section id="festive-specials" className="bg-gray-50">
-          <FestiveCollections />
+        {/* "Handpicked Collections" is now below the spotlight */}
+        <Section id="collections" className="bg-white">
+          <Collections />
         </Section>
-        <Section id="trending-products" className="bg-white">
+
+        <Section id="trending-products" className="bg-gray-50">
           <TrendingProducts />
         </Section>
-        <Section className="bg-gray-50">
+        <Section className="bg-white">
           <StatesGrid />
         </Section>
       </main>

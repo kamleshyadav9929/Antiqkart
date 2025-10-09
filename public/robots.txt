@@ -1,0 +1,6 @@
+# See https://www.robotstxt.org/robotstxt.html for documentation on how to write a robots.txt file
+
+User-agent: *
+Disallow:
+
+Sitemap: https://antiqkart.netlify.app/sitemap.xml

@@ -167,8 +167,8 @@ const Navbar = () => {
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-2">
               <img
-                src="/logo-round.png"
-                alt="AntiqKart Logo"
+                src="/new_logo.png"
+                alt="AntiqKart Logo" // Add this alt text
                 className="h-9 w-9 md:h-10 md:w-10 rounded-full object-cover"
               />
               <span className="text-xl md:text-2xl font-serif font-semibold tracking-wide text-slate-900 hidden sm:block">

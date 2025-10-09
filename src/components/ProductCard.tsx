@@ -176,7 +176,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
             {product.price && (
               <p className="text-lg sm:text-xl font-semibold text-slate-700 flex items-baseline">
                 ₹{product.price}
-                <span className="ml-1 text-[9px] text-gray-400 font-normal whitespace-nowrap">
+                <span className="ml-1 text-[9px] text-gray-500 font-normal whitespace-nowrap">
                   (price may vary)
                 </span>
               </p>

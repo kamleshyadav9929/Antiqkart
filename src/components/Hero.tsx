@@ -50,7 +50,11 @@ const Hero = () => {
             className="group w-full flex items-center text-left bg-white border border-gray-200 rounded-full px-2 py-2 shadow-sm hover:ring-2 hover:ring-slate-800 transition-all"
           >
             <span className="flex-grow text-gray-500 pl-4 pr-2">
-              Search for 'Madhubani Painting' or 'Pashmina'...
+              {/* --- THIS IS THE CHANGE --- */}
+              <span className="hidden sm:inline">
+                Search for 'Madhubani Painting' or 'Pashmina'...
+              </span>
+              <span className="sm:hidden">Search for handicrafts...</span>
             </span>
             <span className="flex-shrink-0 bg-slate-800 text-white rounded-full p-3">
               <Search size={20} />

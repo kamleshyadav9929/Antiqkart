@@ -11,19 +11,66 @@ const FestiveCollections = () => {
   useEffect(() => {
     const fetchFestiveProducts = async () => {
       setLoading(true);
-      const { data, error } = await supabase
-        .from("products")
-        .select("*, collections(name)")
-        .not("festival_id", "is", null)
-        .order("created_at", { ascending: false })
-        .limit(10);
+      try {
+        // Step 1: Find the ID for the 'Diwali' festival using a case-insensitive search
+        const { data: festivalData, error: festivalError } = await supabase
+          .from("festivals")
+          .select("id")
+          .ilike("name", "diwali") // Use ilike for case-insensitive matching
+          .single();
 
-      if (error) {
+        // If Diwali isn't found, just get the latest festive products as a fallback
+        if (festivalError || !festivalData) {
+          console.error(
+            "Could not find a festival named 'Diwali'. Fetching general festive items.",
+            festivalError?.message
+          );
+          const { data, error } = await supabase
+            .from("products")
+            .select("*, collections(name)")
+            .not("festival_id", "is", null)
+            .order("created_at", { ascending: false })
+            .limit(10);
+
+          if (error) throw error;
+          setProducts((data as Product[]) || []);
+          return; // Exit after fallback
+        }
+
+        const diwaliFestivalId = festivalData.id;
+
+        // Step 2: Fetch all products linked to the Diwali festival ID
+        const { data: diwaliProducts, error: diwaliError } = await supabase
+          .from("products")
+          .select("*, collections(name)")
+          .eq("festival_id", diwaliFestivalId)
+          .order("created_at", { ascending: false });
+
+        if (diwaliError) throw diwaliError;
+
+        // Step 3: Fetch other festive products, making sure to exclude the Diwali ones
+        const { data: otherFestiveProducts, error: otherError } = await supabase
+          .from("products")
+          .select("*, collections(name)")
+          .not("festival_id", "is", null)
+          .neq("festival_id", diwaliFestivalId) // Exclude Diwali items
+          .order("created_at", { ascending: false })
+          .limit(10 - (diwaliProducts?.length || 0)); // Fetch enough to fill up to 10 spots
+
+        if (otherError) throw otherError;
+
+        // Step 4: Combine the lists, ensuring Diwali products are always first
+        const combinedProducts = [
+          ...(diwaliProducts || []),
+          ...(otherFestiveProducts || []),
+        ];
+
+        setProducts((combinedProducts as Product[]) || []);
+      } catch (error: any) {
         console.error("Error fetching festive products:", error.message);
-      } else {
-        setProducts((data as Product[]) || []);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
     fetchFestiveProducts();
@@ -45,8 +92,8 @@ const FestiveCollections = () => {
         </div>
       </div>
 
-      <div className="relative">
-        <div className="flex overflow-x-auto space-x-3 pb-4 -mx-4 px-4 scrollbar-hide">
+      <div className="-mx-4 sm:-mx-6 lg:-mx-8">
+        <div className="flex overflow-x-auto space-x-3 pb-4 px-4 sm:px-2 lg:px-8 scrollbar-hide">
           {loading
             ? Array.from({ length: 6 }).map((_, index) => (
                 <div key={index} className="flex-shrink-0 w-48 md:w-56">

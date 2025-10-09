@@ -4,15 +4,23 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import compression from "vite-plugin-compression";
 import checker from "vite-plugin-checker";
+import { ViteImageOptimizer } from "vite-plugin-image-optimizer";
 
 export default defineConfig({
   plugins: [
     react(),
-    compression({ algorithm: "brotliCompress" }), // adds compressed assets for deploy pipelines (optional)
-    checker({ typescript: true }), // VSCode-friendly type checks during dev
+    compression({ algorithm: "brotliCompress" }),
+    checker({ typescript: true }),
+    ViteImageOptimizer({
+      /* pass your config */
+    }),
   ],
+  server: {
+    host: true,
+  },
   build: {
     target: "es2020",
     chunkSizeWarningLimit: 1500,
+    sourcemap: true,
   },
 });

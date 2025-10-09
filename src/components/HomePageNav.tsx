@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 
+// I have reordered the sections here to match the new layout
 const sections = [
   { id: "new-arrivals", title: "New Arrivals" },
-  { id: "collections", title: "Collections" },
-  { id: "featured-products", title: "Featured" },
   { id: "festive-specials", title: "Festive" },
+  { id: "collections", title: "Collections" },
   { id: "trending-products", title: "Trending" },
 ];
 

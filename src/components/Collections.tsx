@@ -39,7 +39,8 @@ const Collections: React.FC<CollectionsProps> = ({ showAll = false }) => {
   }, [showAll]);
 
   const CollectionCard = ({ collection }: { collection: Collection }) => (
-    <div className="flex-shrink-0 w-40 sm:w-56 text-center">
+    // The width of the card is also important for consistent spacing
+    <div className="flex-shrink-0 w-48 md:w-56 text-center">
       <Link
         to={`/collections/${collection.name
           .toLowerCase()
@@ -61,7 +62,7 @@ const Collections: React.FC<CollectionsProps> = ({ showAll = false }) => {
   );
 
   const SkeletonCard = () => (
-    <div className="flex-shrink-0 w-40 sm:w-56 animate-pulse">
+    <div className="flex-shrink-0 w-48 md:w-56 animate-pulse">
       <div className="aspect-square bg-gray-200 rounded-xl"></div>
       <div className="h-4 mt-2 bg-gray-200 rounded w-3/4 mx-auto"></div>
     </div>
@@ -83,8 +84,10 @@ const Collections: React.FC<CollectionsProps> = ({ showAll = false }) => {
         </div>
       </div>
 
-      <div className="relative">
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2 px-2 pr-0 sm:px-0">
+      {/* --- THIS IS THE CORRECTED SECTION --- */}
+      {/* It now perfectly matches the structure from NewArrivals.tsx */}
+      <div className="-mx-4 sm:-mx-6 lg:-mx-8">
+        <div className="flex overflow-x-auto space-x-3 pb-4 px-4 sm:px-2 lg:px-8 scrollbar-hide">
           {loading
             ? Array.from({ length: 6 }).map((_, index) => (
                 <SkeletonCard key={index} />
