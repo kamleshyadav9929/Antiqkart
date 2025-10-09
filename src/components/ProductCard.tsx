@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Heart, Star, Zap, Eye } from "lucide-react";
+import { Heart, Star, Zap } from "lucide-react";
 import { useCart } from "../hooks/useCart";
 import { Product } from "../context/cart-context";
 import { useUser } from "../hooks/useUser";
@@ -11,11 +11,7 @@ interface ProductCardProps {
   onQuickView?: (product: Product) => void;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({
-  product,
-  tag,
-  onQuickView,
-}) => {
+const ProductCard: React.FC<ProductCardProps> = ({ product, tag }) => {
   const { addToCart, isItemInCart, removeFromCart } = useCart();
   const { user } = useUser();
   const navigate = useNavigate();
@@ -45,14 +41,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
         console.error("Redirecting to login:", error);
         navigate("/auth");
       }
-    }
-  };
-
-  const handleQuickViewClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (onQuickView) {
-      onQuickView(product);
     }
   };
 
@@ -127,15 +115,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
               fill={inWishlist && user ? "currentColor" : "none"}
             />
           </button>
-          {onQuickView && (
-            <button
-              onClick={handleQuickViewClick}
-              className="p-2 rounded-full bg-white text-gray-600 hover:bg-gray-100 shadow-md transition-all duration-200 opacity-0 group-hover:opacity-100"
-              aria-label="Quick View"
-            >
-              <Eye size={18} />
-            </button>
-          )}
         </div>
 
         {tag && (
@@ -154,7 +133,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
             </p>
           )}
           <h3
-            className="text-sm font-semibold text-slate-800 mt-1 min-h-[2.5rem] line-clamp-2"
+            className="text-sm font-normal text-slate-900 mt-1 min-h-[2.5rem] line-clamp-2 text"
             title={product.name}
           >
             {product.name}

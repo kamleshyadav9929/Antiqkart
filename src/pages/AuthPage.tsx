@@ -82,8 +82,12 @@ const AuthPage = () => {
         });
         if (error) throw error;
       }
-    } catch (error: any) {
-      setError(error.message);
+    } catch (error) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError("An unexpected error occurred.");
+      }
     } finally {
       setAuthLoading(false);
     }
@@ -101,8 +105,12 @@ const AuthPage = () => {
         },
       });
       if (error) throw error;
-    } catch (error: any) {
-      setError(error.message);
+    } catch (error) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError("An unexpected error occurred during Google sign-in.");
+      }
     } finally {
       setGoogleLoading(false);
     }
