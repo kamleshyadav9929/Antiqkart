@@ -7,6 +7,9 @@ import checker from "vite-plugin-checker";
 import { ViteImageOptimizer } from "vite-plugin-image-optimizer";
 
 export default defineConfig({
+  server: {
+    host: true,
+  },
   plugins: [
     react(),
     compression({ algorithm: "brotliCompress" }),
@@ -15,9 +18,7 @@ export default defineConfig({
       /* pass your config */
     }),
   ],
-  server: {
-    host: true,
-  },
+
   build: {
     target: "es2020",
     chunkSizeWarningLimit: 1500,
