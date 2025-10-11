@@ -279,7 +279,7 @@ const Navbar = () => {
           <div className="flex items-center gap-3">
             <Link to="/" className="flex items-center space-x-2">
               <img
-                src="../public/logo.png"
+                src="./logo.png"
                 alt="AntiqKart Logo"
                 className="h-10 w-10 md:h-12 md:w-12 rounded-full object-cover shadow-sm"
               />
