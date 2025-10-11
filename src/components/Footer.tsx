@@ -9,9 +9,9 @@ const Footer = () => {
           <div className="lg:col-span-5">
             <Link to="/" className="inline-block mb-4">
               <img
-                src="/logo-round.png"
+                src="/logo.png"
                 alt="AntiqKart Logo"
-                className="h-12 w-12 rounded-full"
+                className="h-10 w-10 rounded-full"
               />
             </Link>
             <p className="text-gray-400 text-sm max-w-sm mb-6">

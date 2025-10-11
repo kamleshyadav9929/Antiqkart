@@ -11,17 +11,31 @@
 }
 
 /* --- GLOBAL RESET / LAYOUT FIXES --- */
-/* Prevent unwanted horizontal scrolling and right white bars */
+/* Prevent unwanted horizontal and vertical scrolling and right white bars */
 html,
 body {
   height: 100%;
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
+  /* hide both horizontal and vertical scrollbars */
+  overflow: hidden;
   background-color: var(--bg-primary);
   color: var(--text-secondary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Ensure any scrollable inner elements do not show scrollbars */
+* {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Hide WebKit-based scrollbars for all elements */
+*::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+  display: none;
 }
 
 /* --- FONT FALLBACKS (use Tailwind fontFamily in tailwind.config.js instead) */

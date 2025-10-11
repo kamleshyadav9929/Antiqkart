@@ -274,21 +274,23 @@ const Navbar = () => {
   return (
     <>
       <header className="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-gray-200/80">
-        <nav className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-12 sm:h-12 lg:h-14">
-          <div className="flex items-center">
+        {/* Full width bar with no extra outer margins - logo/text flush left, actions flush right */}
+        <nav className="relative w-full flex items-center justify-between h-12 sm:h-12 lg:h-14 px-3 sm:px-4">
+          <div className="flex items-center gap-3">
             <Link to="/" className="flex items-center space-x-2">
               <img
-                src="/new_logo.png"
+                src="../public/logo.png"
                 alt="AntiqKart Logo"
                 className="h-10 w-10 md:h-12 md:w-12 rounded-full object-cover shadow-sm"
               />
-              <span className="text-xl md:text-2xl font-serif font-semibold text-slate-900 hidden sm:block">
+              <span className="text-xl md:text-2xl font-serif font-semibold text-slate-900 tracking-tight">
                 AntiqKart
               </span>
             </Link>
           </div>
 
-          <div className="hidden md:flex items-center gap-x-1 lg:gap-x-2">
+          {/* center / desktop nav - centered */}
+          <div className="hidden md:flex items-center gap-x-1 lg:gap-x-2 absolute left-1/2 transform -translate-x-1/2">
             {mainNavItems.map((item) => (
               <NavLink
                 key={item.href}
@@ -358,7 +360,8 @@ const Navbar = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-x-2 sm:gap-x-3">
+          {/* actions - flush right */}
+          <div className="flex items-center gap-x-2 sm:gap-x-3 ml-auto">
             <button
               className="p-2 rounded-full text-gray-500 hover:bg-gray-100 hover:text-slate-800 transition-colors"
               onClick={() => setIsSearchOpen(true)}
@@ -369,7 +372,7 @@ const Navbar = () => {
             <Link
               to="/cart"
               className="p-2 rounded-full text-gray-500 hover:bg-gray-100 hover:text-slate-800 transition-colors relative"
-              aria-label="Wishlist"
+              aria-label="Cart"
             >
               <ShoppingCart size={22} />
               {cartProductDetails.length > 0 && (
