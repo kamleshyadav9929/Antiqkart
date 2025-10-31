@@ -1,0 +1,247 @@
+### KisaanSaarthi API Examples
+### Use with REST Client extension in VS Code
+
+@baseUrl = http://localhost:4000
+@token = your_jwt_token_here
+
+### Health Check
+GET {{baseUrl}}/health
+
+### ============================================
+### AUTHENTICATION
+### ============================================
+
+### Request OTP
+POST {{baseUrl}}/api/v1/auth/request-otp
+Content-Type: application/json
+
+{
+  "phone": "+919876543210"
+}
+
+### Verify OTP
+POST {{baseUrl}}/api/v1/auth/verify-otp
+Content-Type: application/json
+
+{
+  "phone": "+919876543210",
+  "otp": "123456"
+}
+
+### Get Profile (Authenticated)
+GET {{baseUrl}}/api/v1/auth/profile
+Authorization: Bearer {{token}}
+
+### Update Profile (Authenticated)
+PUT {{baseUrl}}/api/v1/auth/profile
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Rajesh Kumar",
+  "metadata": {
+    "location": "Ludhiana",
+    "crops": ["Wheat", "Rice"]
+  }
+}
+
+### ============================================
+### MANDI PRICES
+### ============================================
+
+### Get All Mandi Prices
+GET {{baseUrl}}/api/v1/mandi
+
+### Get Mandi Prices - Filter by State
+GET {{baseUrl}}/api/v1/mandi?state=Punjab
+
+### Get Mandi Prices - Filter by Crop
+GET {{baseUrl}}/api/v1/mandi?crop=Wheat
+
+### Get Mandi Prices - Multiple Filters
+GET {{baseUrl}}/api/v1/mandi?state=Punjab&crop=Wheat&limit=10
+
+### Get Mandi Price History
+GET {{baseUrl}}/api/v1/mandi/history?state=Punjab&crop=Wheat&days=30
+
+### Get States List
+GET {{baseUrl}}/api/v1/mandi/states
+
+### Get Crops List
+GET {{baseUrl}}/api/v1/mandi/crops
+
+### Get Crops by State
+GET {{baseUrl}}/api/v1/mandi/crops?state=Punjab
+
+### Get Mandis List
+GET {{baseUrl}}/api/v1/mandi/mandis
+
+### Get Mandis by State
+GET {{baseUrl}}/api/v1/mandi/mandis?state=Punjab
+
+### ============================================
+### WEATHER
+### ============================================
+
+### Get Weather - Ludhiana
+GET {{baseUrl}}/api/v1/weather?lat=30.9010&lon=75.8573&location=Ludhiana
+
+### Get Weather - Delhi
+GET {{baseUrl}}/api/v1/weather?lat=28.6139&lon=77.2090&location=Delhi
+
+### ============================================
+### GOVERNMENT SCHEMES
+### ============================================
+
+### Get All Schemes
+GET {{baseUrl}}/api/v1/schemes
+
+### Get Schemes - Filter by State
+GET {{baseUrl}}/api/v1/schemes?state=Punjab
+
+### Get Schemes - Filter by Category
+GET {{baseUrl}}/api/v1/schemes?category=subsidy
+
+### Get Schemes - Verified Only
+GET {{baseUrl}}/api/v1/schemes?verified=true
+
+### Get Scheme by ID
+GET {{baseUrl}}/api/v1/schemes/scheme-id-here
+
+### ============================================
+### SUBSCRIPTIONS (Requires Auth)
+### ============================================
+
+### Create Subscription - Mandi Price Alert
+POST {{baseUrl}}/api/v1/subscriptions
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "type": "mandi_price",
+  "filter": {
+    "state": "Punjab",
+    "crop": "Wheat"
+  },
+  "mode": "whatsapp"
+}
+
+### Create Subscription - Weather Alert
+POST {{baseUrl}}/api/v1/subscriptions
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "type": "weather",
+  "filter": {
+    "location": "Ludhiana",
+    "lat": 30.9010,
+    "lon": 75.8573
+  },
+  "mode": "sms"
+}
+
+### Get My Subscriptions
+GET {{baseUrl}}/api/v1/subscriptions
+Authorization: Bearer {{token}}
+
+### Update Subscription
+PUT {{baseUrl}}/api/v1/subscriptions/subscription-id-here
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "active": false
+}
+
+### Delete Subscription
+DELETE {{baseUrl}}/api/v1/subscriptions/subscription-id-here
+Authorization: Bearer {{token}}
+
+### ============================================
+### ORDERS & PAYMENTS (Requires Auth)
+### ============================================
+
+### Create Order
+POST {{baseUrl}}/api/v1/orders
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "amount": 100,
+  "metadata": {
+    "service": "form_filling",
+    "description": "PM-KISAN registration help"
+  }
+}
+
+### Verify Payment
+POST {{baseUrl}}/api/v1/orders/verify
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "razorpay_order_id": "order_xxx",
+  "razorpay_payment_id": "pay_xxx",
+  "razorpay_signature": "signature_xxx"
+}
+
+### Get My Orders
+GET {{baseUrl}}/api/v1/orders
+Authorization: Bearer {{token}}
+
+### Get Orders - Filter by Status
+GET {{baseUrl}}/api/v1/orders?status=paid
+Authorization: Bearer {{token}}
+
+### Get Order by ID
+GET {{baseUrl}}/api/v1/orders/order-id-here
+Authorization: Bearer {{token}}
+
+### ============================================
+### HELP REQUESTS (Requires Auth)
+### ============================================
+
+### Create Help Request
+POST {{baseUrl}}/api/v1/help
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "type": "form_filling",
+  "description": "Need help with PM-KISAN registration. I have all documents ready.",
+  "attachments": []
+}
+
+### Create Help Request - Document Help
+POST {{baseUrl}}/api/v1/help
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "type": "document_help",
+  "description": "Need help understanding land records for subsidy application",
+  "attachments": ["https://example.com/document1.pdf"]
+}
+
+### Get My Help Requests
+GET {{baseUrl}}/api/v1/help
+Authorization: Bearer {{token}}
+
+### Get Help Requests - Filter by Status
+GET {{baseUrl}}/api/v1/help?status=pending
+Authorization: Bearer {{token}}
+
+### Get Help Request by ID
+GET {{baseUrl}}/api/v1/help/help-request-id-here
+Authorization: Bearer {{token}}
+
+### Update Help Request Status (Admin Only)
+PUT {{baseUrl}}/api/v1/help/help-request-id-here/status
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "status": "in_progress",
+  "assigned_to": "admin-user-id"
+}
